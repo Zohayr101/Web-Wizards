@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset = "UTF-8">
+        <link rel = "stylesheet" href = "css/style.css">
+
+        <title>To-Do List Demo</title> 
+    </head>
+
+    <body>
+        <div class = "menu_bar">
+        <div>
+            <button type = "button">Calendar</button>
+            <button type = "button">Journal</button>
+            <button type = "button" id = "add_task">Add Task</button>
+            <button type = "button" id = "account">Account</button>
+        </div>
+        </div>
+
+        <div id = "boxes">
+        <div id = "current_box">
+            <div class = "todo_box">
+            <h2>Today</h2>
+
+            <div class = "items">
+                <label>
+                    <input type="checkbox">
+                    Task 1:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 2:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 3:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 4:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 5:
+                </label>
+            </div>
+
+            <div class = "page_buttons">
+                <button disabled class = "back">Back</button>
+                <button disabled class = "next">Next</button>
+            </div>
+            </div>
+        </div>
+
+        <div id = "mini_box_1">
+            <div class = "todo_box">
+            <h2>7 day</h2>
+
+            <div class = "items">
+                <label>
+                    <input type="checkbox">
+                    Task 1:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 2:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 3:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 4:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 5:
+                </label>
+            </div>
+        
+            <div class = "page_buttons">
+                <button disabled class = "back">Back</button>
+                <button disabled class = "next">Next</button>
+            </div>
+            </div>
+        </div>
+
+        <div id = "mini_box_2">
+            <div class = "todo_box">
+            <h2>30 day</h2>
+            
+            <div class = "items">
+                <label>
+                    <input type="checkbox">
+                    Task 1:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 2:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 3:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 4:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 5:
+                </label>
+            </div>
+            
+            <div class = "page_buttons">
+                <button disabled class = "back">Back</button>
+                <button disabled class = "next">Next</button>
+            </div>
+            </div>
+        </div>
+
+        <div id = "goals_box">
+            <div class = "todo_box">
+            <h2>Goals</h2>
+            
+            <div class = "items">
+                <label>
+                    <input type="checkbox">
+                    Task 1:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 2:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 3:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 4:
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Task 5:
+                </label>
+            </div>
+
+            <div class = "page_buttons">
+                <button disabled class = "back">Back</button>
+                <button disabled class = "next">Next</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <div id="task_popup" class="popup">
+            <div class="popup-content">
+                <h2>Add Task</h2>
+
+                <label for="task_name">Task name: </label>
+                <input type="text" id="task_name" name="task_name"><br><br>
+
+                <label for="date_due">Date due: </label>
+                <input type="text" id="date_due" name="date_due"><br><br>
+
+                <p>Priority: </p>
+                <input type="radio" id="lowest" name="priority" value=0>
+                <label for="lowest">Unimportant </label><br>
+                <input type="radio" id="low" name="priority" value=1>
+                <label for="low">Low </label><br>
+                <input type="radio" id="high" name="priority" value=2>
+                <label for="high">High </label><br>
+                <input type="radio" id="highest" name="priority" value=3>
+                <label for="highest">Urgent </label><br><br>
+
+                <label for="complete">Complete: </label>
+                <input type="checkbox" id="complete" name="complete"><br><br>
+
+                <label for="task_tag">Add tag: </label>
+                <input type="text" id="task_tag" name="task_tag"><br><br>
+
+                <button id="close_task">Close</button>
+                <button id="enter_task">Enter</button>
+            </div>
+        </div>
+
+        <script src="js/script.js"></script>
+    </body>
+</html>
