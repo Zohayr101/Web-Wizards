@@ -1,112 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To-Do List</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
     <!-- Menu Bar -->
     <div class="menu_bar">
-        <div>
-            <button type="button">Calendar</button>
-            <button type="button">Journal</button>
-            <button type="button" id="add_task">Add Task</button>
-        </div>
-        <button type="button" id="account">Account</button>
+      <div>
+        <button type="button">Calendar</button>
+        <button type="button">Journal</button>
+        <button type="button" id="add_task">Add Task</button>
+      </div>
+      <button type="button" id="account">Account</button>
     </div>
 
     <!-- Task Boxes -->
     <div id="boxes">
-        <!-- Today Box -->
-        <div id="current_box" class="todo_box">
-            <h2>Today</h2>
-            <div class="items">
-                <label><input type="checkbox"> Task 1</label>
-                <label><input type="checkbox"> Task 2</label>
-                <label><input type="checkbox"> Task 3</label>
-                <label><input type="checkbox"> Task 4</label>
-                <label><input type="checkbox"> Task 5</label>
-            </div>
-            <div class="page_buttons">
-                <button class="back" disabled>Back</button>
-                <button class="next" disabled>Next</button>
-            </div>
+      <!-- Today Box -->
+      <div id="current_box" class="todo_box">
+        <h2>Today</h2>
+        <div class="items">
+          <label><input type="checkbox" /> Task 1</label>
+          <label><input type="checkbox" /> Task 2</label>
+          <label><input type="checkbox" /> Task 3</label>
+          <label><input type="checkbox" /> Task 4</label>
+          <label><input type="checkbox" /> Task 5</label>
+          <label><input type="checkbox" /> Task 6</label>
+          <label><input type="checkbox" /> Task 7</label>
+          <label><input type="checkbox" /> Task 8</label>
+          <label><input type="checkbox" /> Task 9</label>
+          <label><input type="checkbox" /> Task 10</label>
+          <label><input type="checkbox" /> Task 11</label>
+          <label><input type="checkbox" /> Task 12</label>
+          <label><input type="checkbox" /> Task 13</label>
+          <label><input type="checkbox" /> Task 14</label>
+          <label><input type="checkbox" /> Task 15</label>
+          <label><input type="checkbox" /> Task 16</label>
+          <label><input type="checkbox" /> Task 17</label>
+          <label><input type="checkbox" /> Task 18</label>
+          <label><input type="checkbox" /> Task 19</label>
+          <label><input type="checkbox" /> Task 20</label>
         </div>
+        <div class="page_buttons">
+          <button class="back" disabled>Back</button>
+          <button class="next" disabled>Next</button>
+        </div>
+      </div>
 
-        <!-- 7-Day Box -->
-        <div id="mini_box_1" class="todo_box">
-            <h2>7-Day</h2>
-            <div class="items">
-                <label><input type="checkbox"> Task 1</label>
-                <label><input type="checkbox"> Task 2</label>
-                <label><input type="checkbox"> Task 3</label>
-                <label><input type="checkbox"> Task 4</label>
-                <label><input type="checkbox"> Task 5</label>
-            </div>
-            <div class="page_buttons">
-                <button class="back" disabled>Back</button>
-                <button class="next" disabled>Next</button>
-            </div>
+      <!-- 7-Day Box -->
+      <div id="mini_box_1" class="todo_box">
+        <h2>7-Day</h2>
+        <div class="items">
+          <label><input type="checkbox" /> Task 1</label>
+          <label><input type="checkbox" /> Task 2</label>
+          <label><input type="checkbox" /> Task 3</label>
+          <label><input type="checkbox" /> Task 4</label>
+          <label><input type="checkbox" /> Task 5</label>
+          <label><input type="checkbox" /> Task 6</label>
+          <label><input type="checkbox" /> Task 7</label>
+          <label><input type="checkbox" /> Task 8</label>
+          <label><input type="checkbox" /> Task 9</label>
+          <label><input type="checkbox" /> Task 10</label>
         </div>
+        <div class="page_buttons">
+          <button class="back" disabled>Back</button>
+          <button class="next" disabled>Next</button>
+        </div>
+      </div>
 
-        <!-- 30-Day Box -->
-        <div id="mini_box_2" class="todo_box">
-            <h2>30-Day</h2>
-            <div class="items">
-                <label><input type="checkbox"> Task 1</label>
-                <label><input type="checkbox"> Task 2</label>
-                <label><input type="checkbox"> Task 3</label>
-                <label><input type="checkbox"> Task 4</label>
-                <label><input type="checkbox"> Task 5</label>
-            </div>
-            <div class="page_buttons">
-                <button class="back" disabled>Back</button>
-                <button class="next" disabled>Next</button>
-            </div>
+      <!-- 30-Day Box -->
+      <div id="mini_box_2" class="todo_box">
+        <h2>30-Day</h2>
+        <div class="items">
+          <label><input type="checkbox" /> Task 1</label>
+          <label><input type="checkbox" /> Task 2</label>
+          <label><input type="checkbox" /> Task 3</label>
+          <label><input type="checkbox" /> Task 4</label>
+          <label><input type="checkbox" /> Task 5</label>
+          <label><input type="checkbox" /> Task 6</label>
+          <label><input type="checkbox" /> Task 7</label>
+          <label><input type="checkbox" /> Task 8</label>
+          <label><input type="checkbox" /> Task 9</label>
+          <label><input type="checkbox" /> Task 10</label>
         </div>
+        <div class="page_buttons">
+          <button class="back" disabled>Back</button>
+          <button class="next" disabled>Next</button>
+        </div>
+      </div>
 
-        <!-- Goals Box -->
-        <div id="goals_box" class="todo_box">
-            <h2>Goals</h2>
-            <div class="items">
-                <label><input type="checkbox"> Task 1</label>
-                <label><input type="checkbox"> Task 2</label>
-                <label><input type="checkbox"> Task 3</label>
-                <label><input type="checkbox"> Task 4</label>
-                <label><input type="checkbox"> Task 5</label>
-            </div>
-            <div class="page_buttons">
-                <button class="back" disabled>Back</button>
-                <button class="next" disabled>Next</button>
-            </div>
+      <!-- Goals Box -->
+      <div id="goals_box" class="todo_box">
+        <h2>Goals</h2>
+        <div class="items">
+          <label><input type="checkbox" /> Task 1</label>
+          <label><input type="checkbox" /> Task 2</label>
+          <label><input type="checkbox" /> Task 3</label>
+          <label><input type="checkbox" /> Task 4</label>
+          <label><input type="checkbox" /> Task 5</label>
         </div>
+        <div class="page_buttons">
+          <button class="back" disabled>Back</button>
+          <button class="next" disabled>Next</button>
+        </div>
+      </div>
     </div>
 
     <!-- Add Task Popup -->
     <div id="task_popup" class="popup">
-        <div class="popup-content">
-            <h2>Add Task</h2>
-            <label for="task_name">Task Name:</label>
-            <input type="text" id="task_name" name="task_name">
+      <div class="popup-content">
+        <h2>Add Task</h2>
+        <label for="task_name">Task Name:</label>
+        <input type="text" id="task_name" name="task_name" />
 
-            <label for="date_due">Date Due:</label>
-            <input type="date" id="date_due" name="date_due">
+        <label for="date_due">Date Due:</label>
+        <input type="date" id="date_due" name="date_due" />
 
-            <p>Priority:</p>
-            <label><input type="radio" name="priority" value="low"> Unimportant</label>
-            <label><input type="radio" name="priority" value="medium"> Low</label>
-            <label><input type="radio" name="priority" value="high"> High</label>
-            <label><input type="radio" name="priority" value="urgent"> Urgent</label>
+        <p>Priority:</p>
+        <label
+          ><input type="radio" name="priority" value="low" /> Unimportant</label
+        >
+        <label><input type="radio" name="priority" value="medium" /> Low</label>
+        <label><input type="radio" name="priority" value="high" /> High</label>
+        <label
+          ><input type="radio" name="priority" value="urgent" /> Urgent</label
+        >
 
-            <div class="popup-buttons">
-                <button id="close_task">Close</button>
-                <button id="enter_task">Enter</button>
-            </div>
+        <div class="popup-buttons">
+          <button id="close_task">Close</button>
+          <button id="enter_task">Enter</button>
         </div>
+      </div>
     </div>
 
     <script src="js/script.js"></script>
-</body>
+  </body>
 </html>
