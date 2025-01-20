@@ -11,9 +11,28 @@
         <!-- Top Panel -->
         <header class="top-panel">
             <button>Journal</button>
-            <button>Add Task</button>
+            <button onclick="addTaskWindow()">Add Task</button>
             <button>Account</button>
         </header>
+
+
+        <!--Modal for adding new task-->
+        <div id="taskModal" class="modal">
+            <div class="modal-content">
+              <span class="close" onclick="closeTaskWindow()">&times;</span>
+              <h2>Add a New Task</h2>
+              <form id="addTaskForm" onsubmit="addTask(event)">
+                <label for="taskName">Task Name:</label>
+                <input type="text" id="taskName" name="taskName" required>
+                <br>
+                <label for="taskDueDate">Due Date:</label>
+                <input type="date" id="taskDueDate" name="taskDueDate">
+                <br>
+                <button type="submit">Add Task</button>
+              </form>
+            </div>
+          </div>
+
 
         <!-- Main Content -->
         <div class="main-content">
@@ -45,8 +64,9 @@
                     <div class="widget">
                         <button class="arrow left-arrow" onclick="navigate('today', -1)">&#8249;</button>
                         <ul id="today">
+                            <!--Comment these out to check if add new is working
                             <li><input type="checkbox"> Example Task 1</li>
-                            <li><input type="checkbox"> Example Task 2</li>
+                            <li><input type="checkbox"> Example Task 2</li>-->
                         </ul>
                         <button class="arrow right-arrow" onclick="navigate('today', 1)">&#8250;</button>
                     </div>
@@ -57,8 +77,9 @@
                     <div class="widget">
                         <button class="arrow left-arrow" onclick="navigate('week', -1)">&#8249;</button>
                         <ul id="week">
+                            <!--Comment these out to check if add new is working
                             <li><input type="checkbox"> Example Weekly Task 1</li>
-                            <li><input type="checkbox"> Example Weekly Task 2</li>
+                            <li><input type="checkbox"> Example Weekly Task 2</li>-->
                         </ul>
                         <button class="arrow right-arrow" onclick="navigate('week', 1)">&#8250;</button>
                     </div>
@@ -69,8 +90,9 @@
                     <div class="widget">
                         <button class="arrow left-arrow" onclick="navigate('month', -1)">&#8249;</button>
                         <ul id="month">
+                            <!--Comment these out to check if add new is working
                             <li><input type="checkbox"> Example Monthly Task 1</li>
-                            <li><input type="checkbox"> Example Monthly Task 2</li>
+                            <li><input type="checkbox"> Example Monthly Task 2</li>-->
                         </ul>
                         <button class="arrow right-arrow" onclick="navigate('month', 1)">&#8250;</button>
                     </div>

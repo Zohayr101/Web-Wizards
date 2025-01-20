@@ -1,5 +1,93 @@
 // script.js
 
+
+const tasksToDo = [];
+const todayList = document.getElementById("today-list");
+const sevenDayList = document.getElementById("7day-list");
+const thirtyDayList = document.getElementById("30day-list");
+
+function addTaskWindow() {
+  document.getElementById("taskModal").style.display = "block";
+}
+
+function closeTaskWindow() {
+  document.getElementById("taskModal").style.display = "none";
+}
+
+function addTask(event) {
+  event.preventDefault(); // Prevent the form from reloading the page
+
+  const taskName = document.getElementById("taskName").value;
+  const taskDueDate = document.getElementById("taskDueDate").value;
+
+  // push into the array
+  tasksToDo.push({ toDoName: taskName, toDoDueDate: taskDueDate });
+
+  // close modal and reset form
+  closeTaskWindow();
+  document.getElementById("addTaskForm").reset();
+
+  // update the lists with the new task
+  updateLists();
+
+  //local storage
+  localStorage.setItem("tasksToDo", JSON.stringify(tasksToDo));
+
+}
+
+
+function dateDiff(first, second) {
+  return Math.round((second - first) / (1000 * 60 * 60 * 24));
+}
+
+function updateLists() {
+  // clear existing lists
+  todayList.innerHTML = "";
+  sevenDayList.innerHTML = "";
+  thirtyDayList.innerHTML = "";
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  tasksToDo.forEach(task => {
+    const dueDate = new Date(task.toDoDueDate);
+    dueDate.setHours(0, 0, 0, 0);
+
+    // create <li>
+    const li = document.createElement("li");
+    li.textContent = `${task.toDoName} (Due: ${task.toDoDueDate})`;
+
+    const diffDays = dateDiff(now, dueDate) + 1;
+    //console.log(task.toDoDueDate + " " + diffDays); //log to see what the diff days is getting
+
+    // put in list
+    if (diffDays === 0) {
+      todayList.appendChild(li);
+    } else if (diffDays > 0 && diffDays <= 7) {
+      sevenDayList.appendChild(li);
+    } else if (diffDays > 7 && diffDays <= 30) {
+      thirtyDayList.appendChild(li);
+    }
+  });
+}
+
+//get existing tasks on page load
+window.addEventListener("load", () => {
+    const saved = localStorage.getItem("tasksToDo");
+    if (saved) {
+      // Parse the JSON string back into an array of tasks
+      const parsedTasks = JSON.parse(saved);
+      // Spread the parsed tasks into our tasksToDo array
+      tasksToDo.push(...parsedTasks);
+    }
+    // refresh UI
+    updateLists();
+  });
+
+
+
+
+
 // Sample data for widgets
 const widgetData = {
     today: ["Task 1", "Task 2", "Task 3", "Task 4"],
@@ -24,7 +112,10 @@ function renderWidget(id) {
     const end = start + ITEMS_PER_PAGE;
     const pageData = data.slice(start, end);
 
-    widget.innerHTML = pageData.map(item => `<li><input type="checkbox"> ${item}</li>`).join("");
+
+    /******************************************************/
+    //was getting errors after adding add task function with this line so comment for now. Need to debug.
+    //widget.innerHTML = pageData.map(item => `<li><input type="checkbox"> ${item}</li>`).join("");
 }
 
 function navigate(id, direction) {
@@ -41,7 +132,9 @@ function navigate(id, direction) {
 }
 
 // Initialize all widgets
-Object.keys(widgetData).forEach(id => renderWidget(id));
+/******************************************************/
+//was getting errors after adding add task function with this line so comment for now. Need to debug.
+//Object.keys(widgetData).forEach(id => renderWidget(id));
 
 // Highlight the current day
 const highlightCurrentDay = () => {
