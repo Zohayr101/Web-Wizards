@@ -1,122 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Life at a Glance</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Life at a Glance</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="container">
-        <!-- Top Panel -->
-        <header class="top-panel">
-            <button>Journal</button>
-            <button onclick="addTaskWindow()">Add Task</button>
-            <button>Account</button>
-        </header>
+  <div class="container">
+    <!-- Top Panel -->
+    <header class="top-panel">
+      <button>Journal</button>
+      <button onclick="addTaskWindow()">Add Task</button>
+      <button>Account</button>
+      <button id="change-theme-btn">Change Theme</button>
+    </header>
 
+    <!-- Modal for adding new task -->
+    <div id="taskModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeTaskWindow()">&times;</span>
+        <h2>Add a New Task</h2>
+        <form id="addTaskForm" onsubmit="addTask(event)">
+          <label for="taskName">Task Name:</label>
+          <input type="text" id="taskName" name="taskName" required />
+          <br />
+          <label for="taskDueDate">Due Date:</label>
+          <input type="date" id="taskDueDate" name="taskDueDate" />
+          <br />
+          <button type="submit">Add Task</button>
+        </form>
+      </div>
+    </div>
 
-        <!--Modal for adding new task-->
-        <div id="taskModal" class="modal">
-            <div class="modal-content">
-              <span class="close" onclick="closeTaskWindow()">&times;</span>
-              <h2>Add a New Task</h2>
-              <form id="addTaskForm" onsubmit="addTask(event)">
-                <label for="taskName">Task Name:</label>
-                <input type="text" id="taskName" name="taskName" required>
-                <br>
-                <label for="taskDueDate">Due Date:</label>
-                <input type="date" id="taskDueDate" name="taskDueDate">
-                <br>
-                <button type="submit">Add Task</button>
-              </form>
-            </div>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Left Column: Calendar + Habit Tracker -->
+      <div class="left-column">
+        <!-- Calendar Section -->
+        <div class="calendar">
+          <!-- Calendar Header -->
+          <div class="calendar-header-title">
+            <h2 id="calendar-month-year">JANUARY 2025</h2>
           </div>
-
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Calendar Section -->
-            <div class="calendar">
-                <div class="calendar-header">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                </div>
-                <div class="calendar-grid">
-                    <script>
-                        for (let day = 1; day <= 31; day++) {
-                            document.write(`<div class="calendar-cell">${day}</div>`);
-                        }
-                    </script>
-                </div>
-            </div>
-
-            <!-- Tasks Section -->
-            <aside class="tasks-section">
-                <div class="task-box">
-                    <div class="grab-handle">&#9776;</div> <!-- Grab handle -->
-                    <h3>Today's Tasks</h3>
-                    <div class="widget">
-                        <button class="arrow left-arrow" onclick="navigate('today', -1)">&#8249;</button>
-                        <ul id="today-list">
-                            <!--Comment these out to check if add new is working
-                            <li><input type="checkbox"> Example Task 1</li>
-                            <li><input type="checkbox"> Example Task 2</li>-->
-                        </ul>
-                        <button class="arrow right-arrow" onclick="navigate('today', 1)">&#8250;</button>
-                    </div>
-                </div>
-                <div class="task-box">
-                    <div class="grab-handle">&#9776;</div> <!-- Grab handle -->
-                    <h3>7 Days Tasks</h3>
-                    <div class="widget">
-                        <button class="arrow left-arrow" onclick="navigate('week', -1)">&#8249;</button>
-                        <ul id="7day-list">
-                            <!--Comment these out to check if add new is working
-                            <li><input type="checkbox"> Example Weekly Task 1</li>
-                            <li><input type="checkbox"> Example Weekly Task 2</li>-->
-                        </ul>
-                        <button class="arrow right-arrow" onclick="navigate('week', 1)">&#8250;</button>
-                    </div>
-                </div>
-                <div class="task-box">
-                    <div class="grab-handle">&#9776;</div> <!-- Grab handle -->
-                    <h3>30 Days Tasks</h3>
-                    <div class="widget">
-                        <button class="arrow left-arrow" onclick="navigate('month', -1)">&#8249;</button>
-                        <ul id="30day-list">
-                            <!--Comment these out to check if add new is working
-                            <li><input type="checkbox"> Example Monthly Task 1</li>
-                            <li><input type="checkbox"> Example Monthly Task 2</li>-->
-                        </ul>
-                        <button class="arrow right-arrow" onclick="navigate('month', 1)">&#8250;</button>
-                    </div>
-                </div>
-                <div class="task-box">
-                    <div class="grab-handle">&#9776;</div> <!-- Grab handle -->
-                    <h3>Goals</h3>
-                    <div class="widget">
-                        <button class="arrow left-arrow" onclick="navigate('goals', -1)">&#8249;</button>
-                        <ul id="goals">
-                            <li><input type="checkbox"> Example Goal 1</li>
-                            <li><input type="checkbox"> Example Goal 2</li>
-                        </ul>
-                        <button class="arrow right-arrow" onclick="navigate('goals', 1)">&#8250;</button>
-                    </div>
-                </div>
-            </aside>
+          <div class="calendar-header">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+          </div>
+          <div class="calendar-grid">
+            <script>
+              for (let day = 1; day <= 31; day++) {
+                document.write(
+                  `<div class="calendar-cell"><span class="day-number">${day}</span></div>`
+                );
+              }
+            </script>
+          </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <h1>Your Life in a Glance</h1>
-        </footer>
+        <!-- Habit Tracker Section (Narrower) -->
+        <div class="habit-tracker-wide">
+          <div class="task-box">
+            <div class="grab-handle">&#9776;</div> <!-- Grab handle -->
+            <h3>Habit Tracker</h3>
+            <div class="widget">
+              <button class="arrow left-arrow" onclick="navigate('habits-wide', -1)">&#8249;</button>
+              <ul id="habit-list-wide">
+                <!-- Habits will be dynamically added here -->
+              </ul>
+              <button class="arrow right-arrow" onclick="navigate('habits-wide', 1)">&#8250;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks Section (Right Column) -->
+      <aside class="tasks-section">
+        <div class="task-box todays-tasks">
+          <div class="grab-handle">&#9776;</div>
+          <h3>Today's Tasks</h3>
+          <div class="widget">
+            <button class="arrow left-arrow" onclick="navigate('today', -1)">&#8249;</button>
+            <ul id="today-list">
+              <!-- Tasks will be dynamically added here -->
+            </ul>
+            <button class="arrow right-arrow" onclick="navigate('today', 1)">&#8250;</button>
+          </div>
+        </div>
+        <div class="task-box">
+          <div class="grab-handle">&#9776;</div>
+          <h3>7 Days Tasks</h3>
+          <div class="widget">
+            <button class="arrow left-arrow" onclick="navigate('week', -1)">&#8249;</button>
+            <ul id="7day-list">
+              <!-- Tasks will be dynamically added here -->
+            </ul>
+            <button class="arrow right-arrow" onclick="navigate('week', 1)">&#8250;</button>
+          </div>
+        </div>
+        <div class="task-box">
+          <div class="grab-handle">&#9776;</div>
+          <h3>30 Days Tasks</h3>
+          <div class="widget">
+            <button class="arrow left-arrow" onclick="navigate('month', -1)">&#8249;</button>
+            <ul id="30day-list">
+              <!-- Tasks will be dynamically added here -->
+            </ul>
+            <button class="arrow right-arrow" onclick="navigate('month', 1)">&#8250;</button>
+          </div>
+        </div>
+      </aside>
     </div>
-    <script src="script.js"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <h1 id="motivational-quote">Your Life in a Glance</h1>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
