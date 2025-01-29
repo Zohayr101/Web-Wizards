@@ -1,169 +1,93 @@
-
-body {
-    background-color: #f3e5f5; 
-    color: #333; 
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+/* styles.css */
+/* 2. CSS Variables for Themes */
+:root {
+    /* Default (Oakland University) Theme Colors */
+    --bg-color: #1c1c1c;
+    --text-color: #f2f2f2;
+    --primary-color: #a37c27;
+    --secondary-color: #5a463a;
+    --button-bg-color: #5a463a;
+    --button-hover-bg-color: #a37c27;
+    --button-text-color: #f2f2f2;
+    --day-bg-color: #5a463a;
+    --day-number-bg-color: #a37c27;
+    --day-number-text-color: #1c1c1c;
+    --current-day-bg-color: #ffd700;
+    --footer-bg-color: #333333;
+    --modal-bg-color: #333333;
+    --modal-border-color: #888;
+    --arrow-bg-color: #5a463a;
 }
 
-
-.menu_bar {
-    background: #2c3e50; 
-    padding: 15px;
-    color: white;
-    display: flex;
-    justify-content: flex-start;
-    gap: 20px;
-    padding-left: 5vw;
+body.light-theme {
+    /* Tropical Theme Colors */
+    --bg-color: #87CEEB;
+    --text-color: #003366;
+    --primary-color: #00A3E0;
+    --secondary-color: #2E8B57;
+    --button-bg-color: #00A3E0;
+    --button-hover-bg-color: #FF6F61;
+    --button-text-color: #ffffff;
+    --day-bg-color: #2E8B57;
+    --day-number-bg-color: #FFD700;
+    --day-number-text-color: #003366;
+    --current-day-bg-color: #FF6F61;
+    --footer-bg-color: #87CEEB;
+    --modal-bg-color: #87CEEB;
+    --modal-border-color: #00A3E0;
+    --arrow-bg-color: #00A3E0;
 }
 
-.menu_bar button {
-    background: #34495e;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+body.green-theme {
+    /* Jing's Green Theme Colors */
+    --bg-color: #f3e5f5;
+    --text-color: #463a77;
+    --primary-color: #a8d5ba;
+    --secondary-color: #ffffff;
+    --button-bg-color: #b8a1d9;
+    --button-hover-bg-color: #e4c5f9;
+    --button-text-color: #463a77;
+    --day-bg-color: #a8d5ba;
+    --day-number-bg-color: #ffffff;
+    --day-number-text-color: #463a77;
+    --current-day-bg-color: #cfece0;
+    --footer-bg-color: #ffffff;
+    --modal-bg-color: #ffffff;
+    --modal-border-color: #a8d5ba;
+    --arrow-bg-color: #a8d5ba;
 }
 
-.menu_bar button:hover {
-    background: #1abc9c;
+/* Add this AFTER the green-theme block */
+body.purple-theme {
+    /* Light Purple Theme Colors */
+    --bg-color: #ffffff;
+    --text-color: #463a77;
+    --primary-color: #b8a1d9;
+    --secondary-color: #f3e5f5;
+    --button-bg-color: #a8d5ba;
+    --button-hover-bg-color: #cfece0;
+    --day-bg-color: #f7edf9;
+    --day-number-bg-color: #ffffff;
+    --current-day-bg-color: #e4c5f9;
+    --footer-bg-color: #ffffff;
+    --modal-bg-color: #ffffff;
+    --modal-border-color: #b8a1d9;
+    --arrow-bg-color: #b8a1d9;
 }
 
-
-#boxes {
-    display: grid;
-    grid-template-columns: 3fr 2fr 2fr;
-    grid-template-rows: 3fr 2fr;
-    grid-gap: 20px;
-    padding: 20px 5vw;
-}
-
-#current_box {
-    grid-column: 1 / 1;
-    grid-row: 1 / 3;
-}
-
-#goals_box {
-    grid-column: 2 / 4;
-    grid-row: 2 / 3;
-}
-
-
-.todo_box {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.todo_box h2 {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-.items {
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-.items label {
-    display: block;
-    background: #e8f5e9; 
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 15px;
-}
-
-
-.page_buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.page_buttons button {
-    background: #34495e;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 15px;
-    cursor: not-allowed;
-}
-
-.page_buttons button:hover {
-    background: #1abc9c;
-}
-
-/* Popup styling */
-#task_popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.popup-content {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    width: 400px;
-    text-align: left;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.popup-content h2 {
-    margin-top: 0;
-    color: #2c3e50;
-    text-align: center;
-}
-
-.popup-content label,
-.popup-content input,
-.popup-content button {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-}
-
-.popup-content input[type="text"],
-.popup-content input[type="date"],
-.popup-content input[type="radio"] {
-    width: 90%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.popup-content button {
-    background: #1abc9c;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.popup-content button:hover {
-    background: #16a085;
-}
-
-@media (max-width: 768px) {
-    #boxes {
-        grid-template-columns: 
-    }
-
-    .popup-content {
-        width: 90%; 
-    }
+body.jing-theme {
+    /* Jing's Lilac Theme */
+    --bg-color: #f3e5f5;
+    --text-color: #2c3e50;
+    --primary-color: #6a5acd;
+    --secondary-color: #ffffff;
+    --button-bg-color: #d9eaf1;
+    --button-hover-bg-color: #b3d3e5;
+    --day-bg-color: #eae0f2;
+    --day-number-bg-color: #d9eaf1;
+    --current-day-bg-color: #7b4cc9;
+    --footer-bg-color: #ffffff;
+    --modal-bg-color: #ffffff;
+    --modal-border-color: #6a5acd;
+    --arrow-bg-color: #6a5acd;
 }
