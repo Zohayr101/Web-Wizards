@@ -91,40 +91,64 @@
 /* If you want to keep it styled for future use, retain the styles but ensure the button is removed from HTML */
 
 /* Specific Styling for "Today's Tasks" Box */
+#layout-default {
+    grid-template:
+                "c c t"
+                "c c w"
+                "h h m";
+}
+
+#layout-mirrored {
+    grid-template:
+                "t c c"
+                "w c c"
+                "m h h";
+}
+
+#layout-top-tasks {
+    grid-template:
+                "t w m"
+                "h c c"
+                "h c c";
+}
+
+#layout-bottom-tasks {
+    grid-template:
+                "h c c"
+                "h c c"
+                "t w m";
+}
+
+#layout-no-calendar {
+    grid-template:
+                "t w m" 25vh
+                "t w m" 25vh
+                "h h h" 25vh / 1fr 1fr 1fr;
+}
+
 #today {
-    grid-column-start: 3;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    grid-area: t;
 }
 
 #week {
-    grid-column-start: 3;
-    grid-column-end: 4;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-area: w;
 }
 
 #month {
-    grid-column-start: 3;
-    grid-column-end: 4;
-    grid-row-start: 3;
-    grid-row-end: 4;
+    grid-area: m;
 }
 
 #habits {
-    grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: 3;
-    grid-row-end: 4;
+    grid-area: h;
 }
 
 /* 7. Calendar Section */
 #calendar {
-    grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 3;
+    grid-area: c;
+}
+
+#layout-no-calendar #calendar {
+    display: none;
 }
 
 #calendar-header {
