@@ -16,59 +16,79 @@ var calendarTime = new Date();
 // Set date constants for today's date info as well as 7 and
 // 30 days from now
 const currentDate = new Date();
-currentDate.setHours(23,59,59,999);
+currentDate.setHours(23, 59, 59, 999);
 const currentYear = currentDate.getFullYear();
 const currentMonth = currentDate.getMonth() + 1;
 const currentDay = currentDate.getDate();
 
 const weekDate = new Date();
 weekDate.setDate(currentDay + 7);
-weekDate.setHours(23,59,59,999);
+weekDate.setHours(23, 59, 59, 999);
 
 const monthDate = new Date();
-monthDate.setDate(currentDay + 30)
-monthDate.setHours(23,59,59,999);
+monthDate.setDate(currentDay + 30);
+monthDate.setHours(23, 59, 59, 999);
 
 //temporary todo tasks until database is operational
 var widgetData = {
   today: [
-    {name: "Task 1", dueDate: currentDate, completed: false}, 
-    {name: "Task 2", dueDate: currentDate, completed: false}, 
-    {name: "Task 3", dueDate: currentDate, completed: false}, 
-    {name: "Task 4", dueDate: currentDate, completed: false}
+    { name: "Task 1", dueDate: currentDate, completed: false },
+    { name: "Task 2", dueDate: currentDate, completed: false },
+    { name: "Task 3", dueDate: currentDate, completed: false },
+    { name: "Task 4", dueDate: currentDate, completed: false },
   ],
   week: [
-    {name: "Week Task 1", dueDate: weekDate, completed: false}, 
-    {name: "Week Task 2", dueDate: weekDate, completed: false}, 
-    {name: "Week Task 3", dueDate: weekDate, completed: false}, 
-    {name: "Week Task 4", dueDate: weekDate, completed: false}
+    { name: "Week Task 1", dueDate: weekDate, completed: false },
+    { name: "Week Task 2", dueDate: weekDate, completed: false },
+    { name: "Week Task 3", dueDate: weekDate, completed: false },
+    { name: "Week Task 4", dueDate: weekDate, completed: false },
   ],
   month: [
-    {name: "Month Task 1", dueDate: monthDate, completed: false}, 
-    {name: "Month Task 2", dueDate: monthDate, completed: false}, 
-    {name: "Month Task 3", dueDate: monthDate, completed: false}, 
-    {name: "Month Task 4", dueDate: monthDate, completed: false}
+    { name: "Month Task 1", dueDate: monthDate, completed: false },
+    { name: "Month Task 2", dueDate: monthDate, completed: false },
+    { name: "Month Task 3", dueDate: monthDate, completed: false },
+    { name: "Month Task 4", dueDate: monthDate, completed: false },
   ],
   habits: [
-    {name: "Did you drink water today?", id: (new Date()).valueOf() + Math.random(), completed: false},
-    {name: "Did you exercise today?", id: (new Date()).valueOf() + Math.random(), completed: false},
-    {name: "Did you do your XYZ today?", id: (new Date()).valueOf() + Math.random(), completed: false}
-  ]
-}
+    {
+      name: "Did you drink water today?",
+      id: new Date().valueOf() + Math.random(),
+      completed: false,
+    },
+    {
+      name: "Did you exercise today?",
+      id: new Date().valueOf() + Math.random(),
+      completed: false,
+    },
+    {
+      name: "Did you do your XYZ today?",
+      id: new Date().valueOf() + Math.random(),
+      completed: false,
+    },
+  ],
+};
 
 var widgetIndex = {
   today: 0,
   week: 0,
   month: 0,
-  habits: 0
+  habits: 0,
 };
 
 var itemsPerPage = {
   today: 4,
   week: 4,
   month: 2,
-  habits: 2
+  habits: 2,
 };
+
+const layouts = [
+  "layout-default",
+  "layout-mirrored",
+  "layout-top-tasks",
+  "layout-bottom-tasks",
+  "layout-no-calendar",
+];
 
 // Task Modal Functions
 function addTaskWindow() {
@@ -92,8 +112,8 @@ function addTask(event) {
     id: taskDueDate.valueOf() + Math.random(),
     name: taskName,
     dueDate: taskDueDate.valueOf(),
-    completed: false
-  }
+    completed: false,
+  };
 
   // Close modal and reset form
   closeTaskWindow();
@@ -157,9 +177,9 @@ function updateTasks(listId, taskList) {
   listTarget = document.getElementById(listId);
   listTarget.innerHTML = "";
 
-  taskList.forEach(task => {
+  taskList.forEach((task) => {
     // Create <li>
-    const checkbox = document.createElement("input")
+    const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
 
     const span = document.createElement("span");
@@ -178,7 +198,7 @@ function updateTasks(listId, taskList) {
 function updateHabits(habitsArray) {
   habitsList.innerHTML = "";
 
-  habitsArray.forEach(habit => {
+  habitsArray.forEach((habit) => {
     const span = document.createElement("span");
     span.textContent = habit.name;
 
@@ -205,7 +225,7 @@ function updateHabits(habitsArray) {
 
 // Function to toggle habit completion
 function toggleHabit(habitId) {
-  habitTarget = widgetData["habits"].find(habit => habit.id === habitId);
+  habitTarget = widgetData["habits"].find((habit) => habit.id === habitId);
   habitTarget.completed = !habitTarget.completed;
 
   renderWidget("habits", 0);
@@ -213,27 +233,34 @@ function toggleHabit(habitId) {
   localStorage.setItem("habits", JSON.stringify(widgetData["habits"]));
 }
 
+function cycleLayout() {
+  const content = document.getElementsByClassName("main-content")[0];
+  let currentLayout = content.id;
+  let nextLayoutIndex = (layouts.indexOf(currentLayout) + 1) % layouts.length;
+  content.id = layouts[nextLayoutIndex];
+}
+
 function toggleTheme() {
   const body = document.body;
-  
-  if (body.classList.contains('light-theme')) {
-      body.classList.remove('light-theme');
-      body.classList.add('green-theme');
-      localStorage.setItem('theme', 'green');
-  } else if (body.classList.contains('green-theme')) {
-      body.classList.remove('green-theme');
-      body.classList.add('purple-theme');
-      localStorage.setItem('theme', 'purple');
-  } else if (body.classList.contains('purple-theme')) {
-      body.classList.remove('purple-theme');
-      body.classList.add('jing-theme');
-      localStorage.setItem('theme', 'jing');
-  } else if (body.classList.contains('jing-theme')) {
-      body.classList.remove('jing-theme');
-      localStorage.setItem('theme', 'dark');
+
+  if (body.classList.contains("light-theme")) {
+    body.classList.remove("light-theme");
+    body.classList.add("green-theme");
+    localStorage.setItem("theme", "green");
+  } else if (body.classList.contains("green-theme")) {
+    body.classList.remove("green-theme");
+    body.classList.add("purple-theme");
+    localStorage.setItem("theme", "purple");
+  } else if (body.classList.contains("purple-theme")) {
+    body.classList.remove("purple-theme");
+    body.classList.add("jing-theme");
+    localStorage.setItem("theme", "jing");
+  } else if (body.classList.contains("jing-theme")) {
+    body.classList.remove("jing-theme");
+    localStorage.setItem("theme", "dark");
   } else {
-      body.classList.add('light-theme');
-      localStorage.setItem('theme', 'light');
+    body.classList.add("light-theme");
+    localStorage.setItem("theme", "light");
   }
 }
 
@@ -245,27 +272,31 @@ function loadCalendar(offset) {
   lastDay = new Date(calendarYear, calendarMonth + 1, 0).getDate();
   weekday = new Date(calendarYear, calendarMonth, 1).getDay();
 
-  monthName = calendarTime.toLocaleString('default', {month: 'long'});
-  var calendarDateText = document.createElement('h2');
+  monthName = calendarTime.toLocaleString("default", { month: "long" });
+  var calendarDateText = document.createElement("h2");
   calendarDateText.innerText = monthName + " " + calendarYear;
   calendarHeader.innerHTML = "";
   calendarHeader.appendChild(calendarDateText);
 
   calendarGrid.innerHTML = "";
   for (let day = 0; day < 38; day++) {
-    var dayCellDiv = document.createElement('div');
+    var dayCellDiv = document.createElement("div");
 
     if (day >= weekday && day < lastDay + weekday) {
-      if (calendarYear === currentYear && calendarMonth + 1 === currentMonth && day - weekday + 1 === currentDay) {
+      if (
+        calendarYear === currentYear &&
+        calendarMonth + 1 === currentMonth &&
+        day - weekday + 1 === currentDay
+      ) {
         dayCellDiv.id = "current-day";
       }
 
-      var dayNumberSpan = document.createElement('span');
+      var dayNumberSpan = document.createElement("span");
       dayNumberSpan.className = "day-number";
       dayNumberSpan.textContent = day - weekday + 1;
       dayCellDiv.appendChild(dayNumberSpan);
 
-      dayCellDiv.className = 'calendar-cell';
+      dayCellDiv.className = "calendar-cell";
     }
 
     calendarGrid.appendChild(dayCellDiv);
@@ -274,38 +305,43 @@ function loadCalendar(offset) {
 
 // Initialization on Page Load
 window.addEventListener("load", () => {
-    // Load Tasks
-    savedPages = ["today", "week", "month", "habits"];
-    savedPages.forEach(page => {
-      const savedTasks = localStorage.getItem(page);
-      if (savedTasks) {
-        // Parse the JSON string back into an array of tasks
-        widgetData[page] = JSON.parse(savedTasks);
-      }
-
-      renderWidget(page, 0);
-    });
-
-    // Initialize Calendar at current month, year
-    loadCalendar(0);
-
-    // Initialize quote cycling on window load
-    // Start cycling motivational quotes
-    cycleQuotes();
-
-    // Apply saved theme
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-        document.body.classList.add("light-theme");
-    } else if (savedTheme === "green") {
-        document.body.classList.add("green-theme");
-    } else if (savedTheme === "purple") {
-        document.body.classList.add("purple-theme");
-    } else if (savedTheme === "jing") {
-        document.body.classList.add("jing-theme");
-    } else {
-        document.body.classList.remove("light-theme", "green-theme", "purple-theme", "jing-theme");
+  // Load Tasks
+  savedPages = ["today", "week", "month", "habits"];
+  savedPages.forEach((page) => {
+    const savedTasks = localStorage.getItem(page);
+    if (savedTasks) {
+      // Parse the JSON string back into an array of tasks
+      widgetData[page] = JSON.parse(savedTasks);
     }
+
+    renderWidget(page, 0);
+  });
+
+  // Initialize Calendar at current month, year
+  loadCalendar(0);
+
+  // Initialize quote cycling on window load
+  // Start cycling motivational quotes
+  cycleQuotes();
+
+  // Apply saved theme
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-theme");
+  } else if (savedTheme === "green") {
+    document.body.classList.add("green-theme");
+  } else if (savedTheme === "purple") {
+    document.body.classList.add("purple-theme");
+  } else if (savedTheme === "jing") {
+    document.body.classList.add("jing-theme");
+  } else {
+    document.body.classList.remove(
+      "light-theme",
+      "green-theme",
+      "purple-theme",
+      "jing-theme"
+    );
+  }
 });
 
 // 6. Motivational Quotes Functionality
@@ -321,7 +357,7 @@ const motivationalQuotes = [
   "Create your own sunshine.",
   "Stay strong, stay positive.",
   "Make it happen today.",
-  "Be the change now."
+  "Be the change now.",
 ];
 
 // Function to cycle through quotes
