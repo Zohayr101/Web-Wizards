@@ -27,13 +27,13 @@
     <div class="modal-content">
       <span class="close" onclick="closeTaskWindow()">&times;</span>
       <h2>Add a New Task</h2>
-      <form id="addTaskForm" onsubmit="addTask(event)">
-        <label for="taskName">Task Name:</label>
-        <input type="text" id="taskName" name="taskName" required />
-        <br />
-        <label for="taskDueDate">Due Date:</label>
-        <input type="date" id="taskDueDate" name="taskDueDate" />
-        <br />
+      <form id="add-task-form" onsubmit="addTask(event)">
+        <label for="task-name">Task Name:</label>
+        <input type="text" id="task-name" name="task-name" required>
+        <br>
+        <label for="task-due-date">Due Date:</label>
+        <input type="date" id="task-due-date" name="task-due-date">
+        <br>
         <button type="submit">Add Task</button>
       </form>
     </div>
@@ -74,16 +74,16 @@
     <div class="widget" id="habits">
       <div class="grab-handle">&#9776;</div> <!-- Grab handle -->
       <div class="interface">
-        <button class="arrow left-arrow" onclick="navigate('habits', -1)">&#8249;</button>
+        <button disabled class="arrow left-arrow" id="habits-back" onclick="renderWidget('habits', -1)">&#8249;</button>
 
         <div class="task-content">
           <h3>Habit Tracker</h3>
-          <ul class="task-list" id="habit-list">
+          <ul class="task-list" id="habits-list">
             <!-- Habits will be dynamically added here -->
           </ul>
         </div>
 
-        <button class="arrow right-arrow" onclick="navigate('habits', 1)">&#8250;</button>
+        <button class="arrow right-arrow" id="habits-forward" onclick="renderWidget('habits', 1)">&#8250;</button>
       </div>
     </div>
 
@@ -91,7 +91,7 @@
     <div class="widget" id="today">
       <div class="grab-handle">&#9776;</div>
       <div class="interface">
-        <button class="arrow left-arrow" onclick="navigate('today', -1)">&#8249;</button>
+        <button disabled class="arrow left-arrow" id="today-back" onclick="renderWidget('today', -1)">&#8249;</button>
 
         <div class="task-content">
           <h3>Today's Tasks</h3>
@@ -100,14 +100,14 @@
           </ul>
         </div>
 
-        <button class="arrow right-arrow" onclick="navigate('today', 1)">&#8250;</button>
+        <button class="arrow right-arrow" id="today-forward" onclick="renderWidget('today', 1)">&#8250;</button>
       </div>
     </div>
 
     <div class="widget" id="week">
       <div class="grab-handle">&#9776;</div>
       <div class="interface">
-        <button class="arrow left-arrow" onclick="navigate('week', -1)">&#8249;</button>
+        <button disabled class="arrow left-arrow" id="week-back" onclick="renderWidget('week', -1)">&#8249;</button>
 
         <div class="task-content">
           <h3>7 Days Tasks</h3>
@@ -116,14 +116,14 @@
           </ul>
         </div>
 
-        <button class="arrow right-arrow" onclick="navigate('week', 1)">&#8250;</button>
+        <button class="arrow right-arrow" id="week-forward" onclick="renderWidget('week', 1)">&#8250;</button>
       </div>
     </div>
 
     <div class="widget" id="month">
       <div class="grab-handle">&#9776;</div>
       <div class="interface">
-        <button class="arrow left-arrow" onclick="navigate('month', -1)">&#8249;</button>
+        <button disabled class="arrow left-arrow" id="month-back" onclick="renderWidget('month', -1)">&#8249;</button>
 
         <div class="task-content">
           <h3>30 Days Tasks</h3>
@@ -132,7 +132,7 @@
           </ul>
         </div>
 
-        <button class="arrow right-arrow" onclick="navigate('month', 1)">&#8250;</button>
+        <button class="arrow right-arrow" id="month-forward" onclick="renderWidget('month', 1)">&#8250;</button>
       </div>
     </div>
   </div>
