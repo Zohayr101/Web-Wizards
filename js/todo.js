@@ -2,7 +2,6 @@
 
 //temporary username until database is operational
 const username = "username_test";
-const ITEMS_PER_PAGE = 2;
 
 // DOM Elements
 const habitsList = document.getElementById("habits-list"); // For Habit Tracker
@@ -64,6 +63,13 @@ var widgetIndex = {
   habits: 0
 };
 
+var itemsPerPage = {
+  today: 4,
+  week: 4,
+  month: 2,
+  habits: 2
+};
+
 // Task Modal Functions
 function addTaskWindow() {
   document.getElementById("add-task").style.display = "block";
@@ -120,8 +126,8 @@ function renderWidget(id, offset) {
   const data = widgetData[id];
   widgetIndex[id] += offset;
 
-  const start = widgetIndex[id] * ITEMS_PER_PAGE;
-  const end = start + ITEMS_PER_PAGE;
+  const start = widgetIndex[id] * itemsPerPage[id];
+  const end = start + itemsPerPage[id];
   const pageData = data.slice(start, end);
 
   const backButton = document.getElementById(id + "-back");
