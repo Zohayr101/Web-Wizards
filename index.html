@@ -20,6 +20,13 @@
       <button onclick="addTaskWindow()">Add Task</button>
       <button>Account</button>
       <button onclick="cycleLayout()">Change Layout</button>
+      <select onchange="setLayout(value)" selected="layout-default">
+        <option value="layout-default">Default</option>
+        <option value="layout-mirrored">Mirrored</option>
+        <option value="layout-top-tasks">Top Tasks</option>
+        <option value="layout-bottom-tasks">Bottom Tasks</option>
+        <option value="layout-no-calendar">No Calendar</option>
+      </select>
       <button onclick="toggleTheme()">Change Theme</button>
     </header>
 

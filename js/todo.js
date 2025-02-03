@@ -240,6 +240,10 @@ function cycleLayout() {
   content.id = layouts[nextLayoutIndex];
 }
 
+function setLayout(layout) {
+  document.getElementsByClassName("main-content")[0].id = layout;
+}
+
 function toggleTheme() {
   const body = document.body;
 
