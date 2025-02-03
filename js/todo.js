@@ -90,6 +90,14 @@ const layouts = [
   "layout-no-calendar",
 ];
 
+const themes = [
+  "light",
+  "green",
+  "purple",
+  "jing",
+  "dark",
+];
+
 // Task Modal Functions
 function addTaskWindow() {
   document.getElementById("add-task").style.display = "block";
@@ -266,6 +274,16 @@ function toggleTheme() {
     body.classList.add("light-theme");
     localStorage.setItem("theme", "light");
   }
+}
+
+function setTheme(theme) {
+  const body = document.body;
+  localStorage.setItem("theme", theme);
+  // remove the current theme
+  for (let t of themes) {
+    body.classList.remove(t + "-theme");
+  }
+  body.classList.add(theme + "-theme");
 }
 
 function loadCalendar(offset) {

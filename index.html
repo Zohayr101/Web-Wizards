@@ -27,7 +27,13 @@
         <option value="layout-bottom-tasks">Bottom Tasks</option>
         <option value="layout-no-calendar">No Calendar</option>
       </select>
-      <button onclick="toggleTheme()">Change Theme</button>
+      <select onchange="setTheme(value)" selected="layout-default">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+        <option value="green">Green</option>
+        <option value="purple">Purple</option>
+        <option value="jing">Jing</option>
+      </select>
     </header>
 
     <!-- Modal for adding new task -->
