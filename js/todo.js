@@ -85,18 +85,13 @@ var itemsPerPage = {
 const layouts = [
   "layout-default",
   "layout-mirrored",
+  "layout-large-today",
   "layout-top-tasks",
   "layout-bottom-tasks",
   "layout-no-calendar",
 ];
 
-const themes = [
-  "light",
-  "green",
-  "purple",
-  "jing",
-  "dark",
-];
+const themes = ["light", "green", "purple", "jing", "dark"];
 
 // Task Modal Functions
 function addTaskWindow() {

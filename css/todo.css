@@ -105,6 +105,13 @@
                 "m h h";
 }
 
+#layout-large-today {
+    grid-template:
+                "t c c"
+                "t c c"
+                "w m h";
+}
+
 #layout-top-tasks {
     grid-template:
                 "t w m"
