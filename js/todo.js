@@ -11,14 +11,16 @@ const quoteElement = document.getElementById("motivational-quote");
 //Calendar
 const calendarHeader = document.getElementById("calendar-header");
 const calendarGrid = document.getElementById("calendar-grid");
+
 var calendarTime = new Date();
+var calendarDisplay = "month";
 
 // Set date constants for today's date info as well as 7 and
 // 30 days from now
 const currentDate = new Date();
 currentDate.setHours(23, 59, 59, 999);
 const currentYear = currentDate.getFullYear();
-const currentMonth = currentDate.getMonth() + 1;
+const currentMonth = currentDate.getMonth();
 const currentDay = currentDate.getDate();
 
 const weekDate = new Date();
@@ -32,23 +34,24 @@ monthDate.setHours(23, 59, 59, 999);
 //temporary todo tasks until database is operational
 var widgetData = {
   today: [
-    { name: "Task 1", dueDate: currentDate, completed: false },
-    { name: "Task 2", dueDate: currentDate, completed: false },
-    { name: "Task 3", dueDate: currentDate, completed: false },
-    { name: "Task 4", dueDate: currentDate, completed: false },
+    { name: "Task 1", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
+    { name: "Task 2", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
+    { name: "Task 3", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
+    { name: "Task 4", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
   ],
   week: [
-    { name: "Week Task 1", dueDate: weekDate, completed: false },
-    { name: "Week Task 2", dueDate: weekDate, completed: false },
-    { name: "Week Task 3", dueDate: weekDate, completed: false },
-    { name: "Week Task 4", dueDate: weekDate, completed: false },
+    { name: "Week Task 1", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
+    { name: "Week Task 2", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
+    { name: "Week Task 3", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
+    { name: "Week Task 4", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
   ],
   month: [
-    { name: "Month Task 1", dueDate: monthDate, completed: false },
-    { name: "Month Task 2", dueDate: monthDate, completed: false },
-    { name: "Month Task 3", dueDate: monthDate, completed: false },
-    { name: "Month Task 4", dueDate: monthDate, completed: false },
+    { name: "Month Task 1", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
+    { name: "Month Task 2", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
+    { name: "Month Task 3", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
+    { name: "Month Task 4", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
   ],
+
   habits: [
     {
       name: "Did you drink water today?",
@@ -88,6 +91,7 @@ const layouts = [
   "layout-large-today",
   "layout-top-tasks",
   "layout-bottom-tasks",
+  "layout-week-calendar",
   "layout-no-calendar",
 ];
 
@@ -155,18 +159,16 @@ function renderWidget(id, offset) {
 
   const backButton = document.getElementById(id + "-back");
   const forwardButton = document.getElementById(id + "-forward");
-  if (offset === 1) {
+  if (start === 0) {
+    backButton.disabled = true;
+  } else {
     backButton.disabled = false;
+  }
 
-    if (end >= data.length - 1) {
-      forwardButton.disabled = true;
-    }
-  } else if (offset === -1) {
+  if (end >= data.length) {
+    forwardButton.disabled = true;
+  } else {
     forwardButton.disabled = false;
-
-    if (start === 0) {
-      backButton.disabled = true;
-    }
   }
 
   if (id === "habits") {
@@ -245,6 +247,13 @@ function cycleLayout() {
 
 function setLayout(layout) {
   document.getElementsByClassName("main-content")[0].id = layout;
+  if (layout === "layout-week-calendar") {
+    calendarDisplay = "week";
+    initCalendar();
+  } else if (calendarDisplay !== "month") {
+    calendarDisplay = "month";
+    initCalendar();
+  }
 }
 
 function toggleTheme() {
@@ -281,39 +290,78 @@ function setTheme(theme) {
   body.classList.add(theme + "-theme");
 }
 
-function loadCalendar(offset) {
-  calendarTime.setMonth(calendarTime.getMonth() + offset);
-  calendarYear = calendarTime.getFullYear();
-  calendarMonth = calendarTime.getMonth();
+function initCalendar() {
+  if (calendarDisplay === "week") {
+    weekday = currentDate.getDay();
+    dayDiff = currentDate.getDate() - weekday;
 
-  lastDay = new Date(calendarYear, calendarMonth + 1, 0).getDate();
-  weekday = new Date(calendarYear, calendarMonth, 1).getDay();
+    calendarTime = new Date(currentYear, currentMonth, dayDiff);
+  } else if (calendarDisplay === "month") {
+    calendarTime = new Date(currentYear, currentMonth, 1);
+  }
 
-  monthName = calendarTime.toLocaleString("default", { month: "long" });
-  var calendarDateText = document.createElement("h2");
-  calendarDateText.innerText = monthName + " " + calendarYear;
+  setCalendar(0);
+}
+
+function setCalendar(offset) {
+  if (calendarDisplay === "week") {
+    calendarTime.setDate(calendarTime.getDate() + offset * 7);
+
+    year = calendarTime.getFullYear();
+    month = calendarTime.getMonth();
+
+    lastDay = 7;
+    weekday = 0;
+  } else if (calendarDisplay === "month") {
+    calendarTime.setMonth(calendarTime.getMonth() + offset);
+    
+    year = calendarTime.getFullYear();
+    month = calendarTime.getMonth();
+
+    lastDay = new Date(year, month + 1, 0).getDate();
+    weekday = calendarTime.getDay();
+  }
+
+  const monthName = calendarTime.toLocaleString('default', {month: 'long'});
+  const dateText = monthName + " " + year;
+
+  loadCalendar(weekday, lastDay, dateText);
+}
+
+function loadCalendar(weekday, lastDay, dateText) {
+  var calendarDateText = document.createElement('h2');
+  calendarDateText.innerText = dateText;
+
   calendarHeader.innerHTML = "";
   calendarHeader.appendChild(calendarDateText);
 
   calendarGrid.innerHTML = "";
-  for (let day = 0; day < 38; day++) {
-    var dayCellDiv = document.createElement("div");
+  calendarLoopTime = new Date(calendarTime);
+  for (let day = 0; day < lastDay + weekday; day++) {
+    const dayCellDiv = document.createElement('div');
 
-    if (day >= weekday && day < lastDay + weekday) {
-      if (
-        calendarYear === currentYear &&
-        calendarMonth + 1 === currentMonth &&
-        day - weekday + 1 === currentDay
-      ) {
+    if (day >= weekday) {
+      dayCellDiv.className = 'calendar-cell';
+
+      if (calendarLoopTime.toDateString() === currentDate.toDateString()) {
         dayCellDiv.id = "current-day";
       }
 
-      var dayNumberSpan = document.createElement("span");
+      const dayNumberSpan = document.createElement('span');
       dayNumberSpan.className = "day-number";
-      dayNumberSpan.textContent = day - weekday + 1;
+      dayNumberSpan.textContent = calendarLoopTime.getDate();
       dayCellDiv.appendChild(dayNumberSpan);
 
-      dayCellDiv.className = "calendar-cell";
+      //example code for adding tasts to day (currently adding task icon
+      //to current date)
+      if (currentDate.toDateString() === calendarLoopTime.toDateString()) {
+        const taskDiv = document.createElement('div');
+        taskDiv.className = "calendar-task";
+
+        dayCellDiv.appendChild(taskDiv);
+      }
+
+      calendarLoopTime.setDate(calendarLoopTime.getDate() + 1);
     }
 
     calendarGrid.appendChild(dayCellDiv);
@@ -335,7 +383,7 @@ window.addEventListener("load", () => {
   });
 
   // Initialize Calendar at current month, year
-  loadCalendar(0);
+  initCalendar();
 
   // Initialize quote cycling on window load
   // Start cycling motivational quotes

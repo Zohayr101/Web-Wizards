@@ -1,6 +1,5 @@
 /* 13. Grab Handle Styling */
 .grab-handle {
-    background-color: var(--secondary-color); /* Uses CSS variable */
     color: var(--text-color); /* Uses CSS variable */
     padding: 5px 0;
     text-align: center;
@@ -10,6 +9,14 @@
     border-top-right-radius: 5px;
     margin-bottom: 5px; /* Spacing below the handle */
     transition: background-color 0.3s ease, color 0.5s ease; /* Smooth transition */
+
+    -webkit-user-select: none;
+    user-select: none;
+
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
 }
 
 .grab-handle:hover {
@@ -17,6 +24,8 @@
 }
 
 .grab-handle:active {
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
     cursor: grabbing; /* Change cursor to grabbing when clicked */
 }
 
@@ -90,74 +99,6 @@
 /* Habit Tracker Wide Button - Removed to prevent adding arbitrary habits */
 /* If you want to keep it styled for future use, retain the styles but ensure the button is removed from HTML */
 
-/* Specific Styling for "Today's Tasks" Box */
-#layout-default {
-    grid-template:
-                "c c t"
-                "c c w"
-                "h h m";
-}
-
-#layout-mirrored {
-    grid-template:
-                "t c c"
-                "w c c"
-                "m h h";
-}
-
-#layout-large-today {
-    grid-template:
-                "t c c"
-                "t c c"
-                "w m h";
-}
-
-#layout-top-tasks {
-    grid-template:
-                "t w m"
-                "h c c"
-                "h c c";
-}
-
-#layout-bottom-tasks {
-    grid-template:
-                "h c c"
-                "h c c"
-                "t w m";
-}
-
-#layout-no-calendar {
-    grid-template:
-                "t w m" 25vh
-                "t w m" 25vh
-                "h h h" 25vh / 1fr 1fr 1fr;
-}
-
-#today {
-    grid-area: t;
-}
-
-#week {
-    grid-area: w;
-}
-
-#month {
-    grid-area: m;
-}
-
-#habits {
-    grid-area: h;
-}
-
-/* 7. Calendar Section */
-#calendar {
-    grid-area: c;
-}
-
-#layout-no-calendar #calendar {
-    display: none;
-}
-
 #calendar-header {
     text-align: center;
     margin-bottom: 10px;
@@ -192,9 +133,9 @@
 .calendar-cell {
     background: var(--day-bg-color); /* Uses CSS variable */
     border: 1px solid var(--primary-color); /* Uses CSS variable */
-    display: flex; /* Enable flexbox */
+    display: flex;
+    flex-direction: column;
     align-items: center; /* Vertically center content */
-    justify-content: center; /* Horizontally center content */
     padding: 10px; /* Increased padding for better spacing */
     border-radius: 15px;
     font-size: 1.2rem; /* Slightly larger text */
@@ -215,6 +156,8 @@
     width: 35px; /* Slightly smaller for compactness */
     height: 35px;
     border-radius: 50%; /* Makes the span a circle */
+    margin-top: 5px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -223,12 +166,28 @@
     transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
 }
 
+/* Fixes current day being different size from other cells */
+#current-day {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
 /* Highlight Current Day */
 #current-day .day-number {
     background-color: var(--current-day-bg-color); /* Uses CSS variable */
     color: var(--day-number-text-color); /* Uses CSS variable */
     border: 2px solid var(--day-number-text-color); /* Uses CSS variable */
     transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.calendar-task {
+    background: blue; /* Uses CSS variable */
+    border: 1px solid var(--primary-color); /* Uses CSS variable */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.3s ease, height 0.3s ease; /* Smooth transition */
 }
 
 /* fixes the current month being slightly wider than the rest */
