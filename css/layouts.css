@@ -36,9 +36,9 @@
 
 #layout-week-calendar {
     grid-template:
-                "t c c"
-                "t m m"
-                "w h h";
+                "t t w"
+                "t t m"
+                "c c h";
 }
 
 #layout-no-calendar {
