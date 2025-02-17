@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Life at a Glance</title>
+
+    <!-- CSS for all pages -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/general.css" />
+    <link rel="stylesheet" href="css/layouts.css" />
+    <link rel="stylesheet" href="css/settings.css" />
+  </head>
+
+  <body>
+    <!-- Top Panel -->
+    <header>
+      <button>Journal</button>
+      <a href="index.html">
+        <button>Tasks</button>
+      </a>
+    </header>
+
+    <!-- Modal for adding new task -->
+    <div class="modal" id="add-task">
+      <div class="modal-content">
+        <span class="close" onclick="closeTaskWindow()">&times;</span>
+        <h2>Add a New Task</h2>
+        <form id="add-task-form" onsubmit="addTask(event)">
+          <label for="task-name">Task Name:</label>
+          <input type="text" id="task-name" name="task-name" required />
+          <br />
+          <label for="task-due-date">Due Date:</label>
+          <input type="date" id="task-due-date" name="task-due-date" />
+          <br />
+          <button type="submit">Add Task</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="main-content">
+        <h2>Settings</h2>
+        <div>
+            <h3>Layout</h3>
+            <menu id="layouts">
+                <li><button onclick="setLayout('layout-default')">Default</button></li>
+                <li><button onclick="setLayout('layout-mirrored')">Mirrored</button></li>
+                <li><button onclick="setLayout('layout-large-today')">Large Today</button></li>
+                <li><button onclick="setLayout('layout-top-tasks')">Top Tasks</button></li>
+                <li><button onclick="setLayout('layout-bottom-tasks')">Bottom Tasks</button></li>
+                <li><button onclick="setLayout('layout-week-calendar')">Week Calendar</button></li>
+                <li><button onclick="setLayout('layout-no-calendar')">No Calendar</button></li>
+            </menu>
+        </div>
+        <div>
+            <h3>Theme</h3>
+            <menu id="themes">
+                <li><button onclick="setTheme('dark')">Dark</button></li>
+                <li><button onclick="setTheme('light')">Light</button></li>
+                <li><button onclick="setTheme('green')">Green</button></li>
+                <li><button onclick="setTheme('purple')">Purple</button></li>
+                <li><button onclick="setTheme('jing')">Jing</button></li>
+            </menu>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+      <h1 id="motivational-quote">Your Life in a Glance</h1>
+    </footer>
+
+    <script src="js/todo.js"></script>
+  </body>
+</html>
