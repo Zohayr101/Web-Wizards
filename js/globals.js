@@ -1,12 +1,12 @@
-export const THEMES = [
+window.THEMES = [
     "dark", 
     "light", 
     "green", 
     "purple", 
     "jing"
-];
+    ];
 
-export const LAYOUTS = [
+window.LAYOUTS = [
     "layout-default",
     "layout-mirrored",
     "layout-large-today",
@@ -14,4 +14,17 @@ export const LAYOUTS = [
     "layout-bottom-tasks",
     "layout-week-calendar",
     "layout-no-calendar",
+  ];
+
+window.QUOTES = [
+    "Believe in yourself always.",
+    "Dream big, work hard.",
+    "Stay positive, work hard.",
+    "Never give up hope.",
+    "Embrace the journey ahead.",
+    "Choose joy every day.",
+    "Create your own sunshine.",
+    "Stay strong, stay positive.",
+    "Make it happen today.",
+    "Be the change now.",
   ];

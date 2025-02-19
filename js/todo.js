@@ -85,17 +85,8 @@ var itemsPerPage = {
   habits: 2,
 };
 
-const layouts = [
-  "layout-default",
-  "layout-mirrored",
-  "layout-large-today",
-  "layout-top-tasks",
-  "layout-bottom-tasks",
-  "layout-week-calendar",
-  "layout-no-calendar",
-];
-
-const themes = ["light", "green", "purple", "jing", "dark"];
+layouts = window.LAYOUTS;
+themes = window.THEMES;
 
 // Task Modal Functions
 function addTaskWindow() {
@@ -412,18 +403,7 @@ window.addEventListener("load", () => {
 // 6. Motivational Quotes Functionality
 
 // Array of five-word motivational quotes
-const motivationalQuotes = [
-  "Believe in yourself always.",
-  "Dream big, work hard.",
-  "Stay positive, work hard.",
-  "Never give up hope.",
-  "Embrace the journey ahead.",
-  "Choose joy every day.",
-  "Create your own sunshine.",
-  "Stay strong, stay positive.",
-  "Make it happen today.",
-  "Be the change now.",
-];
+motivationalQuotes = window.QUOTES;
 
 // Function to cycle through quotes
 function cycleQuotes() {

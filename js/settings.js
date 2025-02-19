@@ -1,3 +1,4 @@
+const themes = window.THEMES;
 
 window.addEventListener("load", () => {
     // Initialize quote cycling on window load
@@ -39,18 +40,7 @@ function setTheme(theme) {
 
 // copied from todo.js on 2/19/25 at 3:33pm
 const quoteElement = document.getElementById("motivational-quote");
-const motivationalQuotes = [
-    "Believe in yourself always.",
-    "Dream big, work hard.",
-    "Stay positive, work hard.",
-    "Never give up hope.",
-    "Embrace the journey ahead.",
-    "Choose joy every day.",
-    "Create your own sunshine.",
-    "Stay strong, stay positive.",
-    "Make it happen today.",
-    "Be the change now.",
-  ];
+const motivationalQuotes = window.QUOTES; // adjusted by hand
   
   // Function to cycle through quotes
   function cycleQuotes() {
