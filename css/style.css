@@ -1,6 +1,6 @@
 /* styles.css */
 /* 2. CSS Variables for Themes */
-:root {
+:root, body.theme-dark {
     /* Default (Oakland University) Theme Colors */
     --bg-color: #1c1c1c;
     --text-color: #f2f2f2;
@@ -19,7 +19,7 @@
     --arrow-bg-color: #5a463a;
 }
 
-body.light-theme {
+body.theme-light {
     /* Tropical Theme Colors */
     --bg-color: #87CEEB;
     --text-color: #003366;
@@ -38,7 +38,7 @@ body.light-theme {
     --arrow-bg-color: #00A3E0;
 }
 
-body.green-theme {
+body.theme-green {
     /* Jing's Green Theme Colors */
     --bg-color: #f3e5f5;
     --text-color: #463a77;
@@ -58,7 +58,7 @@ body.green-theme {
 }
 
 /* Add this AFTER the green-theme block */
-body.purple-theme {
+body.theme-purple {
     /* Light Purple Theme Colors */
     --bg-color: #ffffff;
     --text-color: #463a77;
@@ -75,7 +75,7 @@ body.purple-theme {
     --arrow-bg-color: #b8a1d9;
 }
 
-body.jing-theme {
+body.theme-jing {
     /* Jing's Lilac Theme */
     --bg-color: #f3e5f5;
     --text-color: #2c3e50;

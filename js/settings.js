@@ -6,36 +6,18 @@ window.addEventListener("load", () => {
     cycleQuotes();
   
     // Apply saved theme
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-      document.body.classList.add("light-theme");
-    } else if (savedTheme === "green") {
-      document.body.classList.add("green-theme");
-    } else if (savedTheme === "purple") {
-      document.body.classList.add("purple-theme");
-    } else if (savedTheme === "jing") {
-      document.body.classList.add("jing-theme");
-    } else {
-      document.body.classList.remove(
-        "light-theme",
-        "green-theme",
-        "purple-theme",
-        "jing-theme"
-      );
-    }
+  document.body.classList.add(localStorage.getItem("theme"));
   });
 
-function setTheme(theme) {
+  function setTheme(theme) {
     const body = document.body;
     localStorage.setItem("theme", theme);
     // remove the current theme
     for (let t of themes) {
-      body.classList.remove(t + "-theme");
+      body.classList.remove(t);
     }
-    // add the new theme
-    body.classList.add(theme + "-theme");
-  
-}
+    body.classList.add(theme);
+  }
 
 
 // copied from todo.js on 2/19/25 at 3:33pm

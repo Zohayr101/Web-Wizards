@@ -250,24 +250,13 @@ function setLayout(layout) {
 function toggleTheme() {
   const body = document.body;
 
-  if (body.classList.contains("light-theme")) {
-    body.classList.remove("light-theme");
-    body.classList.add("green-theme");
-    localStorage.setItem("theme", "green");
-  } else if (body.classList.contains("green-theme")) {
-    body.classList.remove("green-theme");
-    body.classList.add("purple-theme");
-    localStorage.setItem("theme", "purple");
-  } else if (body.classList.contains("purple-theme")) {
-    body.classList.remove("purple-theme");
-    body.classList.add("jing-theme");
-    localStorage.setItem("theme", "jing");
-  } else if (body.classList.contains("jing-theme")) {
-    body.classList.remove("jing-theme");
-    localStorage.setItem("theme", "dark");
-  } else {
-    body.classList.add("light-theme");
-    localStorage.setItem("theme", "light");
+  for (let t of themes) {
+    if (body.classList.contains(t)) {
+      body.classList.remove(t);
+      body.classList.add(themes[(themes.indexOf(t) + 1) % themes.length]);
+      localStorage.setItem("theme", t);
+      break;
+    }
   }
 }
 
@@ -276,9 +265,9 @@ function setTheme(theme) {
   localStorage.setItem("theme", theme);
   // remove the current theme
   for (let t of themes) {
-    body.classList.remove(t + "-theme");
+    body.classList.remove(t);
   }
-  body.classList.add(theme + "-theme");
+  body.classList.add(theme);
 }
 
 function initCalendar() {
@@ -381,23 +370,7 @@ window.addEventListener("load", () => {
   cycleQuotes();
 
   // Apply saved theme
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-theme");
-  } else if (savedTheme === "green") {
-    document.body.classList.add("green-theme");
-  } else if (savedTheme === "purple") {
-    document.body.classList.add("purple-theme");
-  } else if (savedTheme === "jing") {
-    document.body.classList.add("jing-theme");
-  } else {
-    document.body.classList.remove(
-      "light-theme",
-      "green-theme",
-      "purple-theme",
-      "jing-theme"
-    );
-  }
+  document.body.classList.add(localStorage.getItem("theme"));
 });
 
 // 6. Motivational Quotes Functionality

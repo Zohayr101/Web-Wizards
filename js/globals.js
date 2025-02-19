@@ -1,9 +1,9 @@
 window.THEMES = [
-    "dark", 
-    "light", 
-    "green", 
-    "purple", 
-    "jing"
+    "theme-dark", 
+    "theme-light", 
+    "theme-green", 
+    "theme-purple", 
+    "theme-jing"
     ];
 
 window.LAYOUTS = [
