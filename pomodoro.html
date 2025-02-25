@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+
+    <!-- ✅ Load global styles first -->
+    <link rel="stylesheet" href="css/styles.css"> 
+    <link rel="stylesheet" href="css/pomodoro.css">
+
+    <!-- ✅ Ensure theme is inherited or defaults to "theme-dark" -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let savedTheme = sessionStorage.getItem('theme') || (window.parent?.document.body.classList.value || 'theme-dark');
+            document.body.classList = savedTheme;
+            console.log("✅ Applied theme:", savedTheme);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Pomodoro Timer</h1>
+        <div class="modes">
+            <button id="pomodoro-btn">Pomodoro</button>
+            <button id="short-break-btn">Short Break</button>
+            <button id="long-break-btn">Long Break</button>
+        </div>
+        <div class="timer" id="timer">25:00</div>
+        <div class="controls">
+            <button id="start-btn">Start</button>
+            <button id="pause-btn">Pause</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        <p id="status">Time to focus!</p>
+    </div>
+
+    <!-- ✅ Ensure JavaScript loads AFTER the HTML -->
+    <script src="js/pomodoro.js" defer></script>
+</body>
+</html>
