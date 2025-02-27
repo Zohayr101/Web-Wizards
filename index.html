@@ -12,17 +12,26 @@
     <!-- CSS for home page -->
     <link rel="stylesheet" href="css/layouts.css" />
     <link rel="stylesheet" href="css/todo.css" />
+
   </head>
 
   <body>
     <script type="text/javascript" src="js/globals.js"></script>
     <!-- Top Panel -->
     <header>
-      <button>Journal</button>
+      <button onclick="window.location.href='journal.html'">Journal</button>
       <button onclick="addTaskWindow()">Add Task</button>
-      <a href="settings.html">
-        <button>Settings</button>
+         <!-- Pomodoro Icon in the Middle -->
+         <a href="pomodoro.html" class="pomodoro-icon">
+          <img src="Images/pomodoro.png" alt="Pomodoro Timer" style="width: 65px; height: auto;">
       </a>
+      <a href="settings.html">
+      <button>Settings</button>
+    </a>
+    <a href="signup.html">
+      <button>Sign Up</button>
+  </a>
+  
     </header>
 
     <!-- Modal for adding new task -->
@@ -184,5 +193,9 @@
     </footer>
 
     <script src="js/todo.js"></script>
-  </body>
+    <script src="js/globals.js"></script>
+
+
+</body>
 </html>
+
