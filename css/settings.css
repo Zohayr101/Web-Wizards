@@ -18,3 +18,17 @@ menu {
     display: flex;
     justify-content: space-around;
 }
+
+/* div button for selecting the theme */
+.theme-selection {
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 1fr;
+    border: 2px solid black;
+    height: 100px;
+    width: 100px;
+    transition: border-width 0.5s ease;
+}
+
+#selected-theme {
+    border: 4px solid var(--current-day-bg-color);
+}

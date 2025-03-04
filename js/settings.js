@@ -1,12 +1,60 @@
 const themes = window.THEMES;
 
 window.addEventListener("load", () => {
-    // Initialize quote cycling on window load
+    // Apply saved theme
+    document.body.classList.add(localStorage.getItem("theme"));
     // Start cycling motivational quotes
     cycleQuotes();
-  
-    // Apply saved theme
-  document.body.classList.add(localStorage.getItem("theme"));
+
+    // Generate divs/buttons for settings selection
+    // Layouts
+
+    // Themes
+    const themeMenu = document.getElementById("themes");
+    const colorFetcher = document.createElement("div"); // will inherit the colors of the themes without updating the screen
+    colorFetcher.style.display = "none";
+    document.head.appendChild(colorFetcher); // add to head so it is not visible
+    for (let theme of themes) {
+      const themeSelection = document.createElement("div");
+      themeSelection.classList.add("theme-selection");
+      
+      // retrieve 4 significant colors from the theme
+      // will fetch background, text, primary, and secondary colors
+      colorFetcher.className = theme;
+      const backgroundColor = getComputedStyle(colorFetcher).getPropertyValue('--bg-color');
+      const textColor = getComputedStyle(colorFetcher).getPropertyValue('--text-color');
+      const primaryColor = getComputedStyle(colorFetcher).getPropertyValue('--primary-color');
+      const secondaryColor = getComputedStyle(colorFetcher).getPropertyValue('--secondary-color');
+      const buttonColor = getComputedStyle(colorFetcher).getPropertyValue('--button-bg-color');
+      
+      const backgroundDiv = document.createElement('div');
+      backgroundDiv.style.backgroundColor = backgroundColor;
+      const textColorDiv = document.createElement('div');
+      textColorDiv.style.backgroundColor = textColor;
+      const primaryDiv = document.createElement('div');
+      primaryDiv.style.backgroundColor = primaryColor;
+      const secondaryDiv = document.createElement('div');
+      secondaryDiv.style.backgroundColor = secondaryColor;
+
+      //themeSelection.textContent = "text";
+
+      if (theme === localStorage.getItem("theme")) {
+        themeSelection.id = "selected-theme";
+      }
+      themeSelection.addEventListener("click", () => {
+        setTheme(theme);
+        document.getElementById("selected-theme").removeAttribute("id");
+        themeSelection.id = "selected-theme";
+      });
+
+      themeMenu.appendChild(themeSelection);
+      themeSelection.appendChild(secondaryDiv);
+      themeSelection.appendChild(primaryDiv);
+      themeSelection.appendChild(textColorDiv);
+      themeSelection.appendChild(backgroundDiv);
+    }
+    //document.head.removeChild(colorFetcher); // remove from head after use
+    // Fonts
   });
 
   function setTheme(theme) {
