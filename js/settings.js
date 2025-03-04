@@ -57,6 +57,10 @@ window.addEventListener("load", () => {
     // Fonts
   });
 
+  function setLayout(layout) {
+    localStorage.setItem("layout", layout);
+  }
+
   function setTheme(theme) {
     const body = document.body;
     localStorage.setItem("theme", theme);
