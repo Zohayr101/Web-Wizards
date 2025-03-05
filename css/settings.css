@@ -37,6 +37,7 @@ menu {
     font-size: 10px;
     margin: 3px;
     padding: 3px;
+    color: var(--primary-color);
     background-color: var(--secondary-color);
 }
 
