@@ -371,6 +371,8 @@ window.addEventListener("load", () => {
 
   // Apply saved theme
   document.body.classList.add(localStorage.getItem("theme"));
+  // Apply saved layout
+  document.body.getElementsByClassName("main-content")[0].id = localStorage.getItem("layout");
 });
 
 // 6. Motivational Quotes Functionality
