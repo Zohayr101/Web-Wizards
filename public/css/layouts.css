@@ -1,0 +1,74 @@
+/* Specific Styling for "Today's Tasks" Box */
+#layout-default {
+    grid-template:
+                "c c t"
+                "c c w"
+                "h h m";
+}
+
+#layout-mirrored {
+    grid-template:
+                "t c c"
+                "w c c"
+                "m h h";
+}
+
+#layout-large-today {
+    grid-template:
+                "t c c"
+                "t c c"
+                "w m h";
+}
+
+#layout-top-tasks {
+    grid-template:
+                "t w m"
+                "h c c"
+                "h c c";
+}
+
+#layout-bottom-tasks {
+    grid-template:
+                "h c c"
+                "h c c"
+                "t w m";
+}
+
+#layout-week-calendar {
+    grid-template:
+                "t t w"
+                "t t m"
+                "c c h";
+}
+
+#layout-no-calendar {
+    grid-template:
+                "t w m" 25vh
+                "t w m" 25vh
+                "h h h" 25vh / 1fr 1fr 1fr;
+}
+
+#today {
+    grid-area: t;
+}
+
+#week {
+    grid-area: w;
+}
+
+#month {
+    grid-area: m;
+}
+
+#habits {
+    grid-area: h;
+}
+
+/* 7. Calendar Section */
+#calendar {
+    grid-area: c;
+}
+
+#layout-no-calendar #calendar {
+    display: none;
+}

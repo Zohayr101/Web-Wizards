@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="css/Journal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+  <!-- Top-Left: "Back to Calendar" link -->
+  <a href="/" class="back-btn">Back to Calendar</a>
+
+  <!-- Top-Right: Date display (click to toggle mini-calendar) -->
+  <div class="date-nav">
+    <span id="journal-date">Loading...</span>
+  </div>
+
+  <!-- Mini Calendar popup (hidden initially) -->
+  <div class="mini-calendar" id="mini-calendar" style="display: none;">
+    <div class="mini-calendar-nav">
+      <button id="mini-cal-prev-month">&lt;</button>
+      <span id="mini-calendar-title">Month Year</span>
+      <button id="mini-cal-next-month">&gt;</button>
+    </div>
+    <div class="mini-calendar-weekdays">
+      <div>Sun</div>
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+      <div>Sat</div>
+    </div>
+    <div class="mini-calendar-grid" id="mini-calendar-grid">
+      <!-- JS populates days here -->
+    </div>
+  </div>
+
+  <!-- Journal Window (black/white/gray) -->
+  <div class="journal-container">
+      <h2>My Journal</h2>
+
+      <!-- Title -->
+      <input type="text" id="journal-title" placeholder="Journal Title..." />
+
+      <!-- Main Text -->
+      <textarea id="journal-text" placeholder="Write your thoughts here..."></textarea>
+
+      <button id="save-journal">Save Entry</button>
+  </div>
+
+  <!-- Image Window (also black/white/gray) -->
+  <div class="journal-image-container">
+      <h3>Add an Image</h3>
+      <input type="file" id="journal-image-input" accept="image/*" />
+      <div id="image-preview"></div>
+  </div>
+
+
+  <!-- The Journal JS logic -->
+  <script src="js/Journal.js"></script>
+
