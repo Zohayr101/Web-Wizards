@@ -1,14 +1,20 @@
 const themes = window.THEMES;
 
+preload();
+
 window.addEventListener("load", () => {
-    // Apply saved theme
-    document.body.classList.add(localStorage.getItem("theme"));
     // Start cycling motivational quotes
     cycleQuotes();
+  });
+
+
+  function preload() {
+    // Apply saved theme
+    document.body.classList.add(localStorage.getItem("theme"));
+
 
     // Generate divs/buttons for settings selection
     // Layouts
-
     // Themes
     const themeMenu = document.getElementById("themes");
     const colorFetcher = document.createElement("div"); // will inherit the colors of the themes without updating the screen
@@ -53,9 +59,7 @@ window.addEventListener("load", () => {
       themeSelection.appendChild(textColorDiv);
       themeSelection.appendChild(backgroundDiv);
     }
-    //document.head.removeChild(colorFetcher); // remove from head after use
-    // Fonts
-  });
+  }
 
   function setTheme(theme) {
     const body = document.body;
