@@ -1,4 +1,5 @@
 const themes = window.THEMES;
+const layouts = window.LAYOUTS;
 
 preload();
 
@@ -15,6 +16,49 @@ window.addEventListener("load", () => {
 
     // Generate divs/buttons for settings selection
     // Layouts
+    const layoutMenu = document.getElementById("layouts");
+    for (let layout of layouts) {
+      const layoutSelection = document.createElement("div");
+      layoutSelection.classList.add("layout-selection");
+      const layoutBody = document.createElement("div");
+      layoutBody.classList.add("layout-body");
+      layoutSelection.appendChild(layoutBody);
+      layoutBody.id = layout;
+
+      const dummyCalendar = document.createElement("div");
+      dummyCalendar.id = "calendar";
+      dummyCalendar.textContent = "calendar";
+      layoutBody.appendChild(dummyCalendar);
+      const dummyToday = document.createElement("div");
+      dummyToday.id = "today";
+      dummyToday.textContent = "tdy";
+      layoutBody.appendChild(dummyToday);
+      const dummyWeek = document.createElement("div");
+      dummyWeek.id = "week";
+      dummyWeek.textContent = "week";
+      layoutBody.appendChild(dummyWeek);
+      const dummyMonth = document.createElement("div");
+      dummyMonth.id = "month";
+      dummyMonth.textContent = "mnth";
+      layoutBody.appendChild(dummyMonth);
+      const dummyHabits = document.createElement("div");
+      dummyHabits.id = "habits";
+      dummyHabits.textContent = "hbts";
+      layoutBody.appendChild(dummyHabits);
+
+      if (layout === localStorage.getItem("layout")) {
+        layoutSelection.id = "selected-layout";
+      }
+
+      layoutSelection.addEventListener("click", () => {
+        setLayout(layout);
+        document.getElementById("selected-layout").removeAttribute("id");
+        layoutSelection.id = "selected-layout";
+      });
+
+      layoutMenu.appendChild(layoutSelection);
+    }
+
     // Themes
     const themeMenu = document.getElementById("themes");
     const colorFetcher = document.createElement("div"); // will inherit the colors of the themes without updating the screen
