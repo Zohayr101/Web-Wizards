@@ -8,7 +8,6 @@ window.addEventListener("load", () => {
     cycleQuotes();
   });
 
-
   function preload() {
     // Apply saved theme
     document.body.classList.add(localStorage.getItem("theme"));
