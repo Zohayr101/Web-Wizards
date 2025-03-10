@@ -2,7 +2,6 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #B74D41 !important; /* Red Pomodoro Theme */
     color: white !important; /* Ensures good contrast */
     display: flex;
     flex-direction: column;
@@ -78,7 +77,6 @@ body {
 .container {
     width: 90%;
     max-width: 400px;
-    background-color: #A5433F !important; /* Slightly darker red */
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -181,5 +179,3 @@ h1 {
         max-width: 600px;
     }
 }
-
-
