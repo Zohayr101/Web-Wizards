@@ -1,7 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ Pomodoro script is linked correctly and running after DOM is loaded!");
 
-    let timeLeft = 25 * 60;
+    let pomodoroTime = 0.15;
+    let shortBrTime = 0.15;
+    let longBrTime = 0.25;
+    let totalLoops = 4;
+
+    let loopNum = 0;
+    let timeLeft;
     let timer;
     let isRunning = false;
     let currentMode = "Pomodoro";
@@ -27,9 +33,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     timeLeft--;
                     updateUI();
                 } else {
-                    clearInterval(timer);
-                    alert(currentMode + " session ended!");
-                    isRunning = false;
+                    if (currentMode === "Pomodoro") {
+                        if (++loopNum === totalLoops) {
+                            loopNum = 0;
+                            setTimer(longBrTime, "Long Break");
+                        } else {
+                            setTimer(shortBrTime, "Short Break");
+                        }
+                    } else {
+                        setTimer(pomodoroTime, "Pomodoro");
+                    }
+
+                    startTimer();
                 }
             }, 1000);
         }
@@ -46,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function resetTimer() {
         console.log("🔄 Reset button clicked!");
         clearInterval(timer);
-        setTimer(25, "Pomodoro");
+        setTimer(pomodoroTime, "Pomodoro");
     }
 
     // ⏲ Update UI (Timer & Status)
@@ -113,9 +128,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (pauseBtn) pauseBtn.addEventListener("click", pauseTimer);
     if (resetBtn) resetBtn.addEventListener("click", resetTimer);
 
-    if (pomodoroBtn) pomodoroBtn.addEventListener("click", () => setTimer(25, "Pomodoro"));
-    if (shortBreakBtn) shortBreakBtn.addEventListener("click", () => setTimer(5, "Short Break"));
-    if (longBreakBtn) longBreakBtn.addEventListener("click", () => setTimer(15, "Long Break"));
+    if (pomodoroBtn) pomodoroBtn.addEventListener("click", () => setTimer(pomodoroTime, "Pomodoro"));
+    if (shortBreakBtn) shortBreakBtn.addEventListener("click", () => setTimer(shortBrTime, "Short Break"));
+    if (longBreakBtn) longBreakBtn.addEventListener("click", () => setTimer(longBrTime, "Long Break"));
 
     // 📅 Initialize Date Display on Page Load
     updateDate();
@@ -124,5 +139,5 @@ document.addEventListener("DOMContentLoaded", function () {
     window.toggleCalendar = toggleCalendar;
 
     // ⏳ Set Default Mode
-    setTimer(25, "Pomodoro");
+    setTimer(pomodoroTime, "Pomodoro");
 });
