@@ -161,45 +161,15 @@ function toggleHabit(habitId) {
 }
 */
 
-function cycleLayout() {
-  const content = document.getElementsByClassName("main-content")[0];
-  let currentLayout = content.id;
-  let nextLayoutIndex = (layouts.indexOf(currentLayout) + 1) % layouts.length;
-  content.id = layouts[nextLayoutIndex];
-}
-
-function setLayout(layout) {
-  document.getElementsByClassName("main-content")[0].id = layout;
+function setLayout() {
+  layout = localStorage.getItem("layout");
   if (layout === "layout-week-calendar") {
     calendarDisplay = "week";
     initCalendar();
-  } else if (calendarDisplay !== "month") {
+  } else {
     calendarDisplay = "month";
     initCalendar();
   }
-}
-
-function toggleTheme() {
-  const body = document.body;
-
-  for (let t of themes) {
-    if (body.classList.contains(t)) {
-      body.classList.remove(t);
-      body.classList.add(themes[(themes.indexOf(t) + 1) % themes.length]);
-      localStorage.setItem("theme", t);
-      break;
-    }
-  }
-}
-
-function setTheme(theme) {
-  const body = document.body;
-  localStorage.setItem("theme", theme);
-  // remove the current theme
-  for (let t of themes) {
-    body.classList.remove(t);
-  }
-  body.classList.add(theme);
 }
 
 function initCalendar() {
@@ -295,8 +265,7 @@ window.addEventListener("DOMContentLoaded", () => {
   //  renderWidget(page, 0);
   //});
 
-  // Initialize Calendar at current month, year
-  initCalendar();
+  setLayout();
 
   // Initialize quote cycling on window load
   // Start cycling motivational quotes
@@ -304,6 +273,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Apply saved theme
   document.body.classList.add(localStorage.getItem("theme"));
+  // Apply saved layout
+  document.body.getElementsByClassName("main-content")[0].id = localStorage.getItem("layout");
 });
 
 

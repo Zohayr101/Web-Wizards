@@ -1,151 +1,186 @@
 window.onload = function () {
-  console.log("✅ Window fully loaded, running Journal.js...");
+  console.log("Window loaded, running Journal.js...");
 
-  //
-  // 1) THEME LOADING (for the page background + mini-calendar)
-  //
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme) {
-      document.body.classList.add(savedTheme);
-  }
+  /* ---------------------------
+     1. TOGGLE BUTTONS: Journal vs. Notes
+  ---------------------------- */
+  const journalBtn = document.getElementById("journal-btn");
+  const notesBtn = document.getElementById("notes-btn");
+  const journalSection = document.getElementById("journal-section");
+  const notesSection = document.getElementById("notes-section");
 
-  //
-  // 2) DOM ELEMENTS - Debugging Check
-  //
-  console.log("🔍 Checking elements in Journal.js...");
-  
-  const journalTitle = document.getElementById("journal-title");
-  const journalText = document.getElementById("journal-text");
-  const saveButton = document.getElementById("save-journal");
-  const dateDisplay = document.getElementById("journal-date");
+  journalBtn.addEventListener("click", function () {
+    journalSection.style.display = "block";
+    notesSection.style.display = "none";
+    journalBtn.classList.add("active");
+    notesBtn.classList.remove("active");
+  });
 
-  const miniCalendar = document.getElementById("mini-calendar");
-  const miniCalTitle = document.getElementById("mini-calendar-title");
-  const miniCalGrid = document.getElementById("mini-calendar-grid");
-  const prevMonthBtn = document.getElementById("mini-cal-prev-month");
-  const nextMonthBtn = document.getElementById("mini-cal-next-month");
+  notesBtn.addEventListener("click", function () {
+    journalSection.style.display = "none";
+    notesSection.style.display = "block";
+    notesBtn.classList.add("active");
+    journalBtn.classList.remove("active");
+    loadNotes();
+  });
 
-  // Image elements
-  const imageInput = document.getElementById("journal-image-input");
-  const imagePreview = document.getElementById("image-preview");
-
-  // Debugging logs to check if elements exist
-  console.log("journal-title:", journalTitle);
-  console.log("journal-text:", journalText);
-  console.log("save-journal:", saveButton);
-  console.log("journal-date:", dateDisplay);
-  console.log("mini-calendar:", miniCalendar);
-  console.log("mini-calendar-title:", miniCalTitle);
-  console.log("mini-calendar-grid:", miniCalGrid);
-  console.log("mini-cal-prev-month:", prevMonthBtn);
-  console.log("mini-cal-next-month:", nextMonthBtn);
-  console.log("journal-image-input:", imageInput);
-  console.log("image-preview:", imagePreview);
-
-  // If any elements are null, print an error message
-  if (!journalTitle || !journalText || !saveButton || !dateDisplay) {
-      console.error("❌ ERROR: One or more required elements are missing in Journal.html!");
-      return;
-  }
-
-  //
-  // 3) TRACK CURRENT DATE
-  //
+  /* ---------------------------
+     2. JOURNAL SECTION
+  ---------------------------- */
   let currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
-  let viewYear = currentDate.getFullYear();
-  let viewMonth = currentDate.getMonth();
-
-  // "realToday" used to block future days
-  const realToday = new Date();
-  realToday.setHours(0, 0, 0, 0);
-
-  //
-  // 4) We store the currently selected image data (Base64) in a variable 
-  //    so it can be saved when the user presses "Save Entry."
-  //
   let currentImageData = "";
 
-  //
-  // 5) HELPER FUNCTIONS
-  //
   function formatDateKey(dateObj) {
-      const y = dateObj.getFullYear();
-      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const d = String(dateObj.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const d = String(dateObj.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
   }
 
   function formatDateDisplay(dateObj) {
-      const month = dateObj.getMonth() + 1;
-      const day = dateObj.getDate();
-      const year = dateObj.getFullYear();
-      return `${month}/${day}/${year}`;
+    return `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
   }
 
-  //
-  // 6) LOAD + SAVE
-  //
   function loadEntryForDate(dateObj) {
-      const dateKey = formatDateKey(dateObj);
-
-      // Title
-      const titleKey = "journalTitle_" + dateKey;
-      const savedTitle = localStorage.getItem(titleKey) || "";
-      journalTitle.value = savedTitle;
-
-      // Body
-      const entryKey = "journalEntry_" + dateKey;
-      const savedText = localStorage.getItem(entryKey) || "";
-      journalText.value = savedText;
-
-      // Image
-      const imageKey = "journalImage_" + dateKey;
-      const savedImage = localStorage.getItem(imageKey) || "";
-      currentImageData = savedImage;
-
-      // Show image (if any)
-      if (savedImage) {
-          imagePreview.innerHTML = '<img src="' + savedImage + '">';
-      } else {
-          imagePreview.innerHTML = "";
-      }
+    const key = formatDateKey(dateObj);
+    document.getElementById("journal-title").value = localStorage.getItem("journalTitle_" + key) || "";
+    document.getElementById("journal-text").value = localStorage.getItem("journalEntry_" + key) || "";
+    currentImageData = localStorage.getItem("journalImage_" + key) || "";
+    const imagePreview = document.getElementById("image-preview");
+    imagePreview.innerHTML = currentImageData ? `<img src="${currentImageData}" alt="Journal Image">` : "";
   }
 
   function saveEntryForDate(dateObj) {
-      const dateKey = formatDateKey(dateObj);
-
-      // Title
-      const titleKey = "journalTitle_" + dateKey;
-      localStorage.setItem(titleKey, journalTitle.value);
-
-      // Body
-      const entryKey = "journalEntry_" + dateKey;
-      localStorage.setItem(entryKey, journalText.value);
-
-      // Image
-      const imageKey = "journalImage_" + dateKey;
-      localStorage.setItem(imageKey, currentImageData);
+    const key = formatDateKey(dateObj);
+    localStorage.setItem("journalTitle_" + key, document.getElementById("journal-title").value);
+    localStorage.setItem("journalEntry_" + key, document.getElementById("journal-text").value);
+    localStorage.setItem("journalImage_" + key, currentImageData);
   }
 
-  //
-  // 7) UPDATE UI
-  //
-  function updateUI() {
-      dateDisplay.textContent = formatDateDisplay(currentDate);
-      loadEntryForDate(currentDate);
+  function updateJournalUI() {
+    document.getElementById("journal-date").textContent = formatDateDisplay(currentDate);
+    loadEntryForDate(currentDate);
   }
 
-  //
-  // 8) SAVE BUTTON FUNCTIONALITY
-  //
-  saveButton.addEventListener("click", function () {
-      saveEntryForDate(currentDate);
-      alert("Journal entry saved!");
+  updateJournalUI();
+
+  document.getElementById("save-journal").addEventListener("click", function () {
+    saveEntryForDate(currentDate);
+    playPencilAnimation();
   });
 
-  //
-  // 9) INITIALIZE PAGE
-  //
-  updateUI();
+  const imageInput = document.getElementById("journal-image-input");
+  if (imageInput) {
+    imageInput.addEventListener("change", function () {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          currentImageData = e.target.result;
+          document.getElementById("image-preview").innerHTML = `<img src="${currentImageData}" alt="Journal Image">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  /* ---------------------------
+     3. MINI-CALENDAR FUNCTIONALITY
+  ---------------------------- */
+  const dateNav = document.querySelector(".date-nav");
+  dateNav.addEventListener("click", function () {
+    const miniCalendar = document.getElementById("mini-calendar");
+    if (!miniCalendar) return;
+    if (miniCalendar.style.display === "none" || miniCalendar.style.display === "") {
+      miniCalendar.style.display = "block";
+      populateMiniCalendar();
+    } else {
+      miniCalendar.style.display = "none";
+    }
+  });
+
+  function populateMiniCalendar() {
+    const miniCalGrid = document.getElementById("mini-calendar-grid");
+    if (!miniCalGrid) return;
+    miniCalGrid.innerHTML = "";
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+    const startDay = firstDayOfMonth.getDay();
+
+    // Fill empty cells before the 1st
+    for (let i = 0; i < startDay; i++) {
+      const emptyCell = document.createElement("div");
+      emptyCell.classList.add("mini-calendar-day", "empty");
+      miniCalGrid.appendChild(emptyCell);
+    }
+    // Create day cells
+    for (let day = 1; day <= lastDay; day++) {
+      const cellDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+      const dayCell = document.createElement("div");
+      dayCell.textContent = day;
+      dayCell.classList.add("mini-calendar-day");
+      // Highlight if this is the currently selected date
+      if (cellDate.getTime() === currentDate.getTime()) {
+        dayCell.classList.add("selected");
+      }
+      // Grey out future dates (relative to today's date)
+      if (cellDate > today) {
+        dayCell.classList.add("disabled");
+      } else {
+        dayCell.addEventListener("click", function () {
+          currentDate = new Date(cellDate);
+          updateJournalUI();
+          document.getElementById("mini-calendar").style.display = "none";
+        });
+      }
+      miniCalGrid.appendChild(dayCell);
+    }
+    document.getElementById("mini-calendar-title").textContent =
+      new Date(currentDate.getFullYear(), currentDate.getMonth()).toLocaleString("default", { month: "long", year: "numeric" });
+  }
+
+  /* ---------------------------
+     4. NOTES SECTION (Text Only)
+  ---------------------------- */
+  function loadNotes() {
+    document.getElementById("notes-title").value = localStorage.getItem("notesTitle") || "";
+    document.getElementById("notes-textarea").value = localStorage.getItem("notesContent") || "";
+  }
+
+  function saveNotes() {
+    localStorage.setItem("notesTitle", document.getElementById("notes-title").value);
+    localStorage.setItem("notesContent", document.getElementById("notes-textarea").value);
+  }
+
+  document.getElementById("save-notes").addEventListener("click", function () {
+    saveNotes();
+    playPencilAnimation();
+  });
+
+  /* ---------------------------
+     5. PENCIL ANIMATION FUNCTION
+  ---------------------------- */
+  function playPencilAnimation() {
+    const pencilVideo = document.getElementById("pencil-animation");
+    if (pencilVideo) {
+      pencilVideo.style.display = "block";
+      pencilVideo.currentTime = 0;
+      pencilVideo.play();
+      pencilVideo.onended = function () {
+        pencilVideo.style.display = "none";
+      };
+    }
+  }
+
+  // Default view: Show Journal
+  journalSection.style.display = "block";
+  notesSection.style.display = "none";
+  if (document.getElementById("journalNotesSwitch") && document.getElementById("journalNotesSwitch").checked) {
+    journalSection.style.display = "none";
+    notesSection.style.display = "block";
+    loadNotes();
+  }
 };
