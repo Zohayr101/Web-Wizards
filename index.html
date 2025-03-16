@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Life at a Glance</title>
+
+    <!-- CSS for all pages -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/general.css" />
+
+    <!-- CSS for home page -->
+    <link rel="stylesheet" href="css/layouts.css" />
+    <link rel="stylesheet" href="css/todo.css" />
+
+  </head>
+
+  <body>
+    <script type="text/javascript" src="js/globals.js"></script>
+    <!-- Top Panel -->
+    <header>
+      <button onclick="window.location.href='Journal.html'">Journal</button>
+      <button onclick="addTaskWindow()">Add Task</button>
+         <!-- Pomodoro Icon in the Middle -->
+         <a href="pomodoro.html" class="pomodoro-icon">
+          <img src="Images/pomodoro.png" alt="Pomodoro Timer" style="width: 65px; height: auto;">
+      </a>
+      <a href="settings.html">
+      <button>Settings</button>
+    </a>
+    <a href="signup.html">
+      <button>Sign Up</button>
+  </a>
+  
+    </header>
+
+    <!-- Modal for adding new task -->
+    <div class="modal" id="add-task">
+      <div class="modal-content">
+        <span class="close" onclick="closeTaskWindow()">&times;</span>
+        <h2>Add a New Task</h2>
+        <form id="add-task-form" onsubmit="addTask(event)">
+          <label for="task-name">Task Name:</label>
+          <input type="text" id="task-name" name="task-name" required />
+          <br />
+          <label for="task-due-date">Due Date:</label>
+          <input type="date" id="task-due-date" name="task-due-date" />
+          <br />
+          <button type="submit">Add Task</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="layout-default">
+      <!-- Left Column: Calendar + Habit Tracker -->
+
+      <!-- Calendar Section -->
+      <div class="widget" id="calendar">
+        <div class="grab-handle">&#9776;</div>
+        <!-- Grab handle -->
+        <!-- Calendar Header -->
+        <div class="interface">
+          <button class="arrow left-arrow" onclick="setCalendar(-1)">
+            &#8249;
+          </button>
+
+          <div id="calendar-content">
+            <div id="calendar-header"></div>
+
+            <div id="calendar-weekdays">
+              <div>Sun</div>
+              <div>Mon</div>
+              <div>Tue</div>
+              <div>Wed</div>
+              <div>Thu</div>
+              <div>Fri</div>
+              <div>Sat</div>
+            </div>
+
+            <div id="calendar-grid"></div>
+          </div>
+
+          <button class="arrow right-arrow" onclick="setCalendar(1)">
+            &#8250;
+          </button>
+        </div>
+      </div>
+
+      <!-- Habit Tracker Section -->
+      <div class="widget" id="habits">
+        <div class="grab-handle">&#9776;</div>
+        <!-- Grab handle -->
+        <div class="interface">
+          <button disabled 
+          class="arrow left-arrow" id="habits-back" 
+          onclick="renderWidget('habits', -1)">
+            &#8249;
+          </button>
+
+          <div class="task-content">
+            <h3>Habit Tracker</h3>
+            <ul class="task-list" id="habits-list">
+              <!-- Habits will be dynamically added here -->
+            </ul>
+          </div>
+
+          <button
+          class="arrow right-arrow" id="habits-forward"
+          onclick="renderWidget('habits', 1)">
+            &#8250;
+          </button>
+        </div>
+      </div>
+
+      <!-- Tasks Section -->
+      <div class="widget" id="today">
+        <div class="grab-handle">&#9776;</div>
+        <div class="interface">
+          <button disabled
+          class="arrow left-arrow" id="today-back"
+          onclick="renderWidget('today', -1)">
+            &#8249;
+          </button>
+
+          <div class="task-content">
+            <h3>Today's Tasks</h3>
+            <ul class="task-list" id="today-list">
+              <!-- Tasks will be dynamically added here -->
+            </ul>
+          </div>
+
+          <button
+          class="arrow right-arrow" id="today-forward"
+          onclick="renderWidget('today', 1)">
+            &#8250;
+          </button>
+        </div>
+      </div>
+
+      <div class="widget" id="week">
+        <div class="grab-handle">&#9776;</div>
+        <div class="interface">
+          <button disabled
+          class="arrow left-arrow" id="week-back"
+          onclick="renderWidget('week', -1)">
+            &#8249;
+          </button>
+
+          <div class="task-content">
+            <h3>7 Days Tasks</h3>
+            <ul class="task-list" id="week-list">
+              <!-- Tasks will be dynamically added here -->
+            </ul>
+          </div>
+
+          <button
+          class="arrow right-arrow" id="week-forward"
+          onclick="renderWidget('week', 1)">
+            &#8250;
+          </button>
+        </div>
+      </div>
+
+      <div class="widget" id="month">
+        <div class="grab-handle">&#9776;</div>
+        <div class="interface">
+          <button disabled
+          class="arrow left-arrow" id="month-back"
+          onclick="renderWidget('month', -1)">
+            &#8249;
+          </button>
+
+          <div class="task-content">
+            <h3>30 Days Tasks</h3>
+            <ul class="task-list" id="month-list">
+              <!-- Tasks will be dynamically added here -->
+            </ul>
+          </div>
+
+          <button
+          class="arrow right-arrow" id="month-forward"
+          onclick="renderWidget('month', 1)">
+            &#8250;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <h1 id="motivational-quote">Your Life in a Glance</h1>
+    </footer>
+
+    <script src="js/todo.js"></script>
+    <script src="js/globals.js"></script>
+
+
+</body>
+</html>
+

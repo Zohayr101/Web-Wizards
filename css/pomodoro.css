@@ -1,0 +1,181 @@
+/* Pomodoro Timer Styling - Updated with Red Theme */
+
+body {
+    font-family: Arial, sans-serif;
+    color: white !important; /* Ensures good contrast */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    position: relative; /* Allows absolute positioning for top elements */
+}
+
+/* 📌 Back to Calendar Button (Top-Left) */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #D96C5F; /* Light red button */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-btn:hover {
+    background-color: #C95A4E; /* Darker red */
+    transform: scale(1.05);
+}
+
+/* Date Display (Top-Right) */
+/* Match Date Display Button to "Back to Calendar" */
+.date-nav {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #D96C5F; /* Same as "Back to Calendar" */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover Effect (Same as Back to Calendar) */
+.date-nav:hover {
+    background-color: #C95A4E; /* Slightly darker red */
+    transform: scale(1.05);
+}
+
+
+/* 📌 Mini Calendar (Hidden by Default) */
+#mini-calendar {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: white;
+    color: black;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Show Mini Calendar when active */
+#mini-calendar.active {
+    display: block;
+}
+
+/* Pomodoro Timer Container */
+.container {
+    width: 90%;
+    max-width: 400px;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease;
+}
+
+/* Pomodoro Page Title */
+h1 {
+    text-align: center;
+    color: white !important;
+    transition: color 0.5s ease;
+}
+
+/* Pomodoro Timer Modes */
+.modes {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+/* Buttons for Modes and Controls */
+.modes button, .controls button {
+    background: #D96C5F; /* Lighter red button */
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover Effect for Buttons */
+.modes button:hover, .controls button:hover {
+    background-color: #C95A4E; /* Slightly darker red */
+    transform: scale(1.05);
+}
+
+/* Timer Styling */
+.timer {
+    font-size: 48px;
+    text-align: center;
+    margin: 20px 0;
+    font-weight: bold;
+    color: white !important;
+}
+
+/* Controls for Pomodoro Timer */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+/* Pomodoro Status Text */
+#status {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: white !important;
+}
+
+/* Pomodoro Container Layout */
+#pomodoro-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Tasks Section */
+.tasks {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.tasks h3 {
+    color: white;
+}
+
+/* Add Task Button */
+.add-task {
+    background-color: #D96C5F;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-task:hover {
+    background-color: #C95A4E;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    #pomodoro-container {
+        max-width: 600px;
+    }
+}
