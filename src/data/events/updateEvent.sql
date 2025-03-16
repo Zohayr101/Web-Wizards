@@ -6,6 +6,8 @@ SET     [title] = @title
        , [endDate] = @endDate
        , [endTime] = @endTime
        , [complete] = @complete
+       , [category] = @category
+       , [priority] = @priority
 WHERE   [id] = @id
  AND   [userId] = @userId;
 
@@ -17,6 +19,8 @@ SELECT  [id]
        , [endDate]
        , [endTime]
        , [complete]
+       , [category]
+       , [priority]
 FROM    [dbo].[events]
 WHERE   [id] = @id
  AND   [userId] = @userId;

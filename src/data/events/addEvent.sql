@@ -1,3 +1,5 @@
+DECLARE @newId INT
+
 INSERT INTO [dbo].[events]
 (
     [userId]
@@ -8,6 +10,8 @@ INSERT INTO [dbo].[events]
    , [endDate]
    , [endTime]
    , [complete]
+   , [category]
+   , [priority]
 )
 VALUES
 (
@@ -19,6 +23,23 @@ VALUES
    , @endDate
    , @endTime
    , @complete
+   , @category
+   , @priority
 );
 
-SELECT SCOPE_IDENTITY() AS id;
+SELECT @newId = SCOPE_IDENTITY();
+
+SELECT 
+    [userId]
+   , [id]
+   , [title]
+   , [description]
+   , [startDate]
+   , [startTime]
+   , [endDate]
+   , [endTime]
+   , [complete]
+   , [category]
+   , [priority]
+FROM [dbo].[events]
+WHERE id = @newId;

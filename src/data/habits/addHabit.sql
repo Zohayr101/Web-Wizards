@@ -1,3 +1,5 @@
+DECLARE @newId INT;
+
 INSERT INTO [dbo].[habits]
 (
     [userId]
@@ -17,4 +19,15 @@ VALUES
    , @frequency
 );
 
-SELECT SCOPE_IDENTITY() AS id;
+SELECT @newId = SCOPE_IDENTITY();
+
+SELECT 
+    [id],
+    [userId],
+    [title],
+    [complete],
+    [daysComplete],
+    [maxDays],
+    [frequency]
+FROM [dbo].[habits]
+WHERE id = @newId;

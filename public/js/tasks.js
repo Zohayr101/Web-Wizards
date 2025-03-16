@@ -19,13 +19,15 @@ monthDate.setHours(23, 59, 59, 999);
 
 //=========================
 // MAIN FUNCTION FOR 
-// CREATING LIST ITEMS
+// CREATING LIST ITEMS / EDITING LIST ITEMS
 //=========================
 
 function createTaskListItem(event) {
   
   const li = document.createElement("li");
   li.dataset.eventId = event.id;
+  li.dataset.category = event.category;
+  li.dataset.priority = event.priority;
 
   //code for checkbox
   const checkbox = document.createElement("input");
@@ -43,9 +45,21 @@ function createTaskListItem(event) {
   });
   const formattedDate = formatDate.format(new Date(event.startDate));
 
+  let priorityFlag;
+  switch (event.priority) {
+    case 0: priorityFlag = "💤";
+      break;
+    case 1: priorityFlag = "";
+      break;
+    case 2: priorityFlag = "⚠";
+      break;
+    default: priorityFlag = "";
+      break;
+  };
+
   //put title and formatted date onto span
   const span = document.createElement("span");
-  span.textContent = `${event.title} - ${formattedDate}`;
+  span.textContent = `${priorityFlag} ${event.title} - ${formattedDate}`;
 
   //code for edit button
   const editButton = document.createElement("button");
@@ -54,7 +68,7 @@ function createTaskListItem(event) {
     openEditWindow(event, li);
   });
 
-  //code for delete button
+  /*//code for delete button
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "🗑";
   deleteButton.addEventListener("click", async () => {
@@ -66,12 +80,12 @@ function createTaskListItem(event) {
         alert("error deleting event from sql server");
       }
     }
-  });
+  }); */
 
   li.appendChild(checkbox);
   li.appendChild(span);
   li.appendChild(editButton);
-  li.appendChild(deleteButton);
+  //li.appendChild(deleteButton);
 
   return li;
 }
@@ -118,20 +132,23 @@ function addTaskWindow() {document.getElementById("add-task").style.display = "b
 function closeTaskWindow() {document.getElementById("add-task").style.display = "none";}
 
 document.getElementById("addTaskButton").addEventListener("click", async function (event) {
-  
   event.preventDefault();
-
+  
   const taskName = document.getElementById("task-name").value;
   const dueDate = document.getElementById("task-due-date").value;
+  const taskCategory = document.getElementById("task-category").value;
+  const taskPriority = parseInt(document.getElementById("add-task-priority").value, 10);
 
   const taskData = {
     title: taskName,
     startDate: dueDate,
-    complete: false
+    complete: false,
+    category: taskCategory,
+    priority: taskPriority
   };
 
   try {
-    const response = await fetch("api/events", {
+    const response = await fetch("/api/events", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -143,9 +160,14 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
       throw new Error("error: api post error");
     }
 
-    //const newTask = await response.json();
+    const newTask = await response.json();
+
     const todayTaskList = document.getElementById("today-list");
-    const li = createTaskListItem(taskData);
+    const weekTaskList = document.getElementById("week-list");
+    const monthTaskList = document.getElementById("month-list");
+
+    const li = createTaskListItem(newTask);
+
     const newDate = new Date(taskData.startDate);
 
     if (newDate.getTime() <= todayDate.getTime()) {
@@ -156,13 +178,18 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
       monthTaskList.appendChild(li);
     }
 
-    console.log("Created task", taskData);
+    console.log("Created task", newTask);
 
   } catch (error) {
-      console.error("API error:", error)
+      console.error("API error:", error);
   }
 
   closeTaskWindow();
+  document.getElementById("task-name").value = "";
+  document.getElementById("task-due-date").value = "";
+  document.getElementById("task-category").value = "";
+  document.getElementById("add-task-priority").value = 1; // or whatever default
+
 
 });
 
@@ -175,6 +202,11 @@ function openEditWindow(event, li) {
   const editTaskWindow = document.getElementById("edit-task");
   editTaskWindow.style.display = "block";
   editTaskWindow.dataset.eventId = event.id;
+  editTaskWindow.dataset.title = event.title;
+  
+  //new fields
+  editTaskWindow.dataset.category = event.category;
+  editTaskWindow.dataset.priority = event.priority;
   
   if(event.complete === true || event.complete) {
     editTaskWindow.dataset.complete = 1;
@@ -184,9 +216,13 @@ function openEditWindow(event, li) {
 
   const editTaskName = document.getElementById("edit-task-name");
   const editTaskDueDate = document.getElementById("edit-task-due-date");
+  const editTaskCategory = document.getElementById("edit-task-category");
+  const editTaskPriority = document.getElementById("edit-task-priority");
 
   editTaskName.value = event.title;
   editTaskDueDate.value = new Date(event.startDate).toISOString().split("T")[0];
+  editTaskCategory.value = event.category;
+  editTaskPriority.value = event.priority;
 
 }
 
@@ -233,6 +269,8 @@ document.getElementById("editTaskButton").addEventListener("click", async functi
   const updateDueDate = document.getElementById("edit-task-due-date").value;
   const complete = document.getElementById("edit-task").dataset.complete;
   const eventId = document.getElementById("edit-task").dataset.eventId;
+  const category = document.getElementById("edit-task-category").value;
+  const priority = parseInt(document.getElementById("edit-task-priority").value, 10);
 
   try {
     const response = await fetch(`/api/events/${eventId}`, {
@@ -243,7 +281,9 @@ document.getElementById("editTaskButton").addEventListener("click", async functi
       body: JSON.stringify({
         title: updateTitle,
         startDate: updateDueDate,
-        complete: complete
+        complete: complete,
+        category: category,
+        priority: priority
       })
     });
 
@@ -253,7 +293,7 @@ document.getElementById("editTaskButton").addEventListener("click", async functi
 
     const li = document.querySelector(`li[data-event-id="${eventId}"]`)
     if (li) {
-      const span = li.querySelector('span');
+      const span = li.querySelector("span");
       const formatDate = new Intl.DateTimeFormat("en-US", {
         month: "numeric",
         day: "numeric",
@@ -274,6 +314,29 @@ document.getElementById("editTaskButton").addEventListener("click", async functi
 // DELETE TASK
 //=========================
 
+const deleteButton = document.getElementById("deleteTaskButton");
+  //deleteButton.textContent = "🗑";
+deleteButton.addEventListener("click", async () => {
+  const eventId = document.getElementById("edit-task").dataset.eventId;
+  const eventTitle = document.getElementById("edit-task").dataset.title;
+  const li = document.querySelector(`li[data-event-id="${eventId}"]`);
+
+
+    if (confirm(`Delete this item? "${eventTitle}"`)) {
+      const success = await deleteEvent(eventId);
+      if (success) {
+        if(li) {
+          li.remove();
+
+        }
+        closeEditWindow();
+        
+      } else {
+        alert("error deleting event from sql server");
+      }
+    }
+});
+
 async function deleteEvent(eventId) {
   try {
     const response = await fetch(`/api/events/${eventId}`, {
@@ -282,6 +345,7 @@ async function deleteEvent(eventId) {
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`)
     }
+
     return true;
   } catch (error) {
     console.error("delete failed:", error);
