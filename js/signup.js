@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Load saved theme or default to root
     let savedTheme = localStorage.getItem("selectedTheme") || "root";
+    // Apply saved font
+    document.body.style.fontFamily = localStorage.getItem("font");
 
     // If "jing-theme" was saved, convert it to "lilac-theme"
     if (savedTheme === "jing-theme") {

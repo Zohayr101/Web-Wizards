@@ -11,7 +11,7 @@ header.pomodoro-header {
     height: 70px; /* Slim header */
     background-color: rgba(128, 128, 128, 0.8); /* Neutral grey with transparency */
     color: #fff;
-    font-family: "Helvetica Neue", Arial, sans-serif;
+    /* font-family: "Helvetica Neue", Arial, sans-serif; /* Commented out for font setting to work */
     font-size: 1.8rem;
     display: flex;
     align-items: center;
@@ -251,7 +251,7 @@ header.pomodoro-header {
     border-radius: 15px;
     padding: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    font-family: "Helvetica Neue", Arial, sans-serif;
+    /* font-family: "Helvetica Neue", Arial, sans-serif; /* Commented out for font setting to work */
     text-align: left;
     z-index: 1500;
     transition: background-color 0.3s;

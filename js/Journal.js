@@ -1,6 +1,9 @@
 window.onload = function () {
   console.log("Window loaded, running Journal.js...");
 
+  // Apply saved font
+  document.body.style.fontFamily = localStorage.getItem("font");
+
   /* ---------------------------
      1. TOGGLE BUTTONS: Journal vs. Notes
   ---------------------------- */

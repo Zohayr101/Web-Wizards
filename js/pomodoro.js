@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Pomodoro script loaded.");
+    // Apply saved font
+    document.body.style.fontFamily = localStorage.getItem("font");
   
     // Timer durations (in seconds) for testing
     let pomodoroTime = 25;

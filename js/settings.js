@@ -12,6 +12,8 @@ window.addEventListener("load", () => {
   function preload() {
     // Apply saved theme
     document.body.classList.add(localStorage.getItem("theme"));
+    // Apply saved font
+    document.body.style.fontFamily = localStorage.getItem("font");
 
 
     // Generate divs/buttons for settings selection
