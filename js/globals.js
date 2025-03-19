@@ -16,6 +16,14 @@ window.LAYOUTS = [
     "layout-no-calendar",
   ];
 
+window.FONTS = [
+  "Arial, sans-serif",
+  "Courier New",
+  "Times New Roman",
+  "Brush Script MT",
+  "Copperplate",
+]
+
 window.QUOTES = [
     "Believe in yourself always.",
     "Dream big, work hard.",

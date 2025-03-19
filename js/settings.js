@@ -1,5 +1,6 @@
 const themes = window.THEMES;
 const layouts = window.LAYOUTS;
+const fonts = window.FONTS;
 
 preload();
 
@@ -102,6 +103,27 @@ window.addEventListener("load", () => {
       themeSelection.appendChild(textColorDiv);
       themeSelection.appendChild(backgroundDiv);
     }
+
+    // Fonts
+    const fontsMenu = document.getElementById("fonts");
+    for (let font of fonts) {
+      const fontSelection = document.createElement("div");
+      fontSelection.classList.add("font-selection");
+      fontSelection.textContent = "Tasty Pomodoro!";
+      fontSelection.style.fontFamily = font;
+
+      if (font === localStorage.getItem("font")) {
+        fontSelection.id = "selected-font";
+      }
+
+      fontSelection.addEventListener("click", () => {
+        setFont(font);
+        document.getElementById("selected-font").removeAttribute("id");
+        fontSelection.id = "selected-font";
+      });
+
+      fontsMenu.appendChild(fontSelection);
+    }
   }
 
   function setLayout(layout) {
@@ -116,6 +138,11 @@ window.addEventListener("load", () => {
       body.classList.remove(t);
     }
     body.classList.add(theme);
+  }
+
+  function setFont(font) {
+    localStorage.setItem("font", font);
+    document.body.style.fontFamily = font;
   }
 
 

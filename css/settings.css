@@ -34,7 +34,7 @@ menu {
 }
 
 .layout-body * {
-    font-size: 10px;
+    font-size: 9px;
     margin: 3px;
     padding: 3px;
     color: var(--primary-color);
@@ -56,4 +56,18 @@ menu {
 
 #selected-theme {
     border: 4px solid var(--current-day-bg-color);
+}
+
+.font-selection {
+    width: 150px;
+    text-align: center;
+    border: 2px solid black;
+    transition: border-width 0.5s ease;
+    padding: 5px;
+    background-color: var(--button-hover-bg-color);
+}
+
+#selected-font {
+    border: 4px solid var(--current-day-bg-color);
+    background-color: var(--primary-color);
 }
