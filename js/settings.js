@@ -157,7 +157,7 @@ function quotesLoad() {
   const quoteOptions = quoteMenu.children;
   for (let option of quoteOptions) {
     option = option.children[0];
-    if (checkedQuotes != null & checkedQuotes.includes(option.value)) {
+    if (checkedQuotes != null && checkedQuotes.includes(option.value)) {
       option.checked = true;
     }
     option.addEventListener("change", () => {
