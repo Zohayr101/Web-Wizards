@@ -1,11 +1,14 @@
 const themes = window.THEMES;
 const layouts = window.LAYOUTS;
 const fonts = window.FONTS;
+let quotes = [];
+let checkedQuotes = [];
 
 preload();
 
 window.addEventListener("load", () => {
-    // Start cycling motivational quotes
+    quotesLoad();
+    updateQuotes();
     cycleQuotes();
   });
 
@@ -147,13 +150,52 @@ window.addEventListener("load", () => {
     document.body.style.fontFamily = font;
   }
 
+function quotesLoad() {
+  checkedQuotes = localStorage.getItem('checkedQuotes');
+  console.log("checked quotes: " + checkedQuotes);
+  const quoteMenu = document.getElementById("quotes");
+  const quoteOptions = quoteMenu.children;
+  for (let option of quoteOptions) {
+    option = option.children[0];
+    if (checkedQuotes.includes(option.value)) {
+      option.checked = true;
+    }
+    option.addEventListener("change", () => {
+      updateQuotes();
+    });
+  }
+}
 
-// copied from todo.js on 2/19/25 at 3:33pm
-const quoteElement = document.getElementById("motivational-quote");
-const motivationalQuotes = window.QUOTES; // adjusted by hand
-  
-  // Function to cycle through quotes
+function updateQuotes() {
+  checkedQuotes = [];
+  quotes = [];
+  const quoteMenu = document.getElementById("quotes");
+  const quoteOptions = quoteMenu.children;
+  for (let option of quoteOptions) {
+    option = option.children[0];
+    if (option.checked) {
+      checkedQuotes.push(option.value);
+      quotes = quotes.concat(window[option.value]);
+    }
+  }
+  if (quotes.length <= 0) {
+    quotes.push('Select a quote pack.');
+  } else {
+    shuffleArray(quotes);
+  }
+  localStorage.setItem("checkedQuotes", checkedQuotes);
+}
+
+// https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
   function cycleQuotes() {
+  const quoteElement = document.getElementById("motivational-quote");
     let quoteIndex = 0;
   
     // Function to display the next quote
@@ -163,11 +205,11 @@ const motivationalQuotes = window.QUOTES; // adjusted by hand
   
       // After the fade-out transition ends, update the text and fade in
       setTimeout(() => {
-        quoteElement.textContent = motivationalQuotes[quoteIndex];
+        quoteElement.textContent = quotes[quoteIndex];
         quoteElement.classList.add("visible");
   
         // Update index to the next quote, looping back if necessary
-        quoteIndex = (quoteIndex + 1) % motivationalQuotes.length;
+        quoteIndex = (quoteIndex + 1) % quotes.length;
       }, 1000); // 1000ms matches the CSS transition duration
     };
   
