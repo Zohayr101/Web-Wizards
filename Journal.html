@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Journal &amp; Notes</title>
-    <!-- Your main CSS files -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/Journal.css">
+    <!-- Main CSS files -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/Journal.css" />
     <style>
       /* Toggle Buttons for switching between Journal and Notes */
       .toggle-buttons-container {
@@ -147,12 +147,13 @@
       <div class="journal-image-container">
         <h3>Add an Image</h3>
         <input type="file" id="journal-image-input" accept="image/*" />
+        <!-- Remove Image Button -->
+        <button type="button" id="remove-image-btn">Remove Image</button>
         <div id="image-preview"></div>
       </div>
     </div>
     
     <!-- Notes Section (Text Only) -->
-    <!-- Added "mode-write" so the textarea is displayed by default -->
     <div id="notes-section" class="mode-write" style="display: none;">
       <div class="notes-container">
         <h2>General Notes</h2>
@@ -173,7 +174,7 @@
       muted>
     </video>
     
+    <!-- Include the Journal JavaScript -->
     <script src="js/Journal.js"></script>
   </body>
 </html>
-
