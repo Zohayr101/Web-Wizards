@@ -112,6 +112,7 @@ document
       title: habitName,
       frequency: habitFrequency,
       complete: false,
+      habitStreak: 0
     };
 
     try {
@@ -182,6 +183,7 @@ async function habitComplete(habit, li, checkbox) {
         complete: updateComplete,
         title: habitTitle,
         habitStreak: habitStreak + 1,
+        frequency: habit.frequency
       }),
     });
 
