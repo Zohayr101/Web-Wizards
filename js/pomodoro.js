@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Play selected ring when timer ends
     function playSelectedRing() {
       const selectedRing = ringSelect.value;
-      const audio = new Audio(selectedRing);
+      const audio = new Audio("../" + selectedRing);
       audio.volume = ringVolumeSlider.value;
       audio.play();
     }
@@ -199,7 +199,8 @@ document.addEventListener("DOMContentLoaded", function () {
         testAudio.pause();
         testAudio = null;
       }
-      testAudio = new Audio(ringSelect.value);
+      testAudio = new Audio("../" + ringSelect.value);
+
       testAudio.volume = ringVolumeSlider.value;
       testAudio.play();
       testAudio.onended = function () {
