@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================
     //  SESSION STATS VARIABLES
     // =========================
-    let pomodorosCompletedToday = 10;
+    let pomodorosCompletedToday = 0;
     let focusTimeToday = 0; // in minutes
   
     // Update stats UI
