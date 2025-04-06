@@ -1,6 +1,6 @@
     <!-- Global styles and Pomodoro-specific CSS -->
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/pomodoro.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/pomodoro.css" />
 
     <!-- Inline CSS for header, progress ring, and layout -->
     <style>
@@ -13,7 +13,7 @@
         height: 70px;
         background-color: rgba(128, 128, 128, 0.8);
         color: #fff;
-        font-family: "Helvetica Neue", Arial, sans-serif;
+        /* font-family: "Helvetica Neue", Arial, sans-serif; /* Commented out for font setting to work */
         font-size: 1.8rem;
         display: flex;
         align-items: center;
@@ -185,6 +185,8 @@
         console.log("Applied theme:", savedTheme);
       });
     </script>
+  </head>
+  <body>
     <!-- Fixed Header -->
     <header class="pomodoro-header">
       <div class="header-title">Pomodoro Timer</div>
@@ -199,7 +201,7 @@
         </select>
         <button id="test-ring-btn">Test Ring</button>
         <input type="range" id="ring-volume" min="0" max="1" step="0.01" value="1" />
-        <a href="/">Back to Calendar</a>
+        <a href="../index.html">Back to Calendar</a>
       </div>
     </header>
 
@@ -266,13 +268,13 @@
     <!-- Session Stats Card (Bottom-Right) -->
   <div class="stats-container" id="stats-container">
     <h3>Session Stats</h3>
-    <p>Pomodoros Completed (Today): <span id="pomodoros-completed">10</span></p>
+    <p>Pomodoros Completed (Today): <span id="pomodoros-completed">0</span></p>
     <p>Total Focus Time (Today): <span id="focus-time-today">0</span> min</p>
     <button id="clear-stats-btn">Clear Stats</button>
   </div>
 
 
-    <script src="js/pomodoro.js" defer></script>
+    <script src="../js/pomodoro.js" defer></script>
 
     <script>
       const instructionsBtn = document.getElementById("instructions-btn");
@@ -293,4 +295,4 @@
         }
       });
     </script>
-</div>
+  </body>

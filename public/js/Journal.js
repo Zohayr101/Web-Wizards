@@ -44,17 +44,28 @@ window.onload = function () {
 
   function loadEntryForDate(dateObj) {
     const key = formatDateKey(dateObj);
-    document.getElementById("journal-title").value = localStorage.getItem("journalTitle_" + key) || "";
-    document.getElementById("journal-text").value = localStorage.getItem("journalEntry_" + key) || "";
+    document.getElementById("journal-title").value =
+      localStorage.getItem("journalTitle_" + key) || "";
+    document.getElementById("journal-text").value =
+      localStorage.getItem("journalEntry_" + key) || "";
+
     currentImageData = localStorage.getItem("journalImage_" + key) || "";
     const imagePreview = document.getElementById("image-preview");
-    imagePreview.innerHTML = currentImageData ? `<img src="${currentImageData}" alt="Journal Image">` : "";
+    imagePreview.innerHTML = currentImageData
+      ? `<img src="${currentImageData}" alt="Journal Image">`
+      : "";
   }
 
   function saveEntryForDate(dateObj) {
     const key = formatDateKey(dateObj);
-    localStorage.setItem("journalTitle_" + key, document.getElementById("journal-title").value);
-    localStorage.setItem("journalEntry_" + key, document.getElementById("journal-text").value);
+    localStorage.setItem(
+      "journalTitle_" + key,
+      document.getElementById("journal-title").value
+    );
+    localStorage.setItem(
+      "journalEntry_" + key,
+      document.getElementById("journal-text").value
+    );
     localStorage.setItem("journalImage_" + key, currentImageData);
   }
 
@@ -70,6 +81,7 @@ window.onload = function () {
     playPencilAnimation();
   });
 
+  // File input for the journal image
   const imageInput = document.getElementById("journal-image-input");
   if (imageInput) {
     imageInput.addEventListener("change", function () {
@@ -82,6 +94,27 @@ window.onload = function () {
         };
         reader.readAsDataURL(file);
       }
+    });
+  }
+
+  // -----------------------------
+  // NEW CODE: REMOVE IMAGE BUTTON
+  // -----------------------------
+  // This section defines the behavior for when the user clicks the "Remove Image" button.
+  // It clears the file input, resets the in-memory image data, clears the preview, and updates localStorage.
+  const removeImageBtn = document.getElementById("remove-image-btn");
+  if (removeImageBtn) {
+    removeImageBtn.addEventListener("click", function () {
+      // Clear the file input value
+      if (imageInput) {
+        imageInput.value = "";
+      }
+      // Clear the in-memory image data variable
+      currentImageData = "";
+      // Clear the image preview area (so no image is displayed)
+      document.getElementById("image-preview").innerHTML = "";
+      // Save the updated entry to localStorage (reflecting that no image is present)
+      saveEntryForDate(currentDate);
     });
   }
 
@@ -139,15 +172,20 @@ window.onload = function () {
       miniCalGrid.appendChild(dayCell);
     }
     document.getElementById("mini-calendar-title").textContent =
-      new Date(currentDate.getFullYear(), currentDate.getMonth()).toLocaleString("default", { month: "long", year: "numeric" });
+      new Date(currentDate.getFullYear(), currentDate.getMonth()).toLocaleString(
+        "default",
+        { month: "long", year: "numeric" }
+      );
   }
 
   /* ---------------------------
      4. NOTES SECTION (Text Only)
   ---------------------------- */
   function loadNotes() {
-    document.getElementById("notes-title").value = localStorage.getItem("notesTitle") || "";
-    document.getElementById("notes-textarea").value = localStorage.getItem("notesContent") || "";
+    document.getElementById("notes-title").value =
+      localStorage.getItem("notesTitle") || "";
+    document.getElementById("notes-textarea").value =
+      localStorage.getItem("notesContent") || "";
   }
 
   function saveNotes() {
@@ -175,10 +213,13 @@ window.onload = function () {
     }
   }
 
-  // Default view: Show Journal
+  // Default view: Show Journal; hide Notes
   journalSection.style.display = "block";
   notesSection.style.display = "none";
-  if (document.getElementById("journalNotesSwitch") && document.getElementById("journalNotesSwitch").checked) {
+  if (
+    document.getElementById("journalNotesSwitch") &&
+    document.getElementById("journalNotesSwitch").checked
+  ) {
     journalSection.style.display = "none";
     notesSection.style.display = "block";
     loadNotes();
