@@ -18,25 +18,35 @@
     <script type="text/javascript" src="js/globals.js"></script>
     <!-- Top Panel -->
     <header>
-      <button onclick="window.location.href='html/Journal.html'">Journal</button>
-      <button onclick="addTaskWindow()">Add Task</button>
-      <!-- Pomodoro Icon in the Middle -->
-      <a href="html/pomodoro.html" class="pomodoro-icon">
-        <img src="Images/pomodoro.png" alt="Pomodoro Timer" style="width: 65px; height: auto;">
-      </a>
-      <a href="html/settings.html">
-        <button>Settings</button>
-      </a>
-      <a href="html/signup.html">
-        <button>Sign Up</button>
-      </a>
       <!-- Extras Dropdown -->
       <div class="dropdown">
-        <button class="dropbtn">Extras</button>
+        <button class="dropbtn"><img src="Images/wizard.png" alt="Extras" style="width: 65px; height: auto;"></button>
         <div class="dropdown-content">
           <a href="html/movie.html">Movies</a>
           <a href="html/weather.html">Weather</a>
           <a href="html/stock.html">Stocks</a>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+
+      <button onclick="addTaskWindow()">Add Task</button>
+
+      <!-- Pomodoro Icon in the Middle -->
+      <a href="html/pomodoro.html" class="icon">
+        <img src="Images/pomodoro.png" alt="Pomodoro Timer" style="width: 90px; height: auto;">
+      </a>
+      
+      <button onclick="addHabitWindow()">Add Habit</button>
+
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="dropdown">
+        <button class="dropbtn"><img src="Images/profile.png" alt="Profile" style="width: 65px; height: auto;"></button>
+        <div class="dropdown-content">
+          <a href="html/settings.html">Settings</a>
+          <a href="html/shop.html">Shop</a>
+          <a href="html/logout.html">Logout</a>
         </div>
       </div>
     </header>

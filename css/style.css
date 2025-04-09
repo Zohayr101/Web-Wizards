@@ -108,6 +108,10 @@
   cursor: pointer;
 }
 
+.dropbtn:hover {
+  background-color: var(--button-bg-color);
+}
+
 /* Dropdown content hidden by default */
 .dropdown-content {
   display: none;

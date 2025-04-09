@@ -15,7 +15,7 @@ header {
     max-width: 1200px;
 
     display: flex;
-    justify-content: space-evenly; /* Evenly distribute buttons */
+    justify-content: space-between; /* Spread out buttons */
     align-items: center; /* Vertically center buttons */
     background-color: var(--secondary-color); /* Uses CSS variable */
     padding: 10px;
