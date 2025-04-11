@@ -61,6 +61,46 @@ module.exports.register = async server => {
             options: {
                 auth: false
             }
+        },
+        {
+            method: "GET",
+            path: "/shop.html",
+            handler: async (request, h) => {
+                return h.view("shop.html", {});
+            },
+            options: {
+                auth: false
+            }
+        },
+        {
+            method: "GET",
+            path: "/movie.html",
+            handler: async (request, h) => {
+                return h.view("movie.html", {});
+            },
+            options: {
+                auth: false
+            }
+        },
+        {
+            method: "GET",
+            path: "/weather.html",
+            handler: async (request, h) => {
+                return h.view("weather.html", {});
+            },
+            options: {
+                auth: false
+            }
+        },
+        {
+            method: "GET",
+            path: "/stock.html",
+            handler: async (request, h) => {
+                return h.view("stock.html", {});
+            },
+            options: {
+                auth: false
+            }
         }
         
     ]);
