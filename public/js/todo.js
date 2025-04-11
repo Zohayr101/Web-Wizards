@@ -1,11 +1,10 @@
 // todo.js
 
 //temporary username until database is operational
-const username = "username_test";
+//const username = "username_test";
 
 // DOM Elements
 const habitsList = document.getElementById("habits-list"); // For Habit Tracker
-
 const quoteElement = document.getElementById("motivational-quote");
 
 //Calendar
@@ -23,15 +22,16 @@ const currentYear = currentDate.getFullYear();
 const currentMonth = currentDate.getMonth();
 const currentDay = currentDate.getDate();
 
-const weekDate = new Date();
-weekDate.setDate(currentDay + 7);
-weekDate.setHours(23, 59, 59, 999);
+//const weekDate = new Date();
+//weekDate.setDate(currentDay + 7);
+//weekDate.setHours(23, 59, 59, 999);
 
-const monthDate = new Date();
-monthDate.setDate(currentDay + 30);
-monthDate.setHours(23, 59, 59, 999);
+//const monthDate = new Date();
+//monthDate.setDate(currentDay + 30);
+//monthDate.setHours(23, 59, 59, 999);
 
 //temporary todo tasks until database is operational
+/*
 var widgetData = {
   today: [
     { name: "Task 1", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
@@ -70,6 +70,7 @@ var widgetData = {
     },
   ],
 };
+*/
 
 var widgetIndex = {
   today: 0,
@@ -88,6 +89,7 @@ var itemsPerPage = {
 layouts = window.LAYOUTS;
 themes = window.THEMES;
 
+/*
 // Task Modal Functions
 function addTaskWindow() {
   document.getElementById("add-task").style.display = "block";
@@ -228,6 +230,7 @@ function toggleHabit(habitId) {
 
   localStorage.setItem("habits", JSON.stringify(widgetData["habits"]));
 }
+*/
 
 function setLayout() {
   layout = localStorage.getItem("layout");
@@ -321,7 +324,7 @@ function loadCalendar(weekday, lastDay, dateText) {
 // Initialization on Page Load
 window.addEventListener("load", () => {
   // Load Tasks
-  savedPages = ["today", "week", "month", "habits"];
+  /*savedPages = ["today", "week", "month", "habits"];
   savedPages.forEach((page) => {
     const savedTasks = localStorage.getItem(page);
     if (savedTasks) {
@@ -330,7 +333,7 @@ window.addEventListener("load", () => {
     }
 
     renderWidget(page, 0);
-  });
+  });*/
 
   setLayout();
 
@@ -343,6 +346,7 @@ window.addEventListener("load", () => {
     console.log(option);
     quotes = quotes.concat(window[option]);
   }
+
   shuffleArray(quotes);
   console.log(quotes);
   cycleQuotes();
