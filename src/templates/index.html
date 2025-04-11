@@ -1,5 +1,6 @@
-<div class="container">
+
   {{#if auth.isAuthenticated}}
+  <body>
   <h1 class="header">{{title}}</h1>
   <p>{{message}}</p>
 
@@ -292,10 +293,12 @@
   <footer>
     <h1 id="motivational-quote">Your Life in a Glance</h1>
   </footer>
+</body>
 
 {{else}}
+<body>
 <h1 class="header">{{title}}</h1>
 <p>{{message}}</p>
 <a href="/login">Login</a>
+</body>
 {{/if}}
-</div>
