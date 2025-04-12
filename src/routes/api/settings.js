@@ -5,7 +5,7 @@ const boom = require("@hapi/boom");
 module.exports.register = async server => {
     server.route( {
         method: "GET",
-        path: "/api.tasks",
+        path: "/api.settings",
         options: {
             auth: {mode: "try"}
         },
@@ -17,7 +17,7 @@ module.exports.register = async server => {
                 const db = request.server.plugins.sql.client;
 
                 const userId = request.auth.credentials.profile.id;
-                const res = await db.tasks.getTasks(userId);
+                const res = await db.settings.getSettings(userId);
 
                 return res.recordset;
             } catch (err) {
@@ -28,7 +28,7 @@ module.exports.register = async server => {
 
     server.route({
         method: "POST",
-        path: "/api/tasks",
+        path: "/api/settings",
         options: {
             auth: {mode: "try"}
         },
@@ -39,8 +39,8 @@ module.exports.register = async server => {
                 }
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
-                const {title, description, dueDate, complete, category, priority} = request.payload;
-                const res = await db.tasks.addTask({userId, title, description, dueDate, complete, category, priority});
+                const {title, complete, daysComplete, maxDays, frequency} = request.payload;
+                const res = await db.settings.addSetting({userId, title, complete, daysComplete, maxDays, frequency});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);
@@ -51,7 +51,7 @@ module.exports.register = async server => {
 
     server.route({
         method: "PUT",
-        path: "/api/tasks/{id}",
+        path: "/api/settings/{id}",
         options: {
             auth: {mode: "try"}
         },
@@ -63,9 +63,9 @@ module.exports.register = async server => {
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
                 const {id} = request.params;
-                const {title, description, dueDate, complete, category, priority} = request.payload;
+                const {title, complete, daysComplete, maxDays, frequency} = request.payload;
 
-                const res = await db.tasks.updateTask({id, userId, title, description, dueDate, complete, category, priority});
+                const res = await db.settings.updateSetting({id, userId, title, complete, daysComplete, maxDays, frequency});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);
@@ -76,7 +76,7 @@ module.exports.register = async server => {
 
     server.route( {
         method: "DELETE",
-        path: "/api/tasks/{id}",
+        path: "/api/settings/{id}",
         options: {
             auth: {mode: "try"}
         },
@@ -88,7 +88,7 @@ module.exports.register = async server => {
                 const id = request.params.id;
                 const userId = request.auth.credentials.profile.id;
                 const db = request.server.plugins.sql.client;
-                const res = await db.tasks.deleteTask({id, userId});
+                const res = await db.settings.deleteSetting({id, userId});
                     
                 return res.rowsAffected[0] === 1 ? h.response().code(204) : boom.notFound();
             } catch (err) {

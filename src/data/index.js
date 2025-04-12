@@ -2,6 +2,8 @@
 
 const events = require("./events");
 const habits = require("./habits");
+const stats = require("./stats");
+const settings = require("./settings");
 const sql = require("mssql");
 
 const client = async (server, config) => {
@@ -36,7 +38,9 @@ const client = async (server, config) => {
 
     return {
         events: await events.register({sql, getConnection}),
-        habits: await habits.register({sql, getConnection})
+        habits: await habits.register({sql, getConnection}),
+        settings: await settings.register({sql, getConnection}),
+        stats: await stats.register({sql, getConnection})
     };
 };
 

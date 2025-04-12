@@ -5,7 +5,7 @@ const boom = require("@hapi/boom");
 module.exports.register = async server => {
     server.route( {
         method: "GET",
-        path: "/api.habits",
+        path: "/api.stats",
         options: {
             auth: {mode: "try"}
         },
@@ -17,7 +17,7 @@ module.exports.register = async server => {
                 const db = request.server.plugins.sql.client;
 
                 const userId = request.auth.credentials.profile.id;
-                const res = await db.habits.getHabits(userId);
+                const res = await db.stats.getStats(userId);
 
                 return res.recordset;
             } catch (err) {
@@ -28,7 +28,7 @@ module.exports.register = async server => {
 
     server.route({
         method: "POST",
-        path: "/api/habits",
+        path: "/api/stats",
         options: {
             auth: {mode: "try"}
         },
@@ -40,7 +40,7 @@ module.exports.register = async server => {
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
                 const {title, complete, daysComplete, maxDays, frequency} = request.payload;
-                const res = await db.habits.addHabit({userId, title, complete, daysComplete, maxDays, frequency});
+                const res = await db.stats.addStat({userId, title, complete, daysComplete, maxDays, frequency});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);
@@ -51,7 +51,7 @@ module.exports.register = async server => {
 
     server.route({
         method: "PUT",
-        path: "/api/habits/{id}",
+        path: "/api/stats/{id}",
         options: {
             auth: {mode: "try"}
         },
@@ -65,7 +65,7 @@ module.exports.register = async server => {
                 const {id} = request.params;
                 const {title, complete, daysComplete, maxDays, frequency} = request.payload;
 
-                const res = await db.habits.updateHabit({id, userId, title, complete, daysComplete, maxDays, frequency});
+                const res = await db.stats.updateStat({id, userId, title, complete, daysComplete, maxDays, frequency});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);
@@ -73,37 +73,10 @@ module.exports.register = async server => {
             }
         }
     });
-
-    /*
-    server.route({
-        method: "PATCH",
-        path: "/api/habits/{id}",
-        options: { auth: { mode: "try" } },
-        handler: async request => {
-            try {
-                if (!request.auth.isAuthenticated) {
-                    return boom.unauthorized();
-                }
-                const db = request.server.plugins.sql.client;
-                const userId = request.auth.credentials.profile.id;
-                const { id } = request.params;
-                // Extract the fields sent in the payload for partial update
-                const patchData = request.payload;
-                
-                // Ensure your database layer can handle partial updates
-                const res = await db.habits.patchHabit({ id, userId, ...patchData });
-                return res.recordset[0];
-            } catch (err) {
-                console.log(err);
-                return boom.boomify(err);
-            }
-        }
-    });
-    */
 
     server.route( {
         method: "DELETE",
-        path: "/api/habits/{id}",
+        path: "/api/stats/{id}",
         options: {
             auth: {mode: "try"}
         },
@@ -115,7 +88,7 @@ module.exports.register = async server => {
                 const id = request.params.id;
                 const userId = request.auth.credentials.profile.id;
                 const db = request.server.plugins.sql.client;
-                const res = await db.habits.deleteHabit({id, userId});
+                const res = await db.stats.deleteStat({id, userId});
                     
                 return res.rowsAffected[0] === 1 ? h.response().code(204) : boom.notFound();
             } catch (err) {

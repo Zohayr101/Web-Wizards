@@ -74,6 +74,32 @@ module.exports.register = async server => {
 		}
 	});
 
+	/*
+	server.route({
+        method: "PATCH",
+        path: "/api/events/{id}",
+        options: { auth: { mode: "try" } },
+        handler: async request => {
+            try {
+                if (!request.auth.isAuthenticated) {
+                    return boom.unauthorized();
+                }
+                const db = request.server.plugins.sql.client;
+                const userId = request.auth.credentials.profile.id;
+                const { id } = request.params;
+                // Extract only the fields provided for partial update
+                const patchData = request.payload;
+                // Make sure the database layer method patchEvent can handle partial updates
+                const res = await db.events.patchEvent({ id, userId, ...patchData });
+                return res.recordset[0];
+            } catch (err) {
+                console.log(err);
+                return boom.boomify(err);
+            }
+        }
+    });
+	*/
+
 	server.route( {
 		method: "DELETE",
 		path: "/api/events/{id}",
