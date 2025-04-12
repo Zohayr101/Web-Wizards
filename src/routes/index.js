@@ -14,7 +14,11 @@ module.exports.register = async server => {
             method: "GET",
             path: "/",
             handler: async (request, h) => {
-                return h.view("index", {});
+                if (!request.auth.isAuthenticated) {
+                    return h.redirect("/login"); // this will start the Okta auth flow
+                } else {
+                    return h.view("index", {});
+                }
             },
             options: {
                 auth: {
