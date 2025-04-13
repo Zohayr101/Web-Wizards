@@ -1,0 +1,54 @@
+header {
+    background-color: var(--modal-bg-color);
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--modal-bg-color);
+    text-align: center;
+    gap: 0px;
+}
+
+.shop-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 20px;
+    margin: 0px 20px;
+    padding: 10px;
+    border: 3px inset var(--current-day-bg-color);
+}
+
+.hat {
+    width: 15%;
+}
+
+.theme {
+    width: 10%;
+}
+
+.quote p {
+    font-size: 1.5em;
+}
+
+img {
+    width: 100%;
+}
+
+.spacer {
+    margin: 30px;
+}
+
+.statistics {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 0px 20px;
+    padding: 10px;
+}
+
+.stat {
+    width: calc(100% / 3);
+}

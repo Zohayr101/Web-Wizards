@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.style.fontFamily = localStorage.getItem("font");
   
     // Timer durations (in seconds) for testing
-    let pomodoroTime = 25;
-    let shortBrTime = 5;
-    let longBrTime = 15;
+    let pomodoroTime = 25 * 60;
+    let shortBrTime = 5 * 60;
+    let longBrTime = 15 * 60;
     let totalLoops = 4;
   
     let loopNum = 0;
