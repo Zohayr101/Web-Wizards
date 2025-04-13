@@ -1,3 +1,7 @@
+/**
+ * Initializes the Pomodoro timer script and all associated UI components
+ * after the DOM has fully loaded.
+ */
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Pomodoro script loaded.");
     // Apply saved font
@@ -23,12 +27,19 @@ document.addEventListener("DOMContentLoaded", function () {
     let focusTimeToday = 0; // in minutes
   
     // Update stats UI
+      /**
+   * Updates the statistics UI elements to show the current session stats.
+   */
     function updateStatsUI() {
       document.getElementById("pomodoros-completed").textContent = pomodorosCompletedToday;
       document.getElementById("focus-time-today").textContent = focusTimeToday;
     }
   
     // For example, after each Pomodoro completes, increment stats
+      /**
+   * Callback function to be executed when a Pomodoro session completes.
+   * Increments the completed Pomodoros and adds focus time.
+   */
     function onPomodoroComplete() {
       pomodorosCompletedToday++;
       // 25 minutes is the normal length of a Pomodoro
@@ -59,6 +70,12 @@ document.addEventListener("DOMContentLoaded", function () {
     progressCircle.style.strokeDashoffset = circumference;
   
     // Set Timer function: sets timer duration based on mode
+      /**
+   * Sets and initializes the timer for a given duration and mode.
+   *
+   * @param {number} seconds - The duration (in seconds) for the timer.
+   * @param {string} mode - The mode for which the timer is being set (e.g., "Pomodoro", "Short Break", or "Long Break").
+   */
     function setTimer(seconds, mode) {
       clearInterval(timer);
       timeLeft = seconds;
@@ -71,6 +88,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // Start Timer function
+      /**
+   * Starts the timer, decrementing the time and updating the UI each second.
+   * Automatically handles transitions between Pomodoro and break modes upon completion.
+   */
     function startTimer() {
       if (!isRunning) {
         isRunning = true;
@@ -103,12 +124,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // Pause Timer function
+      /**
+   * Pauses the currently running timer.
+   */
     function pauseTimer() {
       clearInterval(timer);
       isRunning = false;
     }
   
     // Reset Timer now resets to the starting time for the current mode
+      /**
+   * Resets the timer to the starting duration for the current mode.
+   * For example, resets to pomodoroTime if the current mode is "Pomodoro".
+   */
     function resetTimer() {
       clearInterval(timer);
       if (currentMode === "Pomodoro") {
@@ -121,6 +149,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // Update Timer UI and progress ring
+      /**
+   * Updates the timer display and progress ring on the UI.
+   * Shows the remaining time in MM:SS format and updates the ring based on time fraction.
+   */
     function updateUI() {
       document.getElementById("timer").innerText = formatTime(timeLeft);
       document.getElementById("status").innerText =
@@ -131,6 +163,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // Format seconds to MM:SS
+      /**
+   * Formats a given time value in seconds to a string in MM:SS format.
+   *
+   * @param {number} seconds - The time in seconds to format.
+   * @returns {string} The formatted time string.
+   */
     function formatTime(seconds) {
       let mins = Math.floor(seconds / 60);
       let secs = seconds % 60;
@@ -138,6 +176,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // Update theme based on mode using background classes and update button colors
+      /**
+   * Updates the theme and button colors based on the current mode.
+   * This function changes background classes and button style properties.
+   *
+   * @param {string} mode - The current timer mode ("Pomodoro", "Short Break", or "Long Break").
+   */
     function updateTheme(mode) {
       const body = document.body;
       body.classList.remove("bg-pomodoro", "bg-short", "bg-long");
@@ -175,6 +219,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // Play selected ring when timer ends
+      /**
+   * Plays the selected audio ring when the timer ends.
+   * Audio file path is constructed based on the selected value from the ringSelect dropdown.
+   */
     function playSelectedRing() {
       const selectedRing = ringSelect.value;
       const audio = new Audio("../" + selectedRing);

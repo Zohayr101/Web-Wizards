@@ -1,3 +1,8 @@
+/**
+ * List of available themes for the application.
+ * @global
+ * @constant {string[]}
+ */
 window.THEMES = [
     "theme-dark", 
     "theme-light", 
@@ -6,6 +11,11 @@ window.THEMES = [
     "theme-jing"
     ];
 
+    /**
+ * List of available layout options for the application.
+ * @global
+ * @constant {string[]}
+ */
 window.LAYOUTS = [
     "layout-default",
     "layout-mirrored",
@@ -16,6 +26,11 @@ window.LAYOUTS = [
     "layout-no-calendar",
   ];
 
+/**
+ * List of fonts used within the application.
+ * @global
+ * @constant {string[]}
+ */
 window.FONTS = [
   "Arial, sans-serif",
   "Courier New",
@@ -24,6 +39,11 @@ window.FONTS = [
   "Copperplate",
 ];
 
+/**
+ * Array of positive inspirational quotes.
+ * @global
+ * @constant {string[]}
+ */
 window.QUOTES_POSITIVE = [
     "Believe in yourself always.",
     "Dream big, work hard.",
@@ -37,6 +57,11 @@ window.QUOTES_POSITIVE = [
     "Be the change now.",
   ];
 
+/**
+ * Array of quotes that reflect a motivational yet slightly stern perspective.
+ * @global
+ * @constant {string[]}
+ */
   window.QUOTES_NEGATIVE = [
     "Time waits for no one.",
     "Discipline equals freedom.",
@@ -50,6 +75,11 @@ window.QUOTES_POSITIVE = [
     "Invest in your future.",
   ]
 
+/**
+ * Array of cat-themed quotes meant to provide light-hearted inspiration.
+ * @global
+ * @constant {string[]}
+ */
   window.QUOTES_CAT = [
     "Stay pawsitive.",
     "Purr and prosper.",
@@ -63,6 +93,11 @@ window.QUOTES_POSITIVE = [
     "Paws for inspiration.",
   ]
 
+/**
+ * Array of popular culture quotes.
+ * @global
+ * @constant {string[]}
+ */
   window.QUOTES_POP = [
       "Just keep swimming.",
       "To infinity... and beyond!",
@@ -76,6 +111,11 @@ window.QUOTES_POSITIVE = [
       "Hakuna Matata.",
   ]
 
+/**
+ * Array of philosophical quotes.
+ * @global
+ * @constant {string[]}
+ */
   window.QUOTES_PHIL = [
       "Know thyself.",
     "Seize the day.",
@@ -90,6 +130,11 @@ window.QUOTES_POSITIVE = [
 
   ]
 
+/**
+ * Array of programming-related quotes.
+ * @global
+ * @constant {string[]}
+ */
   window.QUOTES_PROGRAMMING = [
       "Code, compile, coffee, repeat.",
     "There's no place like 127.0.0.1.",

@@ -1,17 +1,52 @@
+/**
+ * An array of available themes from the global window.THEMES.
+ * @type {string[]}
+ */
 const themes = window.THEMES;
+
+/**
+ * An array of available layouts from the global window.LAYOUTS.
+ * @type {string[]}
+ */
 const layouts = window.LAYOUTS;
+
+/**
+ * An array of available fonts from the global window.FONTS.
+ * @type {string[]}
+ */
 const fonts = window.FONTS;
+
+/**
+ * Aggregated list of quotes from selected quote packs.
+ * @type {string[]}
+ */
 let quotes = [];
+
+/**
+ * List of identifiers for the quote packs that are currently checked/selected.
+ * @type {string[]}
+ */
 let checkedQuotes = [];
 
 preload();
 
+/**
+ * Event listener that initializes quote handling after the window fully loads.
+ */
 window.addEventListener("load", () => {
     quotesLoad();
     updateQuotes();
     cycleQuotes();
   });
 
+/**
+ * Preloads user settings from localStorage and dynamically generates the UI elements
+ * for selecting layouts, themes, and fonts. This includes:
+ * - Applying the saved theme and font to the document.
+ * - Populating layout menu with clickable layout options.
+ * - Populating theme menu and fetching sample color values from each theme.
+ * - Populating font menu with clickable font options.
+ */
   function preload() {
     // Apply saved theme
     document.body.classList.add(localStorage.getItem("theme"));
@@ -30,6 +65,7 @@ window.addEventListener("load", () => {
       layoutSelection.appendChild(layoutBody);
       layoutBody.id = layout;
 
+          // Create dummy elements to simulate a calendar view.
       const dummyCalendar = document.createElement("div");
       dummyCalendar.id = "calendar";
       dummyCalendar.textContent = "calendar";
@@ -131,10 +167,21 @@ window.addEventListener("load", () => {
     }
   }
 
+  /**
+ * Sets the layout for the application by saving the selected layout to localStorage.
+ *
+ * @param {string} layout - The identifier of the layout to set.
+ */
   function setLayout(layout) {
     localStorage.setItem("layout", layout);
   }
 
+/**
+ * Sets the theme for the application.
+ * Removes any previously applied theme classes from the document body and applies the new theme.
+ *
+ * @param {string} theme - The identifier of the theme to set.
+ */
   function setTheme(theme) {
     const body = document.body;
     localStorage.setItem("theme", theme);
@@ -145,11 +192,22 @@ window.addEventListener("load", () => {
     body.classList.add(theme);
   }
 
+  /**
+ * Sets the font for the application by updating the body's font family style and saving the selection to localStorage.
+ *
+ * @param {string} font - The font-family name to set.
+ */
   function setFont(font) {
     localStorage.setItem("font", font);
     document.body.style.fontFamily = font;
   }
 
+/**
+ * Loads saved quote pack selections from localStorage and initializes change event listeners
+ * for each quote pack option in the quotes menu.
+ *
+ * Retrieves the saved "checkedQuotes" and applies the checked status to the corresponding DOM elements.
+ */
 function quotesLoad() {
   checkedQuotes = localStorage.getItem('checkedQuotes');
   console.log("checked quotes: " + checkedQuotes);
@@ -166,6 +224,15 @@ function quotesLoad() {
   }
 }
 
+/**
+ * Updates the quotes list based on the currently selected quote packs.
+ * This function:
+ * - Resets the quotes and checkedQuotes arrays.
+ * - Iterates over the quote pack options in the DOM.
+ * - Appends quotes from selected quote packs to the global quotes array.
+ * - Shuffles the quotes if there are any.
+ * - Saves the updated list of checked quotes to localStorage.
+ */
 function updateQuotes() {
   checkedQuotes = [];
   quotes = [];
@@ -187,6 +254,11 @@ function updateQuotes() {
 }
 
 // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+/**
+ * Randomly shuffles the elements of the provided array in place using the Fisher–Yates algorithm.
+ *
+ * @param {Array} array - The array to shuffle.
+ */
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -194,11 +266,20 @@ function shuffleArray(array) {
   }
 }
 
+/**
+ * Cycles through the quotes in the global quotes array, updating the quote display with a fade-out/in effect.
+ * Displays each quote in sequence within the HTML element with the id "motivational-quote", changing quotes every 5 seconds.
+ */
   function cycleQuotes() {
   const quoteElement = document.getElementById("motivational-quote");
     let quoteIndex = 0;
   
     // Function to display the next quote
+      /**
+   * Displays the next quote in the array. It first fades out the current quote,
+   * updates the text, and then fades in the new quote. The fade effect is achieved
+   * by toggling the "visible" class and using a timeout to match the CSS transition duration.
+   */
     const showNextQuote = () => {
       // Remove 'visible' class to start fade-out
       quoteElement.classList.remove("visible");

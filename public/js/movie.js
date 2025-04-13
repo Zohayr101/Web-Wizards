@@ -1,3 +1,6 @@
+/**
+ * Set up the application once the DOM content has loaded.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   // --- Setup: Default Month (set to previous month) ---
   const now = new Date();
@@ -30,6 +33,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let allMovies = [];
   
   // --- Fetch Upcoming Movies ---
+    /**
+   * Fetches all upcoming movies from the TMDb API.
+   *
+   * This function fetches page 1 first to retrieve the total number of pages,
+   * then requests each additional page to compile a full list of upcoming movies.
+   *
+   * @returns {Promise<Array>} A promise that resolves to an array of movie objects.
+   */
   function fetchAllUpcomingMovies() {
     return fetchPage(1).then(firstPage => {
       const totalPages = firstPage.total_pages;
@@ -47,6 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
+  /**
+   * Fetches a specific page of upcoming movies from TMDb.
+   *
+   * @param {number} page - The page number to be fetched.
+   * @returns {Promise<Object>} A promise that resolves to the JSON response of the API.
+   */
   function fetchPage(page) {
     return fetch(`${TMDB_API_URL}?page=${page}`, {
       headers: {
@@ -57,6 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   // --- Render Movies for Current Month ---
+  /**
+   * Renders movies for the current month on the page.
+   *
+   * This function filters the fetched movies to find those with a release date
+   * falling within the current month, sorts them by either release date or popularity,
+   * and then creates and appends DOM elements for each movie.
+   */
   function renderCurrentMonth() {
     moviesContainer.innerHTML = "";
     const dateObj = new Date(currentYear, currentMonth, 1);
@@ -175,6 +199,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   // --- Modal Functions ---
+    /**
+   * Opens a modal displaying detailed information about a movie.
+   *
+   * The modal includes the movie's poster, release date, overview, genre,
+   * budget, box office information, and cast. It fetches additional movie details.
+   *
+   * @param {Object} movie - The movie object containing basic movie details.
+   */
   function openModal(movie) {
     const modal = document.createElement("div");
     modal.classList.add("modal");
@@ -296,6 +328,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(modal);
   }
   
+  /**
+   * Closes the provided modal by removing it from the DOM.
+   *
+   * @param {HTMLElement} modal - The modal element to remove.
+   */
   function closeModal(modal) {
     document.body.removeChild(modal);
   }

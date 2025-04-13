@@ -39,8 +39,8 @@ module.exports.register = async server => {
                 }
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
-                const {title, complete, daysComplete, maxDays, frequency} = request.payload;
-                const res = await db.stats.addStat({userId, title, complete, daysComplete, maxDays, frequency});
+                const {goldAmount, goldEarned, goldSpent, pomoCompleted, pomoTimeSpentMinutes, tasksCompleted, habitsCompleted, longestHabitStreak, stocksChecked, weatherChecks, movieLikes, settingsChanged, journalEntriesWritten, notesWritten} = request.payload;
+                const res = await db.stats.addStat({userId, goldAmount, goldEarned, goldSpent, pomoCompleted, pomoTimeSpentMinutes, tasksCompleted, habitsCompleted, longestHabitStreak, stocksChecked, weatherChecks, movieLikes, settingsChanged, journalEntriesWritten, notesWritten});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);
@@ -63,9 +63,9 @@ module.exports.register = async server => {
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
                 const {id} = request.params;
-                const {title, complete, daysComplete, maxDays, frequency} = request.payload;
+                const {goldAmount, goldEarned, goldSpent, pomoCompleted, pomoTimeSpentMinutes, tasksCompleted, habitsCompleted, longestHabitStreak, stocksChecked, weatherChecks, movieLikes, settingsChanged, journalEntriesWritten, notesWritten} = request.payload;
 
-                const res = await db.stats.updateStat({id, userId, title, complete, daysComplete, maxDays, frequency});
+                const res = await db.stats.updateStat({id, userId, goldAmount, goldEarned, goldSpent, pomoCompleted, pomoTimeSpentMinutes, tasksCompleted, habitsCompleted, longestHabitStreak, stocksChecked, weatherChecks, movieLikes, settingsChanged, journalEntriesWritten, notesWritten});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);

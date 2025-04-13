@@ -1,3 +1,10 @@
+
+/**
+ * Initializes Journal.js functionality once the window is loaded.
+ *
+ * Sets up Journal vs. Notes toggling, handles journal entry operations (load, save, image upload/removal),
+ * implements a mini-calendar for date selection, and manages notes storage.
+ */
 window.onload = function () {
   console.log("Window loaded, running Journal.js...");
 
@@ -27,10 +34,25 @@ window.onload = function () {
   /* ---------------------------
      2. JOURNAL SECTION
   ---------------------------- */
+ /**
+   * The current selected date for which the journal entry is being viewed/edited.
+   * @type {Date}
+   */
   let currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
+
+    /**
+   * In-memory variable to hold the base64 image data for the current journal entry.
+   * @type {string}
+   */
   let currentImageData = "";
 
+ /**
+   * Formats a Date object as a key string (YYYY-MM-DD) for localStorage.
+   *
+   * @param {Date} dateObj - The date object to format.
+   * @returns {string} The formatted date key.
+   */
   function formatDateKey(dateObj) {
     const y = dateObj.getFullYear();
     const m = String(dateObj.getMonth() + 1).padStart(2, "0");
@@ -38,10 +60,23 @@ window.onload = function () {
     return `${y}-${m}-${d}`;
   }
 
+  /**
+   * Formats a Date object into a display string (M/D/YYYY).
+   *
+   * @param {Date} dateObj - The date object to format.
+   * @returns {string} The formatted date for display.
+   */
   function formatDateDisplay(dateObj) {
     return `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
   }
 
+  /**
+   * Loads the journal entry for a given date from localStorage.
+   *
+   * Retrieves the journal title, text, and image (if available) and updates the corresponding UI elements.
+   *
+   * @param {Date} dateObj - The date for which to load the journal entry.
+   */
   function loadEntryForDate(dateObj) {
     const key = formatDateKey(dateObj);
     document.getElementById("journal-title").value =
@@ -56,6 +91,13 @@ window.onload = function () {
       : "";
   }
 
+  /**
+   * Saves the current journal entry for a given date to localStorage.
+   *
+   * Stores the journal title, text, and image data into localStorage.
+   *
+   * @param {Date} dateObj - The date for which to save the journal entry.
+   */
   function saveEntryForDate(dateObj) {
     const key = formatDateKey(dateObj);
     localStorage.setItem(
@@ -69,6 +111,11 @@ window.onload = function () {
     localStorage.setItem("journalImage_" + key, currentImageData);
   }
 
+  /**
+   * Updates the Journal UI.
+   *
+   * Sets the journal date display element and loads the corresponding journal entry.
+   */
   function updateJournalUI() {
     document.getElementById("journal-date").textContent = formatDateDisplay(currentDate);
     loadEntryForDate(currentDate);
@@ -76,6 +123,11 @@ window.onload = function () {
 
   updateJournalUI();
 
+  /**
+   * Event listener for saving the journal entry.
+   *
+   * Saves the current entry to localStorage and plays a pencil animation.
+   */
   document.getElementById("save-journal").addEventListener("click", function () {
     saveEntryForDate(currentDate);
     playPencilAnimation();
@@ -102,6 +154,11 @@ window.onload = function () {
   // -----------------------------
   // This section defines the behavior for when the user clicks the "Remove Image" button.
   // It clears the file input, resets the in-memory image data, clears the preview, and updates localStorage.
+    /**
+   * Event listener for removing the journal image.
+   *
+   * Clears the image input, resets the in-memory image data, updates the UI, and saves the entry.
+   */
   const removeImageBtn = document.getElementById("remove-image-btn");
   if (removeImageBtn) {
     removeImageBtn.addEventListener("click", function () {
@@ -121,6 +178,9 @@ window.onload = function () {
   /* ---------------------------
      3. MINI-CALENDAR FUNCTIONALITY
   ---------------------------- */
+  /**
+   * Toggles the visibility of the mini-calendar when the date navigation element is clicked.
+   */
   const dateNav = document.querySelector(".date-nav");
   dateNav.addEventListener("click", function () {
     const miniCalendar = document.getElementById("mini-calendar");
@@ -133,6 +193,13 @@ window.onload = function () {
     }
   });
 
+  /**
+   * Populates the mini calendar with day cells for the current month.
+   *
+   * Fills empty cells before the first day, creates day cells for each date,
+   * highlights the currently selected date, disables future dates relative to today,
+   * and sets the mini calendar title.
+   */
   function populateMiniCalendar() {
     const miniCalGrid = document.getElementById("mini-calendar-grid");
     if (!miniCalGrid) return;
@@ -181,6 +248,9 @@ window.onload = function () {
   /* ---------------------------
      4. NOTES SECTION (Text Only)
   ---------------------------- */
+    /**
+   * Loads notes from localStorage and populates the Notes section.
+   */
   function loadNotes() {
     document.getElementById("notes-title").value =
       localStorage.getItem("notesTitle") || "";
@@ -188,11 +258,19 @@ window.onload = function () {
       localStorage.getItem("notesContent") || "";
   }
 
+  /**
+   * Saves the current notes from the Notes section to localStorage.
+   */
   function saveNotes() {
     localStorage.setItem("notesTitle", document.getElementById("notes-title").value);
     localStorage.setItem("notesContent", document.getElementById("notes-textarea").value);
   }
 
+    /**
+   * Event listener for saving notes.
+   *
+   * Saves the notes to localStorage and plays the pencil animation.
+   */
   document.getElementById("save-notes").addEventListener("click", function () {
     saveNotes();
     playPencilAnimation();
@@ -201,6 +279,12 @@ window.onload = function () {
   /* ---------------------------
      5. PENCIL ANIMATION FUNCTION
   ---------------------------- */
+ /**
+   * Plays the pencil animation video.
+   *
+   * Displays the video element, resets its playback time, plays the animation,
+   * and hides the element once the video ends.
+   */
   function playPencilAnimation() {
     const pencilVideo = document.getElementById("pencil-animation");
     if (pencilVideo) {

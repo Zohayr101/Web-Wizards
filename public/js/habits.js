@@ -5,13 +5,31 @@
 // CREATING LIST ITEMS
 //=========================
 
+
+/**
+ * Creates a list item element representing the given habit.
+ *
+ * This function builds an <li> element with:
+ * - data attributes for habit id, title, and frequency,
+ * - a checkbox that toggles the habit's completion status,
+ * - a <span> element that displays the habit title and its streak info,
+ * - an edit button that opens the habit edit window.
+ *
+ * @param {Object} habit - The habit data.
+ * @param {(number|string)} habit.id - The unique identifier for the habit.
+ * @param {string} habit.title - The title of the habit.
+ * @param {string} habit.frequency - The frequency of the habit (e.g., "daily", "weekly", "monthly").
+ * @param {boolean} habit.complete - Indicates whether the habit is complete.
+ * @param {number} habit.daysComplete - The current streak count for completing the habit.
+ * @returns {HTMLElement} The <li> element representing the habit.
+ */
 function createHabitListItem(habit) {
   const li = document.createElement("li");
   li.dataset.habitId = habit.id;
   li.dataset.title = habit.title;
   li.dataset.frequency = habit.frequency;
 
-  //checkbox
+    // Create checkbox element for habit completion tracking.
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.checked = habit.complete;
@@ -19,7 +37,7 @@ function createHabitListItem(habit) {
     habitComplete(habit, li, checkbox);
   });
 
-  //span
+    // Create span element to show habit details based on frequency.
   const span = document.createElement("span");
   switch (habit.frequency.toLowerCase()) {
     case "daily": 
@@ -36,31 +54,16 @@ function createHabitListItem(habit) {
       break;
   };
   
-  //edit button
+  // Create edit button to open the habit editing window.
   const editButton = document.createElement("button");
   editButton.textContent = "🖊";
   editButton.addEventListener("click", () => {
     openHabitEdit(habit, li);
   });
 
-  /*//delete button
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "🗑";
-  deleteButton.addEventListener("click", async () => {
-    if (confirm(`Delete this item? ${habit.title}`)) {
-      const success = await deleteHabit(habit.id);
-      if (success) {
-        li.remove();
-      } else {
-        alert("error deleting habit from sql server");
-      }
-    }
-  });*/
-
   li.appendChild(checkbox);
   li.appendChild(span);
   li.appendChild(editButton);
-  //li.appendChild(deleteButton);
 
   return li;
 }
@@ -69,7 +72,15 @@ function createHabitListItem(habit) {
 //=========================
 // GET HABITS
 //=========================
-
+/**
+ * Initializes the habits list when the DOM content is loaded.
+ *
+ * Fetches habit data from the API endpoint "/api.habits" and appends each habit as a list item
+ * into the element with the id "habits-list".
+ *
+ * @async
+ * @listens DOMContentLoaded
+ */
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await fetch("/api.habits");
@@ -93,13 +104,34 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ADD HABIT
 //=========================
 
+/**
+ * Displays the "add habit" window.
+ *
+ * Sets the display style of the element with id "add-habit" to "block".
+ */
 function addHabitWindow() {
   document.getElementById("add-habit").style.display = "block";
 }
+
+/**
+ * Hides the "add habit" window.
+ *
+ * Sets the display style of the element with id "add-habit" to "none".
+ */
 function closeHabitWindow() {
   document.getElementById("add-habit").style.display = "none";
 }
 
+/**
+ * Handles the "add habit" form submission.
+ *
+ * Gathers habit name and frequency from the input fields, sends a POST request
+ * to create a new habit on the server, appends the new habit to the habits list, and closes the form.
+ *
+ * @async
+ * @event click on #add-habit-button
+ * @param {Event} event - The click event.
+ */
 document
   .getElementById("add-habit-button")
   .addEventListener("click", async function(event) {
@@ -149,6 +181,17 @@ document
 //=========================
 
 //edit habit window function
+/**
+ * Opens the habit edit window to allow the user to modify a habit.
+ *
+ * Displays the edit window and sets its data attributes and input fields with the provided habit's information.
+ *
+ * @param {Object} habit - The habit to edit.
+ * @param {string|number} habit.id - The habit's unique identifier.
+ * @param {string} habit.title - The habit's title.
+ * @param {string} habit.frequency - The habit's frequency.
+ * @param {HTMLElement} li - The list item element associated with the habit.
+ */
 function openHabitEdit(habit, li) {
   const editHabitWindow = document.getElementById("edit-habit");
   editHabitWindow.style.display = "block";
@@ -162,11 +205,32 @@ function openHabitEdit(habit, li) {
 
 }
 
+/**
+ * Closes the habit edit window.
+ *
+ * Hides the edit window by setting its display style to "none".
+ */
 function closeHabitEditWindow() {
   document.getElementById("edit-habit").style.display = "none";
 }
 
 //toggle habit complete function
+/**
+ * Toggles the completion status of a habit.
+ *
+ * Sends a PUT request to update the habit's completion status on the server.
+ * On success, updates the habit object and the checkbox state.
+ *
+ * @async
+ * @param {Object} habit - The habit object containing current details.
+ * @param {number|string} habit.id - The unique identifier for the habit.
+ * @param {string} habit.title - The title of the habit.
+ * @param {string} habit.frequency - The frequency of the habit.
+ * @param {boolean} habit.complete - The current completion status.
+ * @param {number} habit.daysComplete - The current completion streak.
+ * @param {HTMLElement} li - The list item element for the habit.
+ * @param {HTMLInputElement} checkbox - The checkbox element that was clicked.
+ */
 async function habitComplete(habit, li, checkbox) {
   const updateComplete = !habit.complete;
   const habitId = habit.id;
@@ -281,6 +345,16 @@ async function deleteHabit(habit) {
   }
 }*/
 
+/**
+ * Handles the deletion of a habit from the edit window.
+ *
+ * Retrieves the habit id and title, confirms with the user, and if confirmed,
+ * sends a request to delete the habit. If successful, the habit element is removed
+ * from the DOM and the edit window is closed.
+ *
+ * @async
+ * @event click on the delete habit button (#deleteHabitButton)
+ */
 const deleteHabitButton = document.getElementById("deleteHabitButton");
 deleteHabitButton.addEventListener("click", async () => {
   const habitId = document.getElementById("edit-habit").dataset.habitId;
@@ -301,6 +375,15 @@ deleteHabitButton.addEventListener("click", async () => {
     }
 });
 
+/**
+ * Deletes a habit from the server.
+ *
+ * Sends a DELETE request to the API to remove the habit with the specified id.
+ *
+ * @async
+ * @param {(number|string)} habitId - The unique identifier of the habit to delete.
+ * @returns {Promise<boolean>} Resolves to true if deletion was successful, or false otherwise.
+ */
 async function deleteHabit(habitId) {
   try {
     const response = await fetch(`/api/habits/${habitId}`, {

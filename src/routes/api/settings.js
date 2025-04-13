@@ -39,8 +39,8 @@ module.exports.register = async server => {
                 }
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
-                const {title, complete, daysComplete, maxDays, frequency} = request.payload;
-                const res = await db.settings.addSetting({userId, title, complete, daysComplete, maxDays, frequency});
+                const {theme, layout, quotes} = request.payload;
+                const res = await db.settings.addSetting({userId, theme, layout, quotes});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);
@@ -63,9 +63,9 @@ module.exports.register = async server => {
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
                 const {id} = request.params;
-                const {title, complete, daysComplete, maxDays, frequency} = request.payload;
+                const {theme, layout, quotes} = request.payload;
 
-                const res = await db.settings.updateSetting({id, userId, title, complete, daysComplete, maxDays, frequency});
+                const res = await db.settings.updateSetting({id, userId, theme, layout, quotes});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);
