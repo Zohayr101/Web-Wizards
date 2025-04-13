@@ -8,7 +8,7 @@ const register = async ({ sql, getConnection }) => {
 	const getStats = async userId => {
 		const cnx = await getConnection();
 		const request = await cnx.request();
-		request.input("userId", sql.NVarChar(50), userId);
+		request.input("userId", sql.VarChar(50), userId);
 		return request.query(sqlQueries.getStats);
 	};
 
@@ -73,7 +73,7 @@ const register = async ({ sql, getConnection }) => {
 		const cnx = await getConnection();
 		const request = await cnx.request();
 		request.input("id", sql.Int, id);
-		request.input("userId", sql.NVarChar(50), userId);
+		request.input("userId", sql.VarChar(50), userId);
 		return request.query(sqlQueries.deleteStats);
 	};
 

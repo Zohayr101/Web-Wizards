@@ -7,6 +7,13 @@
 const apiKey = '6765d5c874c5fa77f2345c854dc9cf0e';
 
 // Helper function to convert 24-hour time to 12-hour format with AM/PM
+/**
+ * Converts time from 24-hour format to 12-hour format with AM/PM.
+ *
+ * @param {number} hour24 - The hour in 24-hour format.
+ * @param {number} minutes - The minutes.
+ * @returns {string} The formatted time string (e.g., "1:05 PM").
+ */
 function formatTime(hour24, minutes) {
   const period = hour24 >= 12 ? "PM" : "AM";
   let hour12 = hour24 % 12;
@@ -15,6 +22,20 @@ function formatTime(hour24, minutes) {
 }
 
 // Display current weather details in the widget
+/**
+ * Displays current weather details in the weather widget.
+ *
+ * @param {Object} data - The weather data object returned by the OpenWeather API.
+ * @param {string} data.name - The name of the location.
+ * @param {Object[]} data.weather - An array of weather condition objects.
+ * @param {string} data.weather[].icon - The icon code for the weather condition.
+ * @param {string} data.weather[].description - The weather description.
+ * @param {Object} data.main - Contains main weather properties.
+ * @param {number} data.main.temp - The current temperature in Fahrenheit.
+ * @param {number} data.main.humidity - The humidity percentage.
+ * @param {Object} data.wind - Contains wind data.
+ * @param {number} data.wind.speed - The wind speed in mph.
+ */
 function displayCurrentWeather(data) {
   const widget = document.getElementById('weatherWidget');
   const iconCode = data.weather[0].icon;
@@ -32,6 +53,11 @@ function displayCurrentWeather(data) {
 }
 
 // Fetch current weather by city name
+/**
+ * Fetches current weather data for the specified city and updates the weather widget.
+ *
+ * @param {string} city - The city name for which to fetch weather data.
+ */
 function fetchWeather(city) {
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=imperial`;
   fetch(url)
@@ -52,6 +78,12 @@ function fetchWeather(city) {
 }
 
 // Fetch current weather by geographic coordinates
+/**
+ * Fetches current weather data using geographic coordinates and updates the weather widget.
+ *
+ * @param {number} lat - The latitude coordinate.
+ * @param {number} lon - The longitude coordinate.
+ */
 function fetchWeatherByCoords(lat, lon) {
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
   fetch(url)
@@ -72,18 +104,37 @@ function fetchWeatherByCoords(lat, lon) {
 }
 
 // Fetch forecast by city name
+/**
+ * Fetches the forecast for the specified city.
+ *
+ * @param {string} city - The city name for which to fetch the forecast.
+ */
 function fetchForecastByCity(city) {
   const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=imperial`;
   fetchForecast(url);
 }
 
 // Fetch forecast by geographic coordinates
+/**
+ * Fetches the forecast using geographic coordinates.
+ *
+ * @param {number} lat - The latitude coordinate.
+ * @param {number} lon - The longitude coordinate.
+ */
 function fetchForecastByCoords(lat, lon) {
   const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
   fetchForecast(url);
 }
 
 // Common function to fetch and display forecast until midnight
+/**
+ * Fetches forecast data from the given URL and displays the forecast until midnight.
+ *
+ * This function retrieves forecast data, calculates the local time for the city based on the timezone offset,
+ * filters forecast items for the remainder of the day, and updates the forecast widget with the information.
+ *
+ * @param {string} url - The URL for fetching the forecast data.
+ */
 function fetchForecast(url) {
   fetch(url)
     .then(response => {
@@ -141,10 +192,19 @@ function fetchForecast(url) {
 }
 
 // Event listeners for user interactions
+/**
+ * Event listener for the "Get Weather" button.
+ * Fetches weather data for the city selected in the city dropdown.
+ */
 document.getElementById('getWeatherBtn').addEventListener('click', () => {
   const city = document.getElementById('citySelect').value;
   fetchWeather(city);
 });
+
+/**
+ * Event listener for the "Get Location Weather" button.
+ * Retrieves the user's current geographic location and fetches weather data for that location.
+ */
 document.getElementById('getLocationWeatherBtn').addEventListener('click', () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -162,6 +222,9 @@ document.getElementById('getLocationWeatherBtn').addEventListener('click', () =>
 });
 
 // On page load, fetch weather for the default city
+/**
+ * On page load, fetch weather data for the default city selected in the city dropdown.
+ */
 window.addEventListener('load', () => {
   fetchWeather(document.getElementById('citySelect').value);
 });
