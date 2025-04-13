@@ -4,22 +4,63 @@
 //const username = "username_test";
 
 // DOM Elements
+/**
+ * Element for the Habit Tracker's list.
+ * @type {HTMLElement}
+ */
 const habitsList = document.getElementById("habits-list"); // For Habit Tracker
+
+/**
+ * Element to display a motivational quote.
+ * @type {HTMLElement}
+ */
 const quoteElement = document.getElementById("motivational-quote");
 
 //Calendar
+/**
+ * Calendar header element.
+ * @type {HTMLElement}
+ */
 const calendarHeader = document.getElementById("calendar-header");
+
+/**
+ * Calendar grid element.
+ * @type {HTMLElement}
+ */
 const calendarGrid = document.getElementById("calendar-grid");
 
+/**
+ * Current calendar time reference.
+ * @type {Date}
+ */
 var calendarTime = new Date();
 var calendarDisplay = "month";
 
 // Set date constants for today's date info as well as 7 and
 // 30 days from now
+/**
+ * Today's date with time set to 23:59:59.999.
+ * @type {Date}
+ */
 const currentDate = new Date();
 currentDate.setHours(23, 59, 59, 999);
+
+/**
+ * The current year.
+ * @type {number}
+ */
 const currentYear = currentDate.getFullYear();
+
+/**
+ * The current month (0-based index).
+ * @type {number}
+ */
 const currentMonth = currentDate.getMonth();
+
+/**
+ * The current day of the month.
+ * @type {number}
+ */
 const currentDay = currentDate.getDate();
 
 //const weekDate = new Date();
@@ -72,6 +113,10 @@ var widgetData = {
 };
 */
 
+/**
+ * Tracks the current index for widget pagination.
+ * @type {{today: number, week: number, month: number, habits: number}}
+ */
 var widgetIndex = {
   today: 0,
   week: 0,
@@ -79,6 +124,10 @@ var widgetIndex = {
   habits: 0,
 };
 
+/**
+ * Items per page for widget pagination.
+ * @type {{today: number, week: number, month: number, habits: number}}
+ */
 var itemsPerPage = {
   today: 4,
   week: 4,
@@ -232,6 +281,12 @@ function toggleHabit(habitId) {
 }
 */
 
+/**
+ * Sets the layout for the calendar based on the saved layout in local storage.
+ *
+ * If the layout is "layout-week-calendar", the calendar display mode is set to week,
+ * otherwise it is set to month. The calendar is then initialized.
+ */
 function setLayout() {
   layout = localStorage.getItem("layout");
   if (layout === "layout-week-calendar") {
@@ -243,6 +298,13 @@ function setLayout() {
   }
 }
 
+/**
+ * Initializes the calendar based on the current display mode.
+ *
+ * For "week" display, the calendar is set to start on the first day of the current week.
+ * For "month" display, the calendar is set to the first day of the current month.
+ * After setting the date reference, it calls setCalendar to render the view.
+ */
 function initCalendar() {
   if (calendarDisplay === "week") {
     weekday = currentDate.getDay();
@@ -256,6 +318,14 @@ function initCalendar() {
   setCalendar(0);
 }
 
+/**
+ * Updates the calendar based on the current display mode and a provided offset.
+ *
+ * For a week display, the calendar is offset by multiples of 7 days.
+ * For a month display, the calendar is offset by full months.
+ *
+ * @param {number} offset - The offset value (weeks if in week mode, months if in month mode).
+ */
 function setCalendar(offset) {
   if (calendarDisplay === "week") {
     calendarTime.setDate(calendarTime.getDate() + offset * 7);
@@ -281,6 +351,13 @@ function setCalendar(offset) {
   loadCalendar(weekday, lastDay, dateText);
 }
 
+/**
+ * Renders the calendar header and grid based on parameters.
+ *
+ * @param {number} weekday - The day of the week that the first day of the calendar falls on.
+ * @param {number} lastDay - The number of days in the calendar period.
+ * @param {string} dateText - The formatted date text for the calendar header.
+ */
 function loadCalendar(weekday, lastDay, dateText) {
   var calendarDateText = document.createElement('h2');
   calendarDateText.innerText = dateText;
@@ -322,6 +399,13 @@ function loadCalendar(weekday, lastDay, dateText) {
 }
 
 // Initialization on Page Load
+/**
+ * Handles the initial setup when the window loads.
+ *
+ * - Sets the layout and initializes the calendar.
+ * - Loads motivational quotes, applies the saved theme, layout, and font.
+ * - (Commented code is present to load and render tasks from local storage.)
+ */
 window.addEventListener("load", () => {
   // Load Tasks
   /*savedPages = ["today", "week", "month", "habits"];
@@ -360,8 +444,17 @@ window.addEventListener("load", () => {
 });
 
 // 6. Motivational Quotes Functionality
+/**
+ * Array to store motivational quotes.
+ * @type {Array<string>}
+ */
 let quotes = [];
 
+/**
+ * Shuffles an array in place using the Fisher-Yates algorithm.
+ *
+ * @param {Array<any>} array - The array to shuffle.
+ */
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -370,11 +463,20 @@ function shuffleArray(array) {
 }
 
 // Function to cycle through quotes
+/**
+ * Cycles through motivational quotes and updates the display element with a fade effect.
+ *
+ * The function initially displays the first quote, and then every 5 seconds it changes
+ * the quote with a fade-out and fade-in transition.
+ */
 function cycleQuotes() {
   const quoteElement = document.getElementById("motivational-quote");
     let quoteIndex = 0;
   
     // Function to display the next quote
+      /**
+   * Displays the next quote with a fade transition.
+   */
     const showNextQuote = () => {
       // Remove 'visible' class to start fade-out
       quoteElement.classList.remove("visible");

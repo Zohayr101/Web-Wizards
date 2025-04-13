@@ -16,7 +16,7 @@ const register = async ({ sql, getConnection }) => {
 		const cnx = await getConnection();
 		const request = await cnx.request();
 
-        request.input("userId", sql.Int, userId);
+        request.input("userId", sql.VarChar(50), userId);
 		
         request.input("goldAmount", sql.Int, goldAmount);
 		request.input("goldEarned", sql.Int, goldEarned);
@@ -45,7 +45,7 @@ const register = async ({ sql, getConnection }) => {
 		const request = await cnx.request();
 
         request.input("id", sql.Int, id);
-        request.input("userId", sql.Int, userId);
+        request.input("userId", sql.VarChar(50), userId);
 		
         request.input("goldAmount", sql.Int, goldAmount);
 		request.input("goldEarned", sql.Int, goldEarned);

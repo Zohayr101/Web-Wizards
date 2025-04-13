@@ -1,7 +1,15 @@
 // Alpha Vantage API key (stored here; secure on backend for production)
+/**
+ * Alpha Vantage API key (stored here; secure on backend for production).
+ * @constant {string}
+ */
 const apiKey = "3NZ62AYDCROUWX3Q";
 
 // Mapping ticker symbols to logo URLs via Clearbit Logo API
+/**
+ * Mapping ticker symbols to logo URLs via Clearbit Logo API.
+ * @constant {Object.<string, string>}
+ */
 const logos = {
   AAPL: "https://logo.clearbit.com/apple.com",
   MSFT: "https://logo.clearbit.com/microsoft.com",
@@ -55,21 +63,62 @@ const logos = {
   VOO: "https://logo.clearbit.com/vanguard.com"
 };
 
+/**
+ * DOM element for the stock selection dropdown.
+ * @constant {HTMLElement}
+ */
 const stockSelect = document.getElementById("stock-select");
+
+/**
+ * DOM element for the time range selection dropdown.
+ * @constant {HTMLElement}
+ */
 const timeRangeSelect = document.getElementById("time-range-select");
+
+/**
+ * DOM element for the chart load button.
+ * @constant {HTMLElement}
+ */
 const loadChartButton = document.getElementById("load-chart");
+
+/**
+ * DOM canvas element where the stock chart is rendered.
+ * @constant {HTMLElement}
+ */
 const chartCanvas = document.getElementById("stock-chart");
+
+/**
+ * DOM element for the loading spinner indicator.
+ * @constant {HTMLElement}
+ */
 const spinner = document.getElementById("spinner");
 
+/**
+ * Global Chart.js instance used to render the stock chart.
+ * @type {Chart}
+ */
 let stockChart; // Global Chart.js instance
 
 // Helper function to format dates from YYYY-MM-DD to MM-DD-YYYY
+/**
+ * Format a date string from 'YYYY-MM-DD' to 'MM-DD-YYYY'.
+ *
+ * @param {string} dateStr - Date string in the format 'YYYY-MM-DD'.
+ * @returns {string} Formatted date string in the format 'MM-DD-YYYY'.
+ */
 function formatDate(dateStr) {
   const [year, month, day] = dateStr.split("-");
   return `${month}-${day}-${year}`;
 }
 
 // Fetch daily time series data
+/**
+ * Fetch the daily time series data for a given stock symbol from the Alpha Vantage API.
+ *
+ * @async
+ * @param {string} symbol - Stock ticker symbol.
+ * @returns {Promise<Object|null>} Promise resolving to daily time series data or null if unavailable.
+ */
 async function fetchStockTimeSeries(symbol) {
   const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}`;
   try {
@@ -88,6 +137,13 @@ async function fetchStockTimeSeries(symbol) {
 }
 
 // Fetch stock overview data
+/**
+ * Fetch the stock overview data for a given stock symbol from the Alpha Vantage API.
+ *
+ * @async
+ * @param {string} symbol - Stock ticker symbol.
+ * @returns {Promise<Object|null>} Promise resolving to the stock overview data or null if unavailable.
+ */
 async function fetchStockOverview(symbol) {
   const url = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${apiKey}`;
   try {
@@ -106,6 +162,16 @@ async function fetchStockOverview(symbol) {
 }
 
 // Update key details section
+/**
+ * Update the key details section with the stock's data, including price, volume, and overview metrics.
+ *
+ * @async
+ * @param {string} symbol - Stock ticker symbol.
+ * @param {string} latestDate - The latest date from the time series data.
+ * @param {Object} latestData - Daily time series data corresponding to the latest date.
+ * @param {number} avgVolume - Average trading volume over the selected period.
+ * @returns {Promise<void>}
+ */
 async function updateKeyDetails(symbol, latestDate, latestData, avgVolume) {
   const overviewData = await fetchStockOverview(symbol);
   let html = `<table>
@@ -154,6 +220,13 @@ async function updateKeyDetails(symbol, latestDate, latestData, avgVolume) {
 }
 
 // Update chart with selected stock and time range
+/**
+ * Update the stock chart and key details section based on the selected stock symbol.
+ *
+ * @async
+ * @param {string} symbol - Stock ticker symbol.
+ * @returns {Promise<void>}
+ */
 async function updateChart(symbol) {
   spinner.style.display = 'block';
   

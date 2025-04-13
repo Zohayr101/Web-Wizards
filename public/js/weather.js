@@ -1,4 +1,9 @@
 // Your OpenWeather API key (remember to secure this in production)
+/**
+ * Your OpenWeather API key.
+ * Note: In production environments, ensure that API keys are stored securely and not exposed in client-side code.
+ * @constant {string}
+ */
 const apiKey = '6765d5c874c5fa77f2345c854dc9cf0e';
 
 // Helper function to convert 24-hour time to 12-hour format with AM/PM

@@ -4,14 +4,31 @@
 // CONSTANTS
 //=========================
 
+/**
+ * The end of today's date set to 23:59:59:999.
+ * @type {Date}
+ */
 const todayDate = new Date();
 todayDate.setHours(23, 59, 59, 999);
+
+/**
+ * The numeric day for today.
+ * @type {number}
+ */
 const today = todayDate.getDate();
 
+/**
+ * The date object representing one week from today, with time set to 23:59:59:999.
+ * @type {Date}
+ */
 const weekDate = new Date();
 weekDate.setDate(today + 7);
 weekDate.setHours(23, 59, 59, 999);
 
+/**
+ * The date object representing approximately one month (30 days) from today, with time set to 23:59:59:999.
+ * @type {Date}
+ */
 const monthDate = new Date();
 monthDate.setDate(today + 30);
 monthDate.setHours(23, 59, 59, 999);
@@ -22,6 +39,18 @@ monthDate.setHours(23, 59, 59, 999);
 // CREATING LIST ITEMS / EDITING LIST ITEMS
 //=========================
 
+/**
+ * Creates a list item element representing a task event.
+ *
+ * @param {Object} event - The task event object.
+ * @param {string|number} event.id - The unique identifier for the event.
+ * @param {string} event.category - The category of the event.
+ * @param {number} event.priority - The priority level of the event (0 for low, 1 for normal, 2 for high).
+ * @param {boolean} event.complete - The completion status of the event.
+ * @param {Date|string} event.startDate - The start date/time of the event.
+ * @param {string} event.title - The title of the event.
+ * @returns {HTMLLIElement} The list item element that represents the task.
+ */
 function createTaskListItem(event) {
   
   const li = document.createElement("li");
@@ -95,6 +124,10 @@ function createTaskListItem(event) {
 // GET TASKS
 //=========================
 
+/**
+ * Fetches task events from the server when the DOM is fully loaded, creates corresponding list items,
+ * and appends them to their respective lists based on due dates.
+ */
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await fetch("/api.events");
@@ -128,9 +161,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ADD TASK
 //=========================
 
+/**
+ * Opens the "add task" window by making the corresponding HTML element visible.
+ */
 function addTaskWindow() {document.getElementById("add-task").style.display = "block";}
+
+/**
+ * Closes the "add task" window by hiding the corresponding HTML element.
+ */
 function closeTaskWindow() {document.getElementById("add-task").style.display = "none";}
 
+// Handle "Add Task" button click event to create a new task
 document.getElementById("addTaskButton").addEventListener("click", async function (event) {
   event.preventDefault();
   
@@ -198,6 +239,12 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
 // MODIFY TASK
 //=========================
 
+/**
+ * Opens the edit task window and populates it with the selected task's details.
+ *
+ * @param {Object} event - The task event object.
+ * @param {HTMLElement} li - The list item element representing the task.
+ */
 function openEditWindow(event, li) {
   const editTaskWindow = document.getElementById("edit-task");
   editTaskWindow.style.display = "block";
@@ -226,9 +273,19 @@ function openEditWindow(event, li) {
 
 }
 
+/**
+ * Closes the edit task window by hiding the corresponding HTML element.
+ */
 function closeEditWindow() {document.getElementById("edit-task").style.display = "none";}
 
 //function for checking task as complete/incomplete
+/**
+ * Toggles the completion status of a task and updates it on the server.
+ *
+ * @param {Object} event - The task event object.
+ * @param {HTMLElement} li - The list item element representing the task.
+ * @param {HTMLInputElement} checkbox - The checkbox element that triggered the action.
+ */
 async function toggleComplete(event, li, checkbox) {
   const updateComplete = !event.complete;
   const eventId = event.id;
@@ -262,6 +319,17 @@ async function toggleComplete(event, li, checkbox) {
 }
 
 //function for the edit window button
+/**
+ * Handles the click event for updating an existing task.
+ *
+ * This asynchronous function is triggered when the edit task button is clicked.
+ * It prevents the default form submission behavior, retrieves updated task values
+ * from the edit form, and sends a PUT request to update the event on the server.
+ * If the response is successful, it updates the corresponding list item in the DOM
+ * with the new title and formatted due date, and then closes the edit window.
+ *
+ * @param {Event} event - The click event triggered by the edit task button.
+ */
 document.getElementById("editTaskButton").addEventListener("click", async function (event) {
   event.preventDefault();
 
@@ -314,6 +382,10 @@ document.getElementById("editTaskButton").addEventListener("click", async functi
 // DELETE TASK
 //=========================
 
+/**
+ * Deletes the selected task after confirming with the user, updates the UI accordingly,
+ * and closes the edit window.
+ */
 const deleteButton = document.getElementById("deleteTaskButton");
   //deleteButton.textContent = "🗑";
 deleteButton.addEventListener("click", async () => {
@@ -337,6 +409,12 @@ deleteButton.addEventListener("click", async () => {
     }
 });
 
+/**
+ * Deletes a task event from the server.
+ *
+ * @param {string|number} eventId - The ID of the task event to delete.
+ * @returns {Promise<boolean>} A promise that resolves to true if the event was deleted successfully, or false otherwise.
+ */
 async function deleteEvent(eventId) {
   try {
     const response = await fetch(`/api/events/${eventId}`, {
