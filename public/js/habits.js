@@ -172,7 +172,6 @@ document
     }
 
     closeHabitWindow();
-
 });
 
 
