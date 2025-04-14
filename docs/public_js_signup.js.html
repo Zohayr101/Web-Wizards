@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/js/signup.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/js/signup.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Initializes theme selection and signup modal functionality once the DOM is fully loaded.
+ *
+ * This script performs the following operations:
+ * - Loads and applies a saved theme (or defaults to "root").
+ * - Updates the page's font style based on a saved preference.
+ * - Corrects an old theme name ("jing-theme" to "lilac-theme").
+ * - Enables theme switching via a &lt;select> element.
+ * - Sets up modal functionality for a signup dialog.
+ */
+document.addEventListener("DOMContentLoaded", function () {
+    
+        /**
+     * The &lt;select> element for choosing the page theme.
+     * @type {HTMLElement|null}
+     */
+    const themeSelect = document.getElementById("theme-select");
+
+        /**
+     * The &lt;body> element of the document.
+     * @type {HTMLBodyElement}
+     */
+    const body = document.body;
+
+    // Load saved theme or default to root
+    let savedTheme = localStorage.getItem("selectedTheme") || "root";
+    // Apply saved font
+    document.body.style.fontFamily = localStorage.getItem("font");
+
+    // If "jing-theme" was saved, convert it to "lilac-theme"
+    if (savedTheme === "jing-theme") {
+        savedTheme = "lilac-theme";
+        localStorage.setItem("selectedTheme", "lilac-theme");
+    }
+
+    // ✅ Apply theme immediately when the page loads
+    body.className = "";
+    body.classList.add(savedTheme);
+    themeSelect.value = savedTheme;
+
+    // ✅ Apply theme switching functionality
+        /**
+     * Handles theme changes by removing all pre-defined theme classes, 
+     * adding the newly selected theme class, and updating localStorage.
+     *
+     * @param {Event} event - The change event triggered by the theme selection element.
+     */
+    themeSelect.addEventListener("change", function () {
+        body.classList.remove("green-theme", "purple-theme", "lilac-theme", "light-theme", "root");
+        const newTheme = this.value;
+        body.classList.add(newTheme);
+        localStorage.setItem("selectedTheme", newTheme);
+    });
+
+    // ✅ Fix: Ensure the theme applies properly even if the button is not clicked
+    setTimeout(() => {
+        body.classList.add(savedTheme);
+    }, 100);
+
+    // ✅ Modal Functionality
+        /**
+     * The modal element for signup.
+     * @type {HTMLElement|null}
+     */
+    const signupModal = document.getElementById("signup-modal");
+
+        /**
+     * The button that opens the signup modal.
+     * @type {HTMLElement|null}
+     */
+    const openModalButton = document.getElementById("openSignupModal");
+
+        /**
+     * The button inside the modal used to close it.
+     * @type {HTMLElement|null}
+     */
+    const closeModalButton = signupModal ? signupModal.querySelector(".close") : null;
+
+        /**
+     * Opens the signup modal by setting its display style to "flex".
+     */
+    function openSignupModal() {
+        if (signupModal) signupModal.style.display = "flex";
+    }
+
+    /**
+     * Closes the signup modal by setting its display style to "none".
+     */
+    function closeSignupModal() {
+        if (signupModal) signupModal.style.display = "none";
+    }
+
+    if (openModalButton) openModalButton.addEventListener("click", openSignupModal);
+    if (closeModalButton) closeModalButton.addEventListener("click", closeSignupModal);
+
+    /**
+     * Closes the signup modal if the user clicks outside of the modal content.
+     *
+     * @param {MouseEvent} event - The click event.
+     */
+    window.addEventListener("click", function (event) {
+        if (signupModal &amp;&amp; event.target === signupModal) closeSignupModal();
+    });
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-config.html">config</a></li><li><a href="module-sql.html">sql</a></li></ul><h3>Events</h3><ul><li><a href="click%2520on%2520.html#event:add-habit-button">add-habit-button</a></li><li><a href="click%2520on%2520the%2520delete%2520habit%2520button%2520(.html#event:deleteHabitButton)">deleteHabitButton)</a></li></ul><h3>Global</h3><ul><li><a href="global.html#FONTS">FONTS</a></li><li><a href="global.html#LAYOUTS">LAYOUTS</a></li><li><a href="global.html#QUOTES_CAT">QUOTES_CAT</a></li><li><a href="global.html#QUOTES_NEGATIVE">QUOTES_NEGATIVE</a></li><li><a href="global.html#QUOTES_PHIL">QUOTES_PHIL</a></li><li><a href="global.html#QUOTES_POP">QUOTES_POP</a></li><li><a href="global.html#QUOTES_POSITIVE">QUOTES_POSITIVE</a></li><li><a href="global.html#QUOTES_PROGRAMMING">QUOTES_PROGRAMMING</a></li><li><a href="global.html#STATS">STATS</a></li><li><a href="global.html#THEMES">THEMES</a></li><li><a href="global.html#addHabitWindow">addHabitWindow</a></li><li><a href="global.html#addTaskWindow">addTaskWindow</a></li><li><a href="global.html#apiKey">apiKey</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#calendarGrid">calendarGrid</a></li><li><a href="global.html#calendarHeader">calendarHeader</a></li><li><a href="global.html#calendarTime">calendarTime</a></li><li><a href="global.html#chartCanvas">chartCanvas</a></li><li><a href="global.html#checkedQuotes">checkedQuotes</a></li><li><a href="global.html#client">client</a></li><li><a href="global.html#closeEditWindow">closeEditWindow</a></li><li><a href="global.html#closeHabitEditWindow">closeHabitEditWindow</a></li><li><a href="global.html#closeHabitWindow">closeHabitWindow</a></li><li><a href="global.html#closeTaskWindow">closeTaskWindow</a></li><li><a href="global.html#createHabitListItem">createHabitListItem</a></li><li><a href="global.html#createTaskListItem">createTaskListItem</a></li><li><a href="global.html#currentDate">currentDate</a></li><li><a href="global.html#currentDay">currentDay</a></li><li><a href="global.html#currentMonth">currentMonth</a></li><li><a href="global.html#currentYear">currentYear</a></li><li><a href="global.html#cycleQuotes">cycleQuotes</a></li><li><a href="global.html#deleteButton">deleteButton</a></li><li><a href="global.html#deleteEvent">deleteEvent</a></li><li><a href="global.html#deleteHabit">deleteHabit</a></li><li><a href="global.html#displayCurrentWeather">displayCurrentWeather</a></li><li><a href="global.html#fetchForecast">fetchForecast</a></li><li><a href="global.html#fetchForecastByCity">fetchForecastByCity</a></li><li><a href="global.html#fetchForecastByCoords">fetchForecastByCoords</a></li><li><a href="global.html#fetchStockOverview">fetchStockOverview</a></li><li><a href="global.html#fetchStockTimeSeries">fetchStockTimeSeries</a></li><li><a href="global.html#fetchWeather">fetchWeather</a></li><li><a href="global.html#fetchWeatherByCoords">fetchWeatherByCoords</a></li><li><a href="global.html#fonts">fonts</a></li><li><a href="global.html#formatDate">formatDate</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#habitComplete">habitComplete</a></li><li><a href="global.html#habitsList">habitsList</a></li><li><a href="global.html#handler">handler</a></li><li><a href="global.html#initCalendar">initCalendar</a></li><li><a href="global.html#isSecure">isSecure</a></li><li><a href="global.html#itemsPerPage">itemsPerPage</a></li><li><a href="global.html#layouts">layouts</a></li><li><a href="global.html#loadCalendar">loadCalendar</a></li><li><a href="global.html#loadChartButton">loadChartButton</a></li><li><a href="global.html#loadSqlQueries">loadSqlQueries</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logos">logos</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#monthDate">monthDate</a></li><li><a href="global.html#oAuthCallback">oAuthCallback</a></li><li><a href="global.html#openEditWindow">openEditWindow</a></li><li><a href="global.html#openHabitEdit">openHabitEdit</a></li><li><a href="global.html#preload">preload</a></li><li><a href="global.html#quoteElement">quoteElement</a></li><li><a href="global.html#quotes">quotes</a></li><li><a href="global.html#quotesLoad">quotesLoad</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#setCalendar">setCalendar</a></li><li><a href="global.html#setFont">setFont</a></li><li><a href="global.html#setLayout">setLayout</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#spinner">spinner</a></li><li><a href="global.html#startServer">startServer</a></li><li><a href="global.html#stockChart">stockChart</a></li><li><a href="global.html#stockSelect">stockSelect</a></li><li><a href="global.html#themes">themes</a></li><li><a href="global.html#timeRangeSelect">timeRangeSelect</a></li><li><a href="global.html#today">today</a></li><li><a href="global.html#todayDate">todayDate</a></li><li><a href="global.html#toggleComplete">toggleComplete</a></li><li><a href="global.html#updateChart">updateChart</a></li><li><a href="global.html#updateKeyDetails">updateKeyDetails</a></li><li><a href="global.html#updateQuotes">updateQuotes</a></li><li><a href="global.html#weekDate">weekDate</a></li><li><a href="global.html#widgetIndex">widgetIndex</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Apr 14 2025 00:02:56 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

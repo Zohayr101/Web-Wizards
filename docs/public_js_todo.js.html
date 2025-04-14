@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/js/todo.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/js/todo.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// todo.js
+
+//temporary username until database is operational
+//const username = "username_test";
+
+// DOM Elements
+/**
+ * Element for the Habit Tracker's list.
+ * @type {HTMLElement}
+ */
+const habitsList = document.getElementById("habits-list"); // For Habit Tracker
+
+/**
+ * Element to display a motivational quote.
+ * @type {HTMLElement}
+ */
+const quoteElement = document.getElementById("motivational-quote");
+
+//Calendar
+/**
+ * Calendar header element.
+ * @type {HTMLElement}
+ */
+const calendarHeader = document.getElementById("calendar-header");
+
+/**
+ * Calendar grid element.
+ * @type {HTMLElement}
+ */
+const calendarGrid = document.getElementById("calendar-grid");
+
+/**
+ * Current calendar time reference.
+ * @type {Date}
+ */
+var calendarTime = new Date();
+var calendarDisplay = "month";
+
+// Set date constants for today's date info as well as 7 and
+// 30 days from now
+/**
+ * Today's date with time set to 23:59:59.999.
+ * @type {Date}
+ */
+const currentDate = new Date();
+currentDate.setHours(23, 59, 59, 999);
+
+/**
+ * The current year.
+ * @type {number}
+ */
+const currentYear = currentDate.getFullYear();
+
+/**
+ * The current month (0-based index).
+ * @type {number}
+ */
+const currentMonth = currentDate.getMonth();
+
+/**
+ * The current day of the month.
+ * @type {number}
+ */
+const currentDay = currentDate.getDate();
+
+//const weekDate = new Date();
+//weekDate.setDate(currentDay + 7);
+//weekDate.setHours(23, 59, 59, 999);
+
+//const monthDate = new Date();
+//monthDate.setDate(currentDay + 30);
+//monthDate.setHours(23, 59, 59, 999);
+
+//temporary todo tasks until database is operational
+/*
+var widgetData = {
+  today: [
+    { name: "Task 1", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
+    { name: "Task 2", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
+    { name: "Task 3", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
+    { name: "Task 4", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
+  ],
+  week: [
+    { name: "Week Task 1", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
+    { name: "Week Task 2", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
+    { name: "Week Task 3", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
+    { name: "Week Task 4", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
+  ],
+  month: [
+    { name: "Month Task 1", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
+    { name: "Month Task 2", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
+    { name: "Month Task 3", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
+    { name: "Month Task 4", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
+  ],
+
+  habits: [
+    {
+      name: "Did you drink water today?",
+      id: new Date().valueOf() + Math.random(),
+      completed: false,
+    },
+    {
+      name: "Did you exercise today?",
+      id: new Date().valueOf() + Math.random(),
+      completed: false,
+    },
+    {
+      name: "Did you do your XYZ today?",
+      id: new Date().valueOf() + Math.random(),
+      completed: false,
+    },
+  ],
+};
+*/
+
+/**
+ * Tracks the current index for widget pagination.
+ * @type {{today: number, week: number, month: number, habits: number}}
+ */
+var widgetIndex = {
+  today: 0,
+  week: 0,
+  month: 0,
+  habits: 0,
+};
+
+/**
+ * Items per page for widget pagination.
+ * @type {{today: number, week: number, month: number, habits: number}}
+ */
+var itemsPerPage = {
+  today: 4,
+  week: 4,
+  month: 2,
+  habits: 2,
+};
+
+layouts = window.LAYOUTS;
+themes = window.THEMES;
+
+/*
+// Task Modal Functions
+function addTaskWindow() {
+  document.getElementById("add-task").style.display = "block";
+}
+
+function closeTaskWindow() {
+  document.getElementById("add-task").style.display = "none";
+}
+
+function addTask(event) {
+  event.preventDefault(); // Prevent the form from reloading the page
+
+  const taskName = document.getElementById("task-name").value;
+  const taskDueInput = document.getElementById("task-due-date").value;
+
+  const taskDueDate = new Date(taskDueInput);
+  taskDueDate.setDate(taskDueDate.getDate() + 1);
+
+  const newTask = {
+    id: taskDueDate.valueOf() + Math.random(),
+    name: taskName,
+    dueDate: taskDueDate.valueOf(),
+    completed: false,
+  };
+
+  // Close modal and reset form
+  closeTaskWindow();
+  document.getElementById("add-task-form").reset();
+
+  var listId;
+  if (newTask.dueDate &lt;= currentDate.valueOf()) {
+    listId = "today";
+  } else if (newTask.dueDate &lt;= weekDate.valueOf()) {
+    listId = "week";
+  } else if (newTask.dueDate &lt;= monthDate.valueOf()) {
+    listId = "month";
+  }
+
+  tasks = widgetData[listId];
+
+  // Push into the array
+  // Update the lists with the new task
+  tasks.push(newTask);
+  tasks.sort((a, b) => a.dueDate - b.dueDate);
+
+  // Local storage
+  localStorage.setItem(listId, JSON.stringify(tasks));
+
+  renderWidget(listId, 0);
+}
+
+// Widget Functions
+function renderWidget(id, offset) {
+  const data = widgetData[id];
+  widgetIndex[id] += offset;
+
+  const start = widgetIndex[id] * itemsPerPage[id];
+  const end = start + itemsPerPage[id];
+  const pageData = data.slice(start, end);
+
+  const backButton = document.getElementById(id + "-back");
+  const forwardButton = document.getElementById(id + "-forward");
+  if (start === 0) {
+    backButton.disabled = true;
+  } else {
+    backButton.disabled = false;
+  }
+
+  if (end >= data.length) {
+    forwardButton.disabled = true;
+  } else {
+    forwardButton.disabled = false;
+  }
+
+  if (id === "habits") {
+    updateHabits(pageData);
+  } else {
+    updateTasks(id + "-list", pageData);
+  }
+}
+
+function updateTasks(listId, taskList) {
+  listTarget = document.getElementById(listId);
+  listTarget.innerHTML = "";
+
+  taskList.forEach((task) => {
+    // Create &lt;li>
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+
+    const span = document.createElement("span");
+    const taskDate = new Date(task.dueDate);
+    span.textContent = `${task.name} (Due: ${taskDate.toLocaleDateString()})`;
+
+    const li = document.createElement("li");
+    li.appendChild(checkbox);
+    li.appendChild(span);
+
+    listTarget.appendChild(li);
+  });
+}
+
+// Function to render habits in the Habit Tracker widget
+function updateHabits(habitsArray) {
+  habitsList.innerHTML = "";
+
+  habitsArray.forEach((habit) => {
+    const span = document.createElement("span");
+    span.textContent = habit.name;
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = habit.completed;
+    checkbox.addEventListener("change", () => toggleHabit(habit.id));
+
+    if (habit.completed) {
+      checkbox.checked = true;
+      span.style.textDecoration = "line-through";
+      span.style.color = "#777"; // Gray out completed habits
+    } else {
+      checkbox.checked = false;
+    }
+
+    const li = document.createElement("li");
+    li.appendChild(checkbox);
+    li.appendChild(span);
+
+    habitsList.appendChild(li);
+  });
+}
+
+// Function to toggle habit completion
+function toggleHabit(habitId) {
+  habitTarget = widgetData["habits"].find((habit) => habit.id === habitId);
+  habitTarget.completed = !habitTarget.completed;
+
+  renderWidget("habits", 0);
+
+  localStorage.setItem("habits", JSON.stringify(widgetData["habits"]));
+}
+*/
+
+/**
+ * Sets the layout for the calendar based on the saved layout in local storage.
+ *
+ * If the layout is "layout-week-calendar", the calendar display mode is set to week,
+ * otherwise it is set to month. The calendar is then initialized.
+ */
+function setLayout() {
+  layout = localStorage.getItem("layout");
+  if (layout === "layout-week-calendar") {
+    calendarDisplay = "week";
+    initCalendar();
+  } else {
+    calendarDisplay = "month";
+    initCalendar();
+  }
+}
+
+/**
+ * Initializes the calendar based on the current display mode.
+ *
+ * For "week" display, the calendar is set to start on the first day of the current week.
+ * For "month" display, the calendar is set to the first day of the current month.
+ * After setting the date reference, it calls setCalendar to render the view.
+ */
+function initCalendar() {
+  if (calendarDisplay === "week") {
+    weekday = currentDate.getDay();
+    dayDiff = currentDate.getDate() - weekday;
+
+    calendarTime = new Date(currentYear, currentMonth, dayDiff);
+  } else if (calendarDisplay === "month") {
+    calendarTime = new Date(currentYear, currentMonth, 1);
+  }
+
+  setCalendar(0);
+}
+
+/**
+ * Updates the calendar based on the current display mode and a provided offset.
+ *
+ * For a week display, the calendar is offset by multiples of 7 days.
+ * For a month display, the calendar is offset by full months.
+ *
+ * @param {number} offset - The offset value (weeks if in week mode, months if in month mode).
+ */
+function setCalendar(offset) {
+  if (calendarDisplay === "week") {
+    calendarTime.setDate(calendarTime.getDate() + offset * 7);
+
+    year = calendarTime.getFullYear();
+    month = calendarTime.getMonth();
+
+    lastDay = 7;
+    weekday = 0;
+  } else if (calendarDisplay === "month") {
+    calendarTime.setMonth(calendarTime.getMonth() + offset);
+    
+    year = calendarTime.getFullYear();
+    month = calendarTime.getMonth();
+
+    lastDay = new Date(year, month + 1, 0).getDate();
+    weekday = calendarTime.getDay();
+  }
+
+  const monthName = calendarTime.toLocaleString('default', {month: 'long'});
+  const dateText = monthName + " " + year;
+
+  loadCalendar(weekday, lastDay, dateText);
+}
+
+/**
+ * Renders the calendar header and grid based on parameters.
+ *
+ * @param {number} weekday - The day of the week that the first day of the calendar falls on.
+ * @param {number} lastDay - The number of days in the calendar period.
+ * @param {string} dateText - The formatted date text for the calendar header.
+ */
+async function loadCalendar(weekday, lastDay, dateText) {
+  var calendarDateText = document.createElement('h2');
+  calendarDateText.innerText = dateText;
+
+  calendarHeader.innerHTML = "";
+  calendarHeader.appendChild(calendarDateText);
+
+  try {
+    const response = await fetch("/api.events");
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    var events = await response.json();
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+
+  calendarGrid.innerHTML = "";
+  calendarLoopTime = new Date(calendarTime);
+  for (let day = 0; day &lt; lastDay + weekday; day++) {
+    const dayCellDiv = document.createElement('div');
+
+    if (day >= weekday) {
+      dayCellDiv.className = 'calendar-cell';
+
+      if (calendarLoopTime.toDateString() === currentDate.toDateString()) {
+        dayCellDiv.id = "current-day";
+      }
+
+      const dayNumberSpan = document.createElement('span');
+      dayNumberSpan.className = "day-number";
+      dayNumberSpan.textContent = calendarLoopTime.getDate();
+      dayCellDiv.appendChild(dayNumberSpan);
+
+      //example code for adding tasts to day (currently adding task icon
+      //to current date)
+      var todayEvents = events.filter(function(event) {
+        eventDate = new Date(event.startDate);
+        eventDate.setDate(eventDate.getDate() + 1);
+        return calendarLoopTime.toDateString() === eventDate.toDateString();
+      });
+      if (todayEvents.length > 0) {
+        console.log(todayEvents[0].startDate)
+        const taskDiv = document.createElement('div');
+        taskDiv.className = "calendar-task";
+
+        dayCellDiv.appendChild(taskDiv);
+      }
+
+      calendarLoopTime.setDate(calendarLoopTime.getDate() + 1);
+    }
+
+    calendarGrid.appendChild(dayCellDiv);
+  }
+}
+
+// Initialization on Page Load
+/**
+ * Handles the initial setup when the window loads.
+ *
+ * - Sets the layout and initializes the calendar.
+ * - Loads motivational quotes, applies the saved theme, layout, and font.
+ * - (Commented code is present to load and render tasks from local storage.)
+ */
+window.addEventListener("load", () => {
+  // Load Tasks
+  /*savedPages = ["today", "week", "month", "habits"];
+  savedPages.forEach((page) => {
+    const savedTasks = localStorage.getItem(page);
+    if (savedTasks) {
+      // Parse the JSON string back into an array of tasks
+      widgetData[page] = JSON.parse(savedTasks);
+    }
+
+    renderWidget(page, 0);
+  });*/
+
+  setLayout();
+
+  // Initialize quote cycling on window load
+  // Start cycling motivational quotes
+  
+  let checkedQuotes = localStorage.getItem('checkedQuotes').split(',');
+  for (let option of checkedQuotes) {
+    quotes = quotes.concat(window[option]);
+  }
+
+  shuffleArray(quotes);
+  cycleQuotes();
+
+  // Apply saved theme
+  document.body.classList.add(localStorage.getItem("theme"));
+  // Apply saved layout
+  document.body.getElementsByClassName("main-content")[0].id = localStorage.getItem("layout");
+  // Apply saved font
+  document.body.style.fontFamily = localStorage.getItem("font");
+});
+
+// 6. Motivational Quotes Functionality
+/**
+ * Array to store motivational quotes.
+ * @type {Array&lt;string>}
+ */
+let quotes = [];
+
+/**
+ * Shuffles an array in place using the Fisher-Yates algorithm.
+ *
+ * @param {Array&lt;any>} array - The array to shuffle.
+ */
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+// Function to cycle through quotes
+/**
+ * Cycles through motivational quotes and updates the display element with a fade effect.
+ *
+ * The function initially displays the first quote, and then every 5 seconds it changes
+ * the quote with a fade-out and fade-in transition.
+ */
+function cycleQuotes() {
+  const quoteElement = document.getElementById("motivational-quote");
+  let quoteIndex = 0;
+  
+    // Function to display the next quote
+      /**
+   * Displays the next quote with a fade transition.
+   */
+  const showNextQuote = () => {
+    // Remove 'visible' class to start fade-out
+    quoteElement.classList.remove("visible");
+
+    // After the fade-out transition ends, update the text and fade in
+    setTimeout(() => {
+      quoteElement.textContent = quotes[quoteIndex];
+      quoteElement.classList.add("visible");
+
+      // Update index to the next quote, looping back if necessary
+      quoteIndex = (quoteIndex + 1) % quotes.length;
+    }, 1000); // 1000ms matches the CSS transition duration
+  };
+
+  // Initially show the first quote
+  showNextQuote();
+
+  // Set interval to change quotes every 5 seconds
+  setInterval(showNextQuote, 5000);
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-config.html">config</a></li><li><a href="module-sql.html">sql</a></li></ul><h3>Events</h3><ul><li><a href="click%2520on%2520.html#event:add-habit-button">add-habit-button</a></li><li><a href="click%2520on%2520the%2520delete%2520habit%2520button%2520(.html#event:deleteHabitButton)">deleteHabitButton)</a></li></ul><h3>Global</h3><ul><li><a href="global.html#FONTS">FONTS</a></li><li><a href="global.html#LAYOUTS">LAYOUTS</a></li><li><a href="global.html#QUOTES_CAT">QUOTES_CAT</a></li><li><a href="global.html#QUOTES_NEGATIVE">QUOTES_NEGATIVE</a></li><li><a href="global.html#QUOTES_PHIL">QUOTES_PHIL</a></li><li><a href="global.html#QUOTES_POP">QUOTES_POP</a></li><li><a href="global.html#QUOTES_POSITIVE">QUOTES_POSITIVE</a></li><li><a href="global.html#QUOTES_PROGRAMMING">QUOTES_PROGRAMMING</a></li><li><a href="global.html#STATS">STATS</a></li><li><a href="global.html#THEMES">THEMES</a></li><li><a href="global.html#addHabitWindow">addHabitWindow</a></li><li><a href="global.html#addTaskWindow">addTaskWindow</a></li><li><a href="global.html#apiKey">apiKey</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#calendarGrid">calendarGrid</a></li><li><a href="global.html#calendarHeader">calendarHeader</a></li><li><a href="global.html#calendarTime">calendarTime</a></li><li><a href="global.html#chartCanvas">chartCanvas</a></li><li><a href="global.html#checkedQuotes">checkedQuotes</a></li><li><a href="global.html#client">client</a></li><li><a href="global.html#closeEditWindow">closeEditWindow</a></li><li><a href="global.html#closeHabitEditWindow">closeHabitEditWindow</a></li><li><a href="global.html#closeHabitWindow">closeHabitWindow</a></li><li><a href="global.html#closeTaskWindow">closeTaskWindow</a></li><li><a href="global.html#createHabitListItem">createHabitListItem</a></li><li><a href="global.html#createTaskListItem">createTaskListItem</a></li><li><a href="global.html#currentDate">currentDate</a></li><li><a href="global.html#currentDay">currentDay</a></li><li><a href="global.html#currentMonth">currentMonth</a></li><li><a href="global.html#currentYear">currentYear</a></li><li><a href="global.html#cycleQuotes">cycleQuotes</a></li><li><a href="global.html#deleteButton">deleteButton</a></li><li><a href="global.html#deleteEvent">deleteEvent</a></li><li><a href="global.html#deleteHabit">deleteHabit</a></li><li><a href="global.html#displayCurrentWeather">displayCurrentWeather</a></li><li><a href="global.html#fetchForecast">fetchForecast</a></li><li><a href="global.html#fetchForecastByCity">fetchForecastByCity</a></li><li><a href="global.html#fetchForecastByCoords">fetchForecastByCoords</a></li><li><a href="global.html#fetchStockOverview">fetchStockOverview</a></li><li><a href="global.html#fetchStockTimeSeries">fetchStockTimeSeries</a></li><li><a href="global.html#fetchWeather">fetchWeather</a></li><li><a href="global.html#fetchWeatherByCoords">fetchWeatherByCoords</a></li><li><a href="global.html#fonts">fonts</a></li><li><a href="global.html#formatDate">formatDate</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#habitComplete">habitComplete</a></li><li><a href="global.html#habitsList">habitsList</a></li><li><a href="global.html#handler">handler</a></li><li><a href="global.html#initCalendar">initCalendar</a></li><li><a href="global.html#isSecure">isSecure</a></li><li><a href="global.html#itemsPerPage">itemsPerPage</a></li><li><a href="global.html#layouts">layouts</a></li><li><a href="global.html#loadCalendar">loadCalendar</a></li><li><a href="global.html#loadChartButton">loadChartButton</a></li><li><a href="global.html#loadSqlQueries">loadSqlQueries</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logos">logos</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#monthDate">monthDate</a></li><li><a href="global.html#oAuthCallback">oAuthCallback</a></li><li><a href="global.html#openEditWindow">openEditWindow</a></li><li><a href="global.html#openHabitEdit">openHabitEdit</a></li><li><a href="global.html#preload">preload</a></li><li><a href="global.html#quoteElement">quoteElement</a></li><li><a href="global.html#quotes">quotes</a></li><li><a href="global.html#quotesLoad">quotesLoad</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#setCalendar">setCalendar</a></li><li><a href="global.html#setFont">setFont</a></li><li><a href="global.html#setLayout">setLayout</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#spinner">spinner</a></li><li><a href="global.html#startServer">startServer</a></li><li><a href="global.html#stockChart">stockChart</a></li><li><a href="global.html#stockSelect">stockSelect</a></li><li><a href="global.html#themes">themes</a></li><li><a href="global.html#timeRangeSelect">timeRangeSelect</a></li><li><a href="global.html#today">today</a></li><li><a href="global.html#todayDate">todayDate</a></li><li><a href="global.html#toggleComplete">toggleComplete</a></li><li><a href="global.html#updateChart">updateChart</a></li><li><a href="global.html#updateKeyDetails">updateKeyDetails</a></li><li><a href="global.html#updateQuotes">updateQuotes</a></li><li><a href="global.html#weekDate">weekDate</a></li><li><a href="global.html#widgetIndex">widgetIndex</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Apr 14 2025 00:02:56 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
