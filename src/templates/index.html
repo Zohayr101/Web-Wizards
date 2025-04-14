@@ -55,18 +55,17 @@
 <!-- Modal for adding a new task -->
 <div class="modal" id="add-task">
   <div class="modal-content">
-    <div class="modal-header">
-      <button class="cancel-btn" type="button" onclick="closeTaskWindow()">Cancel</button>
+
+      <span class="close" onclick="closeTaskWindow()">&times;</span>
       <h2>Add Task</h2>
-      <button class="confirm-btn" id="addTaskButton" type="submit" form="add-task-form">Confirm</button>
-    </div>
+      
 
     <form id="add-task-form">
       <label for="add-task-name">Title</label>
-      <input type="text" id="task-name" name="add-task-name" required />
+      <input type="text" id="task-name" name="add-task-name" required /><br>
 
       <label for="add-task-due-date">Due Date</label>
-      <input type="date" id="task-due-date" name="add-task-due-date" />
+      <input type="date" id="task-due-date" name="add-task-due-date" /><br>
 
       <label for="task-category">Category</label>
       <input type="text" list="categories" id="task-category" name="task-category"></input>
@@ -76,7 +75,7 @@
         <option value="Shopping"></option>
         <option value="Others"></option>
       </datalist>
-
+      <br>
       <label>Priority</label>
       <div class="priority-buttons">
         <button type="button" class="priority-btn" data-value="0">Low</button>
@@ -86,7 +85,7 @@
       </div>
 
       <div class="modal-footer">
-      
+        <button class="confirm-btn" id="addTaskButton" type="submit" form="add-task-form">Confirm</button>
       </div>
     </form>
   </div>
@@ -95,18 +94,17 @@
 <!-- Modal for editing task -->
 <div class="modal" id="edit-task">
   <div class="modal-content">
-    <div class="modal-header">
-      <button class="cancel-btn" type="button" onclick="closeEditWindow()">Cancel</button>
+
+      <span class="close" onclick="closeEditWindow()">&times;</span>
       <h2>Edit Task</h2>
-      <button class="confirm-btn" id="editTaskButton" type="submit" form="edit-task-form">Confirm</button>
-    </div>
+
 
     <form id="edit-task-form">
       <label for="edit-task-name">Title</label>
-      <input type="text" id="edit-task-name" name="edit-task-name" required />
+      <input type="text" id="edit-task-name" name="edit-task-name" required /><br />
 
       <label for="edit-task-due-date">Change Date</label>
-      <input type="date" id="edit-task-due-date" name="edit-task-due-date" />
+      <input type="date" id="edit-task-due-date" name="edit-task-due-date" /><br />
 
       <label for="edit-task-category">Category</label>
       <input list="categories" id="edit-task-category" name="edit-task-category"></input>
@@ -116,7 +114,7 @@
         <option value="Shopping"></option>
         <option value="Others"></option>
       </datalist>
-
+      <br />
       <label>Priority</label>
       <div class="priority-buttons">
         <button type="button" class="priority-btn" data-value="0">Low</button>
@@ -127,6 +125,7 @@
 
       <div class="modal-footer">
         <button id="deleteTaskButton" type="button" class="delete-btn">Delete</button>
+        <button class="confirm-btn" id="editTaskButton" type="submit" form="edit-task-form">Confirm</button>
       </div>
     </form>
   </div>
@@ -163,7 +162,6 @@
     <div class="modal-header">
       <button class="cancel-btn" type="button" onclick="closeHabitEditWindow()">Cancel</button>
       <h2>Edit Habit</h2>
-      <button class="confirm-btn" type="submit" form="edit-habit-form">Confirm</button>
     </div>
 
     <form id="edit-habit-form">
@@ -177,6 +175,8 @@
 
     <div class="modal-footer">
       <button class="delete-btn" type="button" id="deleteHabitButton" onclick="deleteHabit()">Delete</button>
+      <button class="confirm-btn" type="submit" form="edit-habit-form">Confirm</button>
+
     </div>
   </div>
 </div>
