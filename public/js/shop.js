@@ -1,7 +1,33 @@
+/**
+ * Available themes defined on the global window object.
+ * @constant {Object}
+ */
 const themes = window.THEMES;
+
+/**
+ * Available layouts defined on the global window object.
+ * @constant {Object}
+ */
 const layouts = window.LAYOUTS;
+
+/**
+ * Available fonts defined on the global window object.
+ * @constant {Object}
+ */
 const fonts = window.FONTS;
 
+/**
+ * Initializes the app after the window has fully loaded.
+ *
+ * This event listener performs the following tasks:
+ * - Fetches user statistics from the `/api.stats` endpoint.
+ *   - If no stats are found, it attempts to initialize them via a POST request to `/api/stats/initialize`.
+ *   - Updates various DOM elements with the retrieved statistics.
+ * - Loads motivational quotes from local storage, shuffles them, and begins cycling through the quotes.
+ * - Applies the saved theme and font preferences from local storage to the document.
+ *
+ * @listens window#load
+ */
 window.addEventListener("load", async () => {
     // Fetch user stats
     try {
@@ -66,8 +92,19 @@ window.addEventListener("load", async () => {
 });
 
 // 6. Motivational Quotes Functionality
+/**
+ * An array to store motivational quotes.
+ *
+ * @global
+ * @type {Array<string>}
+ */
 let quotes = [];
 
+/**
+ * Shuffles the elements of an array in place using the Fisher-Yates algorithm.
+ *
+ * @param {Array} array - The array to be shuffled.
+ */
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -76,11 +113,24 @@ function shuffleArray(array) {
 }
 
 // Function to cycle through quotes
+/**
+ * Cycles through motivational quotes by updating the text content of the element with ID "motivational-quote".
+ *
+ * This function:
+ * - Retrieves the HTML element with the ID "motivational-quote".
+ * - Sets up an interval to change the quote every 5 seconds.
+ * - Applies a fade-out effect before updating the text and a fade-in effect after updating.
+ */
 function cycleQuotes() {
     const quoteElement = document.getElementById("motivational-quote");
     let quoteIndex = 0;
 
     // Function to display the next quote
+        /**
+     * Displays the next quote by updating the quote element.
+     * - Removes the "visible" class to trigger a fade-out effect.
+     * - After a 1000ms delay (matching the CSS transition duration), updates the text and adds the "visible" class to fade in the new quote.
+     */
     const showNextQuote = () => {
         // Remove 'visible' class to start fade-out
         quoteElement.classList.remove("visible");

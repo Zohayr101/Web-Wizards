@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/js/shop.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/js/shop.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Available themes defined on the global window object.
+ * @constant {Object}
+ */
+const themes = window.THEMES;
+
+/**
+ * Available layouts defined on the global window object.
+ * @constant {Object}
+ */
+const layouts = window.LAYOUTS;
+
+/**
+ * Available fonts defined on the global window object.
+ * @constant {Object}
+ */
+const fonts = window.FONTS;
+
+/**
+ * Initializes the app after the window has fully loaded.
+ *
+ * This event listener performs the following tasks:
+ * - Fetches user statistics from the `/api.stats` endpoint.
+ *   - If no stats are found, it attempts to initialize them via a POST request to `/api/stats/initialize`.
+ *   - Updates various DOM elements with the retrieved statistics.
+ * - Loads motivational quotes from local storage, shuffles them, and begins cycling through the quotes.
+ * - Applies the saved theme and font preferences from local storage to the document.
+ *
+ * @listens window#load
+ */
+window.addEventListener("load", async () => {
+    // Fetch user stats
+    try {
+        let response = await fetch("/api.stats");
+
+        if (response.ok) {
+            let stats = await response.json();
+
+            if (stats.length === 0) {
+                // No stats found, initialize them
+                console.log("No stats found. Initializing...");
+                const initResponse = await fetch("/api/stats/initialize", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (initResponse.ok) {
+                    stats = await initResponse.json();
+                    console.log("Stats initialized:", stats);
+                } else {
+                    console.error("Failed to initialize stats:", initResponse.statusText);
+                    return;
+                }
+            } else {
+                stats = stats[0]; // Assuming stats is an array, take the first entry
+            }
+
+            // Populate stats fields
+            document.querySelector(".stat:nth-child(1)").textContent = `Pomodoros Completed: ${stats.pomoCompleted}`;
+            document.querySelector(".stat:nth-child(2)").textContent = `Tasks Completed: ${stats.tasksCompleted}`;
+            document.querySelector(".stat:nth-child(3)").textContent = `Habits Completed: ${stats.habitsCompleted}`;
+            document.querySelector(".stat:nth-child(4)").textContent = `Journal Entries Written: ${stats.journalEntriesWritten}`;
+            document.querySelector(".stat:nth-child(5)").textContent = `Notes Written: ${stats.notesWritten}`;
+            document.querySelector(".stat:nth-child(6)").textContent = `Movies Liked: ${stats.movieLikes}`;
+            document.querySelector(".stat:nth-child(7)").textContent = `Longest Habit Streak: ${stats.longestHabitStreak}`;
+            document.querySelector(".stat:nth-child(8)").textContent = `Weather Checked: ${stats.weatherChecks}`;
+            document.querySelector(".stat:nth-child(9)").textContent = `Stocks Viewed: ${stats.stocksChecked}`;
+            document.querySelector(".stat:nth-child(10)").textContent = `Settings Changed: ${stats.settingsChanged}`;
+            document.querySelector(".stat:nth-child(11)").textContent = `Gold Earned: ${stats.goldEarned}`;
+            document.querySelector(".stat:nth-child(12)").textContent = `Gold Spent: ${stats.goldSpent}`;
+        } else {
+            console.error("Failed to fetch stats:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error fetching stats:", error);
+    }
+
+    // Load quotes
+    let checkedQuotes = localStorage.getItem('checkedQuotes')?.split(',') || [];
+    for (let option of checkedQuotes) {
+        quotes = quotes.concat(window[option]);
+    }
+    shuffleArray(quotes);
+    cycleQuotes();
+
+    // Apply saved theme
+    document.body.classList.add(localStorage.getItem("theme"));
+    // Apply saved font
+    document.body.style.fontFamily = localStorage.getItem("font");
+});
+
+// 6. Motivational Quotes Functionality
+/**
+ * An array to store motivational quotes.
+ *
+ * @global
+ * @type {Array&lt;string>}
+ */
+let quotes = [];
+
+/**
+ * Shuffles the elements of an array in place using the Fisher-Yates algorithm.
+ *
+ * @param {Array} array - The array to be shuffled.
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Function to cycle through quotes
+/**
+ * Cycles through motivational quotes by updating the text content of the element with ID "motivational-quote".
+ *
+ * This function:
+ * - Retrieves the HTML element with the ID "motivational-quote".
+ * - Sets up an interval to change the quote every 5 seconds.
+ * - Applies a fade-out effect before updating the text and a fade-in effect after updating.
+ */
+function cycleQuotes() {
+    const quoteElement = document.getElementById("motivational-quote");
+    let quoteIndex = 0;
+
+    // Function to display the next quote
+        /**
+     * Displays the next quote by updating the quote element.
+     * - Removes the "visible" class to trigger a fade-out effect.
+     * - After a 1000ms delay (matching the CSS transition duration), updates the text and adds the "visible" class to fade in the new quote.
+     */
+    const showNextQuote = () => {
+        // Remove 'visible' class to start fade-out
+        quoteElement.classList.remove("visible");
+
+        // After the fade-out transition ends, update the text and fade in
+        setTimeout(() => {
+            quoteElement.textContent = quotes[quoteIndex];
+            quoteElement.classList.add("visible");
+
+            // Update index to the next quote, looping back if necessary
+            quoteIndex = (quoteIndex + 1) % quotes.length;
+        }, 1000); // 1000ms matches the CSS transition duration
+    };
+
+    // Initially show the first quote
+    showNextQuote();
+
+    // Set interval to change quotes every 5 seconds
+    setInterval(showNextQuote, 5000);
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-config.html">config</a></li><li><a href="module-sql.html">sql</a></li></ul><h3>Events</h3><ul><li><a href="click%2520on%2520.html#event:add-habit-button">add-habit-button</a></li><li><a href="click%2520on%2520the%2520delete%2520habit%2520button%2520(.html#event:deleteHabitButton)">deleteHabitButton)</a></li></ul><h3>Global</h3><ul><li><a href="global.html#FONTS">FONTS</a></li><li><a href="global.html#LAYOUTS">LAYOUTS</a></li><li><a href="global.html#QUOTES_CAT">QUOTES_CAT</a></li><li><a href="global.html#QUOTES_NEGATIVE">QUOTES_NEGATIVE</a></li><li><a href="global.html#QUOTES_PHIL">QUOTES_PHIL</a></li><li><a href="global.html#QUOTES_POP">QUOTES_POP</a></li><li><a href="global.html#QUOTES_POSITIVE">QUOTES_POSITIVE</a></li><li><a href="global.html#QUOTES_PROGRAMMING">QUOTES_PROGRAMMING</a></li><li><a href="global.html#STATS">STATS</a></li><li><a href="global.html#THEMES">THEMES</a></li><li><a href="global.html#addHabitWindow">addHabitWindow</a></li><li><a href="global.html#addTaskWindow">addTaskWindow</a></li><li><a href="global.html#apiKey">apiKey</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#calendarGrid">calendarGrid</a></li><li><a href="global.html#calendarHeader">calendarHeader</a></li><li><a href="global.html#calendarTime">calendarTime</a></li><li><a href="global.html#chartCanvas">chartCanvas</a></li><li><a href="global.html#checkedQuotes">checkedQuotes</a></li><li><a href="global.html#client">client</a></li><li><a href="global.html#closeEditWindow">closeEditWindow</a></li><li><a href="global.html#closeHabitEditWindow">closeHabitEditWindow</a></li><li><a href="global.html#closeHabitWindow">closeHabitWindow</a></li><li><a href="global.html#closeTaskWindow">closeTaskWindow</a></li><li><a href="global.html#createHabitListItem">createHabitListItem</a></li><li><a href="global.html#createTaskListItem">createTaskListItem</a></li><li><a href="global.html#currentDate">currentDate</a></li><li><a href="global.html#currentDay">currentDay</a></li><li><a href="global.html#currentMonth">currentMonth</a></li><li><a href="global.html#currentYear">currentYear</a></li><li><a href="global.html#cycleQuotes">cycleQuotes</a></li><li><a href="global.html#deleteButton">deleteButton</a></li><li><a href="global.html#deleteEvent">deleteEvent</a></li><li><a href="global.html#deleteHabit">deleteHabit</a></li><li><a href="global.html#displayCurrentWeather">displayCurrentWeather</a></li><li><a href="global.html#fetchForecast">fetchForecast</a></li><li><a href="global.html#fetchForecastByCity">fetchForecastByCity</a></li><li><a href="global.html#fetchForecastByCoords">fetchForecastByCoords</a></li><li><a href="global.html#fetchStockOverview">fetchStockOverview</a></li><li><a href="global.html#fetchStockTimeSeries">fetchStockTimeSeries</a></li><li><a href="global.html#fetchWeather">fetchWeather</a></li><li><a href="global.html#fetchWeatherByCoords">fetchWeatherByCoords</a></li><li><a href="global.html#fonts">fonts</a></li><li><a href="global.html#formatDate">formatDate</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#habitComplete">habitComplete</a></li><li><a href="global.html#habitsList">habitsList</a></li><li><a href="global.html#handler">handler</a></li><li><a href="global.html#initCalendar">initCalendar</a></li><li><a href="global.html#isSecure">isSecure</a></li><li><a href="global.html#itemsPerPage">itemsPerPage</a></li><li><a href="global.html#layouts">layouts</a></li><li><a href="global.html#loadCalendar">loadCalendar</a></li><li><a href="global.html#loadChartButton">loadChartButton</a></li><li><a href="global.html#loadSqlQueries">loadSqlQueries</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logos">logos</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#monthDate">monthDate</a></li><li><a href="global.html#oAuthCallback">oAuthCallback</a></li><li><a href="global.html#openEditWindow">openEditWindow</a></li><li><a href="global.html#openHabitEdit">openHabitEdit</a></li><li><a href="global.html#preload">preload</a></li><li><a href="global.html#quoteElement">quoteElement</a></li><li><a href="global.html#quotes">quotes</a></li><li><a href="global.html#quotesLoad">quotesLoad</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#setCalendar">setCalendar</a></li><li><a href="global.html#setFont">setFont</a></li><li><a href="global.html#setLayout">setLayout</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#spinner">spinner</a></li><li><a href="global.html#startServer">startServer</a></li><li><a href="global.html#stockChart">stockChart</a></li><li><a href="global.html#stockSelect">stockSelect</a></li><li><a href="global.html#themes">themes</a></li><li><a href="global.html#timeRangeSelect">timeRangeSelect</a></li><li><a href="global.html#today">today</a></li><li><a href="global.html#todayDate">todayDate</a></li><li><a href="global.html#toggleComplete">toggleComplete</a></li><li><a href="global.html#updateChart">updateChart</a></li><li><a href="global.html#updateKeyDetails">updateKeyDetails</a></li><li><a href="global.html#updateQuotes">updateQuotes</a></li><li><a href="global.html#weekDate">weekDate</a></li><li><a href="global.html#widgetIndex">widgetIndex</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Apr 14 2025 00:02:56 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

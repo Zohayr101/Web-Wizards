@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/js/stock.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/js/stock.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Alpha Vantage API key (stored here; secure on backend for production)
+/**
+ * Alpha Vantage API key (stored here; secure on backend for production).
+ * @constant {string}
+ */
+const apiKey = "3NZ62AYDCROUWX3Q";
+
+// Mapping ticker symbols to logo URLs via Clearbit Logo API
+/**
+ * Mapping ticker symbols to logo URLs via Clearbit Logo API.
+ * @constant {Object.&lt;string, string>}
+ */
+const logos = {
+  AAPL: "https://logo.clearbit.com/apple.com",
+  MSFT: "https://logo.clearbit.com/microsoft.com",
+  AMZN: "https://logo.clearbit.com/amazon.com",
+  GOOGL: "https://logo.clearbit.com/google.com",
+  TSLA: "https://logo.clearbit.com/tesla.com",
+  META: "https://logo.clearbit.com/meta.com",
+  NVDA: "https://logo.clearbit.com/nvidia.com",
+  JPM: "https://logo.clearbit.com/jpmorganchase.com",
+  JNJ: "https://logo.clearbit.com/jnj.com",
+  V: "https://logo.clearbit.com/visa.com",
+  PG: "https://logo.clearbit.com/pg.com",
+  UNH: "https://logo.clearbit.com/unitedhealthgroup.com",
+  HD: "https://logo.clearbit.com/homedepot.com",
+  VZ: "https://logo.clearbit.com/verizon.com",
+  DIS: "https://logo.clearbit.com/disney.com",
+  MA: "https://logo.clearbit.com/mastercard.com",
+  NFLX: "https://logo.clearbit.com/netflix.com",
+  KO: "https://logo.clearbit.com/coca-cola.com",
+  PFE: "https://logo.clearbit.com/pfizer.com",
+  MRK: "https://logo.clearbit.com/merck.com",
+  INTC: "https://logo.clearbit.com/intel.com",
+  CSCO: "https://logo.clearbit.com/cisco.com",
+  T: "https://logo.clearbit.com/att.com",
+  XOM: "https://logo.clearbit.com/exxonmobil.com",
+  BA: "https://logo.clearbit.com/boeing.com",
+  CRM: "https://logo.clearbit.com/salesforce.com",
+  ORCL: "https://logo.clearbit.com/oracle.com",
+  IBM: "https://logo.clearbit.com/ibm.com",
+  MCD: "https://logo.clearbit.com/mcdonalds.com",
+  WMT: "https://logo.clearbit.com/walmart.com",
+  CVX: "https://logo.clearbit.com/chevron.com",
+  ABT: "https://logo.clearbit.com/abbott.com",
+  COST: "https://logo.clearbit.com/costco.com",
+  NKE: "https://logo.clearbit.com/nike.com",
+  DOW: "https://logo.clearbit.com/dow.com",
+  QCOM: "https://logo.clearbit.com/qualcomm.com",
+  ADP: "https://logo.clearbit.com/adp.com",
+  MDT: "https://logo.clearbit.com/medtronic.com",
+  SBUX: "https://logo.clearbit.com/starbucks.com",
+  GS: "https://logo.clearbit.com/goldmansachs.com",
+  AMGN: "https://logo.clearbit.com/amgen.com",
+  LLY: "https://logo.clearbit.com/lilly.com",
+  HON: "https://logo.clearbit.com/honeywell.com",
+  CAT: "https://logo.clearbit.com/caterpillar.com",
+  GE: "https://logo.clearbit.com/ge.com",
+  UPS: "https://logo.clearbit.com/ups.com",
+  RTX: "https://logo.clearbit.com/raytheon.com",
+  BLK: "https://logo.clearbit.com/blackrock.com",
+  SPY: "https://logo.clearbit.com/ssga.com",
+  VOO: "https://logo.clearbit.com/vanguard.com"
+};
+
+/**
+ * DOM element for the stock selection dropdown.
+ * @constant {HTMLElement}
+ */
+const stockSelect = document.getElementById("stock-select");
+
+/**
+ * DOM element for the time range selection dropdown.
+ * @constant {HTMLElement}
+ */
+const timeRangeSelect = document.getElementById("time-range-select");
+
+/**
+ * DOM element for the chart load button.
+ * @constant {HTMLElement}
+ */
+const loadChartButton = document.getElementById("load-chart");
+
+/**
+ * DOM canvas element where the stock chart is rendered.
+ * @constant {HTMLElement}
+ */
+const chartCanvas = document.getElementById("stock-chart");
+
+/**
+ * DOM element for the loading spinner indicator.
+ * @constant {HTMLElement}
+ */
+const spinner = document.getElementById("spinner");
+
+/**
+ * Global Chart.js instance used to render the stock chart.
+ * @type {Chart}
+ */
+let stockChart; // Global Chart.js instance
+
+// Helper function to format dates from YYYY-MM-DD to MM-DD-YYYY
+/**
+ * Format a date string from 'YYYY-MM-DD' to 'MM-DD-YYYY'.
+ *
+ * @param {string} dateStr - Date string in the format 'YYYY-MM-DD'.
+ * @returns {string} Formatted date string in the format 'MM-DD-YYYY'.
+ */
+function formatDate(dateStr) {
+  const [year, month, day] = dateStr.split("-");
+  return `${month}-${day}-${year}`;
+}
+
+// Fetch daily time series data
+/**
+ * Fetch the daily time series data for a given stock symbol from the Alpha Vantage API.
+ *
+ * @async
+ * @param {string} symbol - Stock ticker symbol.
+ * @returns {Promise&lt;Object|null>} Promise resolving to daily time series data or null if unavailable.
+ */
+async function fetchStockTimeSeries(symbol) {
+  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&amp;symbol=${symbol}&amp;apikey=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data["Time Series (Daily)"]) {
+      return data["Time Series (Daily)"];
+    } else {
+      throw new Error("Data not available or API limit reached");
+    }
+  } catch (error) {
+    console.error("Error fetching time series data:", error);
+    alert("Error fetching data: " + error.message);
+    return null;
+  }
+}
+
+// Fetch stock overview data
+/**
+ * Fetch the stock overview data for a given stock symbol from the Alpha Vantage API.
+ *
+ * @async
+ * @param {string} symbol - Stock ticker symbol.
+ * @returns {Promise&lt;Object|null>} Promise resolving to the stock overview data or null if unavailable.
+ */
+async function fetchStockOverview(symbol) {
+  const url = `https://www.alphavantage.co/query?function=OVERVIEW&amp;symbol=${symbol}&amp;apikey=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data &amp;&amp; Object.keys(data).length > 0 &amp;&amp; !data["Note"]) {
+      return data;
+    } else {
+      console.error("Overview data not available or API limit reached");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching stock overview:", error);
+    return null;
+  }
+}
+
+// Update key details section
+/**
+ * Update the key details section with the stock's data, including price, volume, and overview metrics.
+ *
+ * @async
+ * @param {string} symbol - Stock ticker symbol.
+ * @param {string} latestDate - The latest date from the time series data.
+ * @param {Object} latestData - Daily time series data corresponding to the latest date.
+ * @param {number} avgVolume - Average trading volume over the selected period.
+ * @returns {Promise&lt;void>}
+ */
+async function updateKeyDetails(symbol, latestDate, latestData, avgVolume) {
+  const overviewData = await fetchStockOverview(symbol);
+  let html = `&lt;table>
+    &lt;tr>&lt;th colspan="2">Key Details for ${symbol} (${formatDate(latestDate)})&lt;/th>&lt;/tr>`;
+  
+  html += `&lt;tr>&lt;td>Open&lt;/td>&lt;td>$${parseFloat(latestData["1. open"]).toFixed(2)}&lt;/td>&lt;/tr>`;
+  html += `&lt;tr>&lt;td>Day Range&lt;/td>&lt;td>$${parseFloat(latestData["3. low"]).toFixed(2)} - $${parseFloat(latestData["2. high"]).toFixed(2)}&lt;/td>&lt;/tr>`;
+  
+  if (overviewData) {
+    if (overviewData["52WeekHigh"] &amp;&amp; overviewData["52WeekLow"]) {
+      html += `&lt;tr>&lt;td>52 Week Range&lt;/td>&lt;td>$${parseFloat(overviewData["52WeekLow"]).toFixed(2)} - $${parseFloat(overviewData["52WeekHigh"]).toFixed(2)}&lt;/td>&lt;/tr>`;
+    }
+    if (overviewData["MarketCapitalization"]) {
+      html += `&lt;tr>&lt;td>Market Cap&lt;/td>&lt;td>$${overviewData["MarketCapitalization"]}&lt;/td>&lt;/tr>`;
+    }
+    if (overviewData["SharesOutstanding"]) {
+      html += `&lt;tr>&lt;td>Shares Outstanding&lt;/td>&lt;td>${overviewData["SharesOutstanding"]}&lt;/td>&lt;/tr>`;
+    }
+    if (overviewData["PERatio"]) {
+      html += `&lt;tr>&lt;td>P/E Ratio&lt;/td>&lt;td>${overviewData["PERatio"]}&lt;/td>&lt;/tr>`;
+    }
+    if (overviewData["EPS"]) {
+      html += `&lt;tr>&lt;td>EPS&lt;/td>&lt;td>$${overviewData["EPS"]}&lt;/td>&lt;/tr>`;
+    }
+    if (overviewData["DividendPerShare"]) {
+      html += `&lt;tr>&lt;td>Dividend&lt;/td>&lt;td>$${overviewData["DividendPerShare"]}&lt;/td>&lt;/tr>`;
+    }
+    if (overviewData["DividendYield"]) {
+      html += `&lt;tr>&lt;td>Dividend Yield&lt;/td>&lt;td>${(parseFloat(overviewData["DividendYield"]) * 100).toFixed(2)}%&lt;/td>&lt;/tr>`;
+    }
+    if (overviewData["ExDividendDate"]) {
+      html += `&lt;tr>&lt;td>Ex-Dividend Date&lt;/td>&lt;td>${overviewData["ExDividendDate"]}&lt;/td>&lt;/tr>`;
+    }
+  }
+  
+  html += `&lt;tr>&lt;td>Average Volume (30 days)&lt;/td>&lt;td>${Math.round(avgVolume)}&lt;/td>&lt;/tr>`;
+  html += `&lt;/table>`;
+  
+  const logoUrl = logos[symbol] || "";
+  let logoHtml = "";
+  if (logoUrl) {
+    logoHtml = `&lt;img src="${logoUrl}" alt="${symbol} Logo" class="company-logo">`;
+  }
+  
+  document.getElementById("key-details-section").innerHTML = `&lt;h2>Key Details&lt;/h2>` + logoHtml + html;
+}
+
+// Update chart with selected stock and time range
+/**
+ * Update the stock chart and key details section based on the selected stock symbol.
+ *
+ * @async
+ * @param {string} symbol - Stock ticker symbol.
+ * @returns {Promise&lt;void>}
+ */
+async function updateChart(symbol) {
+  spinner.style.display = 'block';
+  
+  const timeSeries = await fetchStockTimeSeries(symbol);
+  if (!timeSeries) {
+    spinner.style.display = 'none';
+    return;
+  }
+  
+  const numDays = parseInt(timeRangeSelect.value);
+  const dates = Object.keys(timeSeries).sort();
+  const recentDates = dates.slice(-numDays);
+  const prices = recentDates.map(date => parseFloat(timeSeries[date]["4. close"]));
+  const volumes = recentDates.map(date => parseInt(timeSeries[date]["5. volume"]));
+  const avgVolume = volumes.reduce((acc, vol) => acc + vol, 0) / volumes.length;
+  const latestDate = recentDates[recentDates.length - 1];
+  const latestData = timeSeries[latestDate];
+  
+  const chartData = {
+    labels: recentDates,
+    datasets: [{
+      label: `${symbol} Closing Prices`,
+      data: prices,
+      fill: false,
+      borderColor: '#4c6ef5',
+      tension: 0.1
+    }]
+  };
+  
+  const config = {
+    type: 'line',
+    data: chartData,
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          ticks: {
+            maxRotation: 45,
+            minRotation: 45
+          }
+        }
+      },
+      plugins: {
+        legend: { position: 'top' },
+        title: {
+          display: true,
+          text: `${symbol} Stock Price (${timeRangeSelect.options[timeRangeSelect.selectedIndex].text})`
+        }
+      }
+    }
+  };
+  
+  if (stockChart) {
+    stockChart.destroy();
+  }
+  
+  stockChart = new Chart(chartCanvas, config);
+  
+  updateKeyDetails(symbol, latestDate, latestData, avgVolume);
+  
+  spinner.style.display = 'none';
+}
+
+loadChartButton.addEventListener("click", () => {
+  updateChart(stockSelect.value);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateChart(stockSelect.value);
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-config.html">config</a></li><li><a href="module-sql.html">sql</a></li></ul><h3>Events</h3><ul><li><a href="click%2520on%2520.html#event:add-habit-button">add-habit-button</a></li><li><a href="click%2520on%2520the%2520delete%2520habit%2520button%2520(.html#event:deleteHabitButton)">deleteHabitButton)</a></li></ul><h3>Global</h3><ul><li><a href="global.html#FONTS">FONTS</a></li><li><a href="global.html#LAYOUTS">LAYOUTS</a></li><li><a href="global.html#QUOTES_CAT">QUOTES_CAT</a></li><li><a href="global.html#QUOTES_NEGATIVE">QUOTES_NEGATIVE</a></li><li><a href="global.html#QUOTES_PHIL">QUOTES_PHIL</a></li><li><a href="global.html#QUOTES_POP">QUOTES_POP</a></li><li><a href="global.html#QUOTES_POSITIVE">QUOTES_POSITIVE</a></li><li><a href="global.html#QUOTES_PROGRAMMING">QUOTES_PROGRAMMING</a></li><li><a href="global.html#STATS">STATS</a></li><li><a href="global.html#THEMES">THEMES</a></li><li><a href="global.html#addHabitWindow">addHabitWindow</a></li><li><a href="global.html#addTaskWindow">addTaskWindow</a></li><li><a href="global.html#apiKey">apiKey</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#calendarGrid">calendarGrid</a></li><li><a href="global.html#calendarHeader">calendarHeader</a></li><li><a href="global.html#calendarTime">calendarTime</a></li><li><a href="global.html#chartCanvas">chartCanvas</a></li><li><a href="global.html#checkedQuotes">checkedQuotes</a></li><li><a href="global.html#client">client</a></li><li><a href="global.html#closeEditWindow">closeEditWindow</a></li><li><a href="global.html#closeHabitEditWindow">closeHabitEditWindow</a></li><li><a href="global.html#closeHabitWindow">closeHabitWindow</a></li><li><a href="global.html#closeTaskWindow">closeTaskWindow</a></li><li><a href="global.html#createHabitListItem">createHabitListItem</a></li><li><a href="global.html#createTaskListItem">createTaskListItem</a></li><li><a href="global.html#currentDate">currentDate</a></li><li><a href="global.html#currentDay">currentDay</a></li><li><a href="global.html#currentMonth">currentMonth</a></li><li><a href="global.html#currentYear">currentYear</a></li><li><a href="global.html#cycleQuotes">cycleQuotes</a></li><li><a href="global.html#deleteButton">deleteButton</a></li><li><a href="global.html#deleteEvent">deleteEvent</a></li><li><a href="global.html#deleteHabit">deleteHabit</a></li><li><a href="global.html#displayCurrentWeather">displayCurrentWeather</a></li><li><a href="global.html#fetchForecast">fetchForecast</a></li><li><a href="global.html#fetchForecastByCity">fetchForecastByCity</a></li><li><a href="global.html#fetchForecastByCoords">fetchForecastByCoords</a></li><li><a href="global.html#fetchStockOverview">fetchStockOverview</a></li><li><a href="global.html#fetchStockTimeSeries">fetchStockTimeSeries</a></li><li><a href="global.html#fetchWeather">fetchWeather</a></li><li><a href="global.html#fetchWeatherByCoords">fetchWeatherByCoords</a></li><li><a href="global.html#fonts">fonts</a></li><li><a href="global.html#formatDate">formatDate</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#habitComplete">habitComplete</a></li><li><a href="global.html#habitsList">habitsList</a></li><li><a href="global.html#handler">handler</a></li><li><a href="global.html#initCalendar">initCalendar</a></li><li><a href="global.html#isSecure">isSecure</a></li><li><a href="global.html#itemsPerPage">itemsPerPage</a></li><li><a href="global.html#layouts">layouts</a></li><li><a href="global.html#loadCalendar">loadCalendar</a></li><li><a href="global.html#loadChartButton">loadChartButton</a></li><li><a href="global.html#loadSqlQueries">loadSqlQueries</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logos">logos</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#monthDate">monthDate</a></li><li><a href="global.html#oAuthCallback">oAuthCallback</a></li><li><a href="global.html#openEditWindow">openEditWindow</a></li><li><a href="global.html#openHabitEdit">openHabitEdit</a></li><li><a href="global.html#preload">preload</a></li><li><a href="global.html#quoteElement">quoteElement</a></li><li><a href="global.html#quotes">quotes</a></li><li><a href="global.html#quotesLoad">quotesLoad</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#setCalendar">setCalendar</a></li><li><a href="global.html#setFont">setFont</a></li><li><a href="global.html#setLayout">setLayout</a></li><li><a href="global.html#setTheme">setTheme</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#spinner">spinner</a></li><li><a href="global.html#startServer">startServer</a></li><li><a href="global.html#stockChart">stockChart</a></li><li><a href="global.html#stockSelect">stockSelect</a></li><li><a href="global.html#themes">themes</a></li><li><a href="global.html#timeRangeSelect">timeRangeSelect</a></li><li><a href="global.html#today">today</a></li><li><a href="global.html#todayDate">todayDate</a></li><li><a href="global.html#toggleComplete">toggleComplete</a></li><li><a href="global.html#updateChart">updateChart</a></li><li><a href="global.html#updateKeyDetails">updateKeyDetails</a></li><li><a href="global.html#updateQuotes">updateQuotes</a></li><li><a href="global.html#weekDate">weekDate</a></li><li><a href="global.html#widgetIndex">widgetIndex</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Apr 14 2025 00:02:56 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
