@@ -371,7 +371,6 @@ async function loadCalendar(weekday, lastDay, dateText) {
       throw new Error(`HTTP error: ${response.status}`);
     }
     var events = await response.json();
-    console.log(events);
   } catch (error) {
     console.error("Fetch error:", error);
   }
@@ -397,9 +396,11 @@ async function loadCalendar(weekday, lastDay, dateText) {
       //to current date)
       var todayEvents = events.filter(function(event) {
         eventDate = new Date(event.startDate);
+        eventDate.setDate(eventDate.getDate() + 1);
         return calendarLoopTime.toDateString() === eventDate.toDateString();
       });
       if (todayEvents.length > 0) {
+        console.log(todayEvents[0].startDate)
         const taskDiv = document.createElement('div');
         taskDiv.className = "calendar-task";
 
@@ -440,14 +441,11 @@ window.addEventListener("load", () => {
   // Start cycling motivational quotes
   
   let checkedQuotes = localStorage.getItem('checkedQuotes').split(',');
-  console.log(checkedQuotes);
   for (let option of checkedQuotes) {
-    console.log(option);
     quotes = quotes.concat(window[option]);
   }
 
   shuffleArray(quotes);
-  console.log(quotes);
   cycleQuotes();
 
   // Apply saved theme
@@ -486,29 +484,29 @@ function shuffleArray(array) {
  */
 function cycleQuotes() {
   const quoteElement = document.getElementById("motivational-quote");
-    let quoteIndex = 0;
+  let quoteIndex = 0;
   
     // Function to display the next quote
       /**
    * Displays the next quote with a fade transition.
    */
-    const showNextQuote = () => {
-      // Remove 'visible' class to start fade-out
-      quoteElement.classList.remove("visible");
-  
-      // After the fade-out transition ends, update the text and fade in
-      setTimeout(() => {
-        quoteElement.textContent = quotes[quoteIndex];
-        quoteElement.classList.add("visible");
-  
-        // Update index to the next quote, looping back if necessary
-        quoteIndex = (quoteIndex + 1) % quotes.length;
-      }, 1000); // 1000ms matches the CSS transition duration
-    };
-  
-    // Initially show the first quote
-    showNextQuote();
-  
-    // Set interval to change quotes every 5 seconds
-    setInterval(showNextQuote, 5000);
-  }
+  const showNextQuote = () => {
+    // Remove 'visible' class to start fade-out
+    quoteElement.classList.remove("visible");
+
+    // After the fade-out transition ends, update the text and fade in
+    setTimeout(() => {
+      quoteElement.textContent = quotes[quoteIndex];
+      quoteElement.classList.add("visible");
+
+      // Update index to the next quote, looping back if necessary
+      quoteIndex = (quoteIndex + 1) % quotes.length;
+    }, 1000); // 1000ms matches the CSS transition duration
+  };
+
+  // Initially show the first quote
+  showNextQuote();
+
+  // Set interval to change quotes every 5 seconds
+  setInterval(showNextQuote, 5000);
+}

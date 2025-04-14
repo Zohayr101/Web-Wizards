@@ -72,7 +72,9 @@ function createTaskListItem(event) {
     day: "numeric",
     year: "numeric",
   });
-  const formattedDate = formatDate.format(new Date(event.startDate));
+  const rawDate = new Date(event.startDate);
+  rawDate.setDate(rawDate.getDate() + 1);
+  const formattedDate = formatDate.format(rawDate);
 
   let priorityFlag;
   switch (event.priority) {
@@ -187,7 +189,15 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
     category: taskCategory,
     priority: taskPriority
   };
-  
+
+  console.log(taskData);
+
+  closeTaskWindow();
+  document.getElementById("task-name").value = "";
+  document.getElementById("task-due-date").value = "";
+  document.getElementById("task-category").value = "";
+  document.getElementById("add-task-priority").value = 1; // or whatever default
+
   try {
     const response = await fetch("/api/events", {
       method: "POST",
@@ -201,39 +211,30 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
       throw new Error("error: api post error");
     }
 
-    const newTask = await response.json();
-
-    const todayTaskList = document.getElementById("today-list");
-    const weekTaskList = document.getElementById("week-list");
-    const monthTaskList = document.getElementById("month-list");
-
-    const li = createTaskListItem(newTask);
-
-    const newDate = new Date(taskData.startDate);
-
-    if (newDate.getTime() <= todayDate.getTime()) {
-      todayTaskList.appendChild(li);
-    } else if (newDate.getTime() <= weekDate.getTime()) {
-      weekTaskList.appendChild(li);
-    } else if (newDate.getTime() <= monthDate.getTime()) {
-      monthTaskList.appendChild(li);
-    }
-
-    console.log("Created task", newTask);
-
+    var newTask = await response.json();
   } catch (error) {
       console.error("API error:", error);
   }
+  
+  const todayTaskList = document.getElementById("today-list");
+  const weekTaskList = document.getElementById("week-list");
+  const monthTaskList = document.getElementById("month-list");
 
-  closeTaskWindow();
-  document.getElementById("task-name").value = "";
-  document.getElementById("task-due-date").value = "";
-  document.getElementById("task-category").value = "";
-  document.getElementById("add-task-priority").value = 1; // or whatever default
+  const li = createTaskListItem(newTask);
+
+  const newDate = new Date(taskData.startDate);
+  newDate.setDate(newDate.getDate() + 1);
+
+  if (newDate.getTime() <= todayDate.getTime()) {
+    todayTaskList.appendChild(li);
+  } else if (newDate.getTime() <= weekDate.getTime()) {
+    weekTaskList.appendChild(li);
+  } else if (newDate.getTime() <= monthDate.getTime()) {
+    monthTaskList.appendChild(li);
+  }
 
   setLayout();
 });
-
 
 //=========================
 // MODIFY TASK

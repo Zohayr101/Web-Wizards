@@ -172,8 +172,6 @@ document
     }
 
     closeHabitWindow();
-
-    setLayout();
 });
 
 
