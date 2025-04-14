@@ -59,27 +59,22 @@ const register = async ({ sql, getConnection }) => {
 		const request = await cnx.request();
 
         request.input("userId", sql.VarChar(50), userId);
-		
         request.input("goldAmount", sql.Int, goldAmount);
-		request.input("goldEarned", sql.Int, goldEarned);
-		request.input("goldSpent", sql.Int, goldSpent);
+        request.input("goldEarned", sql.Int, goldEarned);
+        request.input("goldSpent", sql.Int, goldSpent);
+        request.input("pomoCompleted", sql.Int, pomoCompleted);
+        request.input("pomoTimeSpentMinutes", sql.Int, pomoTimeSpentMinutes);
+        request.input("tasksCompleted", sql.Int, tasksCompleted);
+        request.input("habitsCompleted", sql.Int, habitsCompleted);
+        request.input("longestHabitStreak", sql.Int, longestHabitStreak);
+        request.input("stocksChecked", sql.Int, stocksChecked);
+        request.input("weatherChecks", sql.Int, weatherChecks);
+        request.input("movieLikes", sql.Int, movieLikes);
+        request.input("settingsChanged", sql.Int, settingsChanged);
+        request.input("journalEntriesWritten", sql.Int, journalEntriesWritten);
+        request.input("notesWritten", sql.Int, notesWritten);
 
-		request.input("pomoCompleted", sql.Int, pomoCompleted);
-		request.input("pomoTimeSpentMinutes", sql.Int, pomoTimeSpentMinutes);
-
-		request.input("tasksCompleted", sql.Int, tasksCompleted);
-		request.input("habitsCompleted", sql.Int, habitsCompleted);
-		request.input("longestHabitStreak", sql.Int, longestHabitStreak);
-
-		request.input("stocksChecked", sql.Int, stocksChecked);
-		request.input("weatherChecks", sql.Int, weatherChecks);
-		request.input("movieLikes", sql.Int, movieLikes);
-
-		request.input("settingsChanged", sql.Int, settingsChanged);
-		request.input("journalEntriesWritten", sql.Int, journalEntriesWritten);
-		request.input("notesWritten", sql.Int, notesWritten);
-
-		return request.query(sqlQueries.updateStats);
+		return request.query(sqlQueries.addStats);
 	};
 
 	/**
