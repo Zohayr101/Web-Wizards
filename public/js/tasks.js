@@ -187,7 +187,7 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
     category: taskCategory,
     priority: taskPriority
   };
-
+  
   try {
     const response = await fetch("/api/events", {
       method: "POST",
@@ -231,7 +231,7 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
   document.getElementById("task-category").value = "";
   document.getElementById("add-task-priority").value = 1; // or whatever default
 
-
+  setLayout();
 });
 
 

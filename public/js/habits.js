@@ -173,6 +173,7 @@ document
 
     closeHabitWindow();
 
+    setLayout();
 });
 
 
