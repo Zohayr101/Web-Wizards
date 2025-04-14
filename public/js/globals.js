@@ -147,3 +147,26 @@ window.QUOTES_POSITIVE = [
     "Git commit, then panic.",
     "Code hard, sleep later.",
   ]
+
+/**
+ * Global object to store user stats locally.
+ * This will be initialized when the application loads.
+ * @global
+ * @type {Object}
+ */
+window.STATS = {
+    goldAmount: 0,
+    goldEarned: 0,
+    goldSpent: 0,
+    pomoCompleted: 0,
+    pomoTimeSpentMinutes: 0,
+    tasksCompleted: 0,
+    habitsCompleted: 0,
+    longestHabitStreak: 0,
+    stocksChecked: 0,
+    weatherChecks: 0,
+    movieLikes: 0,
+    settingsChanged: 0,
+    journalEntriesWritten: 0,
+    notesWritten: 0
+};
