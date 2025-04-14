@@ -157,9 +157,10 @@ window.onload = function () {
     } else {
         stats = stats[0]; // Assuming stats is an array, take the first entry
     }
+    let id = await stats.id;
     stats.journalEntriesWritten++;
-    const updateResponse = await fetch("/api/stats", {
-        method: "POST",
+    const updateResponse = await fetch(`/api/stats/${id}`, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },

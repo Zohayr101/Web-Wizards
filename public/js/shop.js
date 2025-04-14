@@ -31,8 +31,6 @@ window.addEventListener("load", async () => {
                 stats = stats[0]; // Assuming stats is an array, take the first entry
             }
 
-            console.log(stats);
-
             // Populate stats fields
             document.querySelector(".stat:nth-child(1)").textContent = `Pomodoros Completed: ${stats.pomoCompleted}`;
             document.querySelector(".stat:nth-child(2)").textContent = `Tasks Completed: ${stats.tasksCompleted}`;
