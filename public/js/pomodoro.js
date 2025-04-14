@@ -46,7 +46,87 @@ document.addEventListener("DOMContentLoaded", function () {
       // For real usage, you'd track actual durations; this is an example
       focusTimeToday += 25;
       updateStatsUI();
+      incrementPomodoroComplete();
+      incrementPomodoroTime(focusTimeToday)
     }
+
+    async function incrementPomodoroComplete() {
+      let response = await fetch("/api.stats");
+      stats = await response.json();
+      if (stats.length === 0) {
+        // No stats found, initialize them
+        console.log("No stats found. Initializing...");
+        const initResponse = await fetch("/api/stats/initialize", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+  
+        if (initResponse.ok) {
+            stats = await initResponse.json();
+            console.log("Stats initialized:", stats);
+        } else {
+            console.error("Failed to initialize stats:", initResponse.statusText);
+            return;
+        }
+    } else {
+        stats = stats[0]; // Assuming stats is an array, take the first entry
+    }
+    let id = await stats.id;
+  
+    stats.pomoCompleted++; // KEY DIFFERENCE
+  
+    const updateResponse = await fetch(`/api/stats/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(stats)
+    });
+    if (!updateResponse.ok) {
+        console.error(updateResponse.statusText);
+    }
+  }
+
+  async function incrementPomodoroTime(time) {
+    let response = await fetch("/api.stats");
+    stats = await response.json();
+    if (stats.length === 0) {
+      // No stats found, initialize them
+      console.log("No stats found. Initializing...");
+      const initResponse = await fetch("/api/stats/initialize", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          }
+      });
+
+      if (initResponse.ok) {
+          stats = await initResponse.json();
+          console.log("Stats initialized:", stats);
+      } else {
+          console.error("Failed to initialize stats:", initResponse.statusText);
+          return;
+      }
+  } else {
+      stats = stats[0]; // Assuming stats is an array, take the first entry
+  }
+  let id = await stats.id;
+
+  stats.pomoTimeSpentMinutes += time; // KEY DIFFERENCE
+
+  const updateResponse = await fetch(`/api/stats/${id}`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify(stats)
+  });
+  if (!updateResponse.ok) {
+      console.error(updateResponse.statusText);
+  }
+}
   
     // Clear stats button
     const clearStatsBtn = document.getElementById("clear-stats-btn");

@@ -260,6 +260,93 @@ async function habitComplete(habit, li, checkbox) {
     console.error("error updating habit complete: ", error);
     checkbox.checked = habit.complete;
   }
+
+  if (updateComplete) {
+    incrementHabitComplete();
+    checkHabitStreak(habitStreak + 1);
+  }
+}
+
+async function checkHabitStreak(habitStreak) {
+  let response = await fetch("/api.stats");
+  stats = await response.json();
+  if (stats.length === 0) {
+    // No stats found, initialize them
+    console.log("No stats found. Initializing...");
+    const initResponse = await fetch("/api/stats/initialize", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (initResponse.ok) {
+        stats = await initResponse.json();
+        console.log("Stats initialized:", stats);
+    } else {
+        console.error("Failed to initialize stats:", initResponse.statusText);
+        return;
+    }
+} else {
+    stats = stats[0]; // Assuming stats is an array, take the first entry
+}
+let id = await stats.id;
+let currentTopStreak = stats.longestHabitStreak;
+if (currentTopStreak > habitStreak) {
+  return;
+}
+
+stats.longestHabitStreak = habitStreak;
+
+const updateResponse = await fetch(`/api/stats/${id}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(stats)
+});
+if (!updateResponse.ok) {
+    console.error(updateResponse.statusText);
+}
+}
+
+async function incrementHabitComplete() {
+  let response = await fetch("/api.stats");
+  stats = await response.json();
+  if (stats.length === 0) {
+    // No stats found, initialize them
+    console.log("No stats found. Initializing...");
+    const initResponse = await fetch("/api/stats/initialize", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (initResponse.ok) {
+        stats = await initResponse.json();
+        console.log("Stats initialized:", stats);
+    } else {
+        console.error("Failed to initialize stats:", initResponse.statusText);
+        return;
+    }
+} else {
+    stats = stats[0]; // Assuming stats is an array, take the first entry
+}
+let id = await stats.id;
+
+stats.habitsCompleted++;
+
+const updateResponse = await fetch(`/api/stats/${id}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(stats)
+});
+if (!updateResponse.ok) {
+    console.error(updateResponse.statusText);
+}
 }
 
 /*

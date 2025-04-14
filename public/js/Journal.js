@@ -312,8 +312,48 @@ window.onload = function () {
    */
   document.getElementById("save-notes").addEventListener("click", function () {
     saveNotes();
+    incrementNoteStat();
     playPencilAnimation();
   });
+
+  async function incrementNoteStat() {
+    let response = await fetch("/api.stats");
+    stats = await response.json();
+    if (stats.length === 0) {
+      // No stats found, initialize them
+      console.log("No stats found. Initializing...");
+      const initResponse = await fetch("/api/stats/initialize", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          }
+      });
+
+      if (initResponse.ok) {
+          stats = await initResponse.json();
+          console.log("Stats initialized:", stats);
+      } else {
+          console.error("Failed to initialize stats:", initResponse.statusText);
+          return;
+      }
+  } else {
+      stats = stats[0]; // Assuming stats is an array, take the first entry
+  }
+  let id = await stats.id;
+
+  stats.notesWritten++; // KEY DIFFERENCE
+
+  const updateResponse = await fetch(`/api/stats/${id}`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify(stats)
+  });
+  if (!updateResponse.ok) {
+      console.error(updateResponse.statusText);
+  }
+}
 
   /* ---------------------------
      5. PENCIL ANIMATION FUNCTION
