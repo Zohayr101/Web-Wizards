@@ -358,12 +358,23 @@ function setCalendar(offset) {
  * @param {number} lastDay - The number of days in the calendar period.
  * @param {string} dateText - The formatted date text for the calendar header.
  */
-function loadCalendar(weekday, lastDay, dateText) {
+async function loadCalendar(weekday, lastDay, dateText) {
   var calendarDateText = document.createElement('h2');
   calendarDateText.innerText = dateText;
 
   calendarHeader.innerHTML = "";
   calendarHeader.appendChild(calendarDateText);
+
+  try {
+    const response = await fetch("/api.events");
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    var events = await response.json();
+    console.log(events);
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
 
   calendarGrid.innerHTML = "";
   calendarLoopTime = new Date(calendarTime);
@@ -384,7 +395,11 @@ function loadCalendar(weekday, lastDay, dateText) {
 
       //example code for adding tasts to day (currently adding task icon
       //to current date)
-      if (currentDate.toDateString() === calendarLoopTime.toDateString()) {
+      var todayEvents = events.filter(function(event) {
+        eventDate = new Date(event.startDate);
+        return calendarLoopTime.toDateString() === eventDate.toDateString();
+      });
+      if (todayEvents.length > 0) {
         const taskDiv = document.createElement('div');
         taskDiv.className = "calendar-task";
 
