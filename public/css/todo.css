@@ -85,6 +85,10 @@
     transition: accent-color 0.5s ease; /* Smooth transition */
 }
 
+.late {
+    color: red;
+}
+
 /* Style for Task Lists */
 .task-list {
     width: 100%;
