@@ -99,8 +99,8 @@ module.exports.register = async server => {
 				}
 				const db = request.server.plugins.sql.client;
 				const userId = request.auth.credentials.profile.id;
-				const {startDate, startTime, endDate, endTime, title, description, complete, priority} = request.payload;
-				const res = await db.events.addEvent({userId, startDate, startTime, endDate, endTime, title, description, complete, priority});
+				const {startDate, startTime, endDate, endTime, title, description, complete, priority, category} = request.payload;
+				const res = await db.events.addEvent({userId, startDate, startTime, endDate, endTime, title, description, complete, priority, category});
 				return res.recordset[0];
 			} catch (err) {
 				console.log(err);
@@ -134,9 +134,9 @@ module.exports.register = async server => {
 				const db = request.server.plugins.sql.client;
 				const userId = request.auth.credentials.profile.id;
 				const {id} = request.params;
-				const {startDate, startTime, endDate, endTime, title, description, complete, priority} = request.payload;
+				const {startDate, startTime, endDate, endTime, title, description, complete, priority, category} = request.payload;
 
-				const res = await db.events.updateEvent({id, userId, startDate, startTime, endDate, endTime, title, description, complete, priority});
+				const res = await db.events.updateEvent({id, userId, startDate, startTime, endDate, endTime, title, description, complete, priority, category});
 				return res.recordset[0];
 			} catch (err) {
 				console.log(err);
