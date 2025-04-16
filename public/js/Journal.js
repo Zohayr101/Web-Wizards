@@ -11,7 +11,7 @@ window.onload = function () {
   /* ---------------------------
      1. TOGGLE BUTTONS: Journal vs. Notes
   ---------------------------- */
-  const journalBtn = document.getElementById("journal-btn");
+  const journalBtn = document.getElementById("journal-btn") ;
   const notesBtn = document.getElementById("notes-btn");
   const journalSection = document.getElementById("journal-section");
   const notesSection = document.getElementById("notes-section");
