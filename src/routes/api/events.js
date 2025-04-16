@@ -99,8 +99,8 @@ module.exports.register = async server => {
 				}
 				const db = request.server.plugins.sql.client;
 				const userId = request.auth.credentials.profile.id;
-				const {startDate, startTime, endDate, endTime, title, description, complete} = request.payload;
-				const res = await db.events.addEvent({userId, startDate, startTime, endDate, endTime, title, description, complete});
+				const {startDate, startTime, endDate, endTime, title, description, complete, priority} = request.payload;
+				const res = await db.events.addEvent({userId, startDate, startTime, endDate, endTime, title, description, complete, priority});
 				return res.recordset[0];
 			} catch (err) {
 				console.log(err);
@@ -134,9 +134,9 @@ module.exports.register = async server => {
 				const db = request.server.plugins.sql.client;
 				const userId = request.auth.credentials.profile.id;
 				const {id} = request.params;
-				const {startDate, startTime, endDate, endTime, title, description, complete} = request.payload;
+				const {startDate, startTime, endDate, endTime, title, description, complete, priority} = request.payload;
 
-				const res = await db.events.updateEvent({id, userId, startDate, startTime, endDate, endTime, title, description, complete});
+				const res = await db.events.updateEvent({id, userId, startDate, startTime, endDate, endTime, title, description, complete, priority});
 				return res.recordset[0];
 			} catch (err) {
 				console.log(err);
@@ -199,7 +199,7 @@ module.exports.register = async server => {
 				const userId = request.auth.credentials.profile.id;
 				const db = request.server.plugins.sql.client;
 				const res = await db.events.deleteEvent({id, userId});
-                    
+
 				return res.rowsAffected[0] === 1 ? h.response().code(204) : boom.notFound();
 			} catch (err) {
 				console.log(err);
