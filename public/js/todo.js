@@ -44,6 +44,8 @@ var calendarDisplay = "month";
  */
 const currentDate = new Date();
 currentDate.setHours(23, 59, 59, 999);
+const currentDateStart = new Date();
+currentDateStart.setHours(0, 0, 0, 0);
 
 /**
  * The current year.
@@ -63,55 +65,22 @@ const currentMonth = currentDate.getMonth();
  */
 const currentDay = currentDate.getDate();
 
-//const weekDate = new Date();
-//weekDate.setDate(currentDay + 7);
-//weekDate.setHours(23, 59, 59, 999);
+const weekDate = new Date();
+weekDate.setDate(currentDay + 7);
+weekDate.setHours(23, 59, 59, 999);
 
-//const monthDate = new Date();
-//monthDate.setDate(currentDay + 30);
-//monthDate.setHours(23, 59, 59, 999);
+const monthDate = new Date();
+monthDate.setDate(currentDay + 30);
+monthDate.setHours(23, 59, 59, 999);
 
-//temporary todo tasks until database is operational
-/*
 var widgetData = {
-  today: [
-    { name: "Task 1", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
-    { name: "Task 2", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
-    { name: "Task 3", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
-    { name: "Task 4", id: new Date().valueOf() + Math.random(), dueDate: currentDate, completed: false },
-  ],
-  week: [
-    { name: "Week Task 1", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
-    { name: "Week Task 2", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
-    { name: "Week Task 3", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
-    { name: "Week Task 4", id: new Date().valueOf() + Math.random(), dueDate: weekDate, completed: false },
-  ],
-  month: [
-    { name: "Month Task 1", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
-    { name: "Month Task 2", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
-    { name: "Month Task 3", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
-    { name: "Month Task 4", id: new Date().valueOf() + Math.random(), dueDate: monthDate, completed: false },
-  ],
+  today: [],
+  week: [],
+  month: [],
 
-  habits: [
-    {
-      name: "Did you drink water today?",
-      id: new Date().valueOf() + Math.random(),
-      completed: false,
-    },
-    {
-      name: "Did you exercise today?",
-      id: new Date().valueOf() + Math.random(),
-      completed: false,
-    },
-    {
-      name: "Did you do your XYZ today?",
-      id: new Date().valueOf() + Math.random(),
-      completed: false,
-    },
-  ],
+  habits: []
 };
-*/
+
 
 /**
  * Tracks the current index for widget pagination.
@@ -189,18 +158,24 @@ function addTask(event) {
 
   renderWidget(listId, 0);
 }
+*/
 
 // Widget Functions
 function renderWidget(id, offset) {
   const data = widgetData[id];
   widgetIndex[id] += offset;
 
-  const start = widgetIndex[id] * itemsPerPage[id];
+  let start = widgetIndex[id] * itemsPerPage[id];
+  if (start != 0 && start > widgetData[id].length - 1) {
+    start -= itemsPerPage[id];
+  }
+
   const end = start + itemsPerPage[id];
   const pageData = data.slice(start, end);
-
+  
   const backButton = document.getElementById(id + "-back");
   const forwardButton = document.getElementById(id + "-forward");
+
   if (start === 0) {
     backButton.disabled = true;
   } else {
@@ -220,51 +195,165 @@ function renderWidget(id, offset) {
   }
 }
 
+//=========================
+// MAIN FUNCTION FOR 
+// CREATING LIST ITEMS / EDITING LIST ITEMS
+//=========================
+
+/**
+ * Creates a list item element representing a task event.
+ *
+ * @param {Object} event - The task event object.
+ * @param {string|number} event.id - The unique identifier for the event.
+ * @param {string} event.category - The category of the event.
+ * @param {number} event.priority - The priority level of the event (0 for low, 1 for normal, 2 for high).
+ * @param {boolean} event.complete - The completion status of the event.
+ * @param {Date|string} event.startDate - The start date/time of the event.
+ * @param {string} event.title - The title of the event.
+ * @returns {HTMLLIElement} The list item element that represents the task.
+ */
+
 function updateTasks(listId, taskList) {
   listTarget = document.getElementById(listId);
   listTarget.innerHTML = "";
 
-  taskList.forEach((task) => {
+  taskList.forEach((event) => {
     // Create <li>
+    const li = document.createElement("li");
+    li.dataset.eventId = event.id;
+    li.dataset.category = event.category;
+    li.dataset.priority = event.priority;
+    li.dataset.startDate = event.startDate;
+    
+    //code for checkbox
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
+    checkbox.checked = event.complete;
+    checkbox.addEventListener("click", () => {
+      toggleComplete(event, li, checkbox);
+    });
+  
+    //formattting date to short date
+    const formatDate = new Intl.DateTimeFormat("en-US", {
+      month: "numeric",
+      day: "numeric",
+      year: "numeric",
+    });
+    const formattedDate = formatDate.format(event.startDate);
 
+    if (event.startDate < currentDateStart) {
+      li.className = "late";
+    }
+    
+    let priorityFlag;
+    switch (event.priority) {
+      case 0: priorityFlag = "💤";
+        break;
+      case 1: priorityFlag = "";
+        break;
+      case 2: priorityFlag = "⚠";
+        break;
+      default: priorityFlag = "";
+        break;
+    };
+  
+    //put title and formatted date onto span
     const span = document.createElement("span");
-    const taskDate = new Date(task.dueDate);
-    span.textContent = `${task.name} (Due: ${taskDate.toLocaleDateString()})`;
-
-    const li = document.createElement("li");
+    span.textContent = `${priorityFlag} ${event.title} - ${formattedDate}`;
+  
+    //code for edit button
+    const editButton = document.createElement("button");
+    editButton.textContent = "✏";
+    editButton.addEventListener("click", () => {
+      openEditWindow(event);
+    });
+  
+    /*//code for delete button
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "🗑";
+    deleteButton.addEventListener("click", async () => {
+      if (confirm(`Delete this item? "${event.title}"`)) {
+        const success = await deleteEvent(event.id);
+        if (success) {
+          li.remove();
+        } else {
+          alert("error deleting event from sql server");
+        }
+      }
+    }); */
+  
     li.appendChild(checkbox);
     li.appendChild(span);
+    li.appendChild(editButton);
+    //li.appendChild(deleteButton);
 
     listTarget.appendChild(li);
   });
 }
 
 // Function to render habits in the Habit Tracker widget
+/**
+ * Creates a list item element representing the given habit.
+ *
+ * This function builds an <li> element with:
+ * - data attributes for habit id, title, and frequency,
+ * - a checkbox that toggles the habit's completion status,
+ * - a <span> element that displays the habit title and its streak info,
+ * - an edit button that opens the habit edit window.
+ *
+ * @param {Object} habit - The habit data.
+ * @param {(number|string)} habit.id - The unique identifier for the habit.
+ * @param {string} habit.title - The title of the habit.
+ * @param {string} habit.frequency - The frequency of the habit (e.g., "daily", "weekly", "monthly").
+ * @param {boolean} habit.complete - Indicates whether the habit is complete.
+ * @param {number} habit.daysComplete - The current streak count for completing the habit.
+ * @returns {HTMLElement} The <li> element representing the habit.
+ */
+
 function updateHabits(habitsArray) {
   habitsList.innerHTML = "";
 
   habitsArray.forEach((habit) => {
-    const span = document.createElement("span");
-    span.textContent = habit.name;
-
+    const li = document.createElement("li");
+    li.dataset.habitId = habit.id;
+    li.dataset.title = habit.title;
+    li.dataset.frequency = habit.frequency;
+  
+      // Create checkbox element for habit completion tracking.
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.checked = habit.completed;
-    checkbox.addEventListener("change", () => toggleHabit(habit.id));
-
-    if (habit.completed) {
-      checkbox.checked = true;
-      span.style.textDecoration = "line-through";
-      span.style.color = "#777"; // Gray out completed habits
-    } else {
-      checkbox.checked = false;
-    }
-
-    const li = document.createElement("li");
+    checkbox.checked = habit.complete;
+    checkbox.addEventListener("click", () => {
+      habitComplete(habit, li, checkbox);
+    });
+  
+      // Create span element to show habit details based on frequency.
+    const span = document.createElement("span");
+    switch (habit.frequency.toLowerCase()) {
+      case "daily": 
+        span.textContent =  `Did you ${habit.title} today? Days streak: ${habit.daysComplete}`;
+        break;
+      case "weekly":
+        span.textContent = `Did you ${habit.title} this week? Days streak: ${habit.daysComplete}`;
+        break;
+      case "monthly":
+        span.textContent = `Did you ${habit.title} this month? Days streak: ${habit.daysComplete}`;
+        break;
+      default:
+        span.textContent = `Did you ${habit.title}? Days streak: ${habit.daysComplete}`;
+        break;
+    };
+    
+    // Create edit button to open the habit editing window.
+    const editButton = document.createElement("button");
+    editButton.textContent = "🖊";
+    editButton.addEventListener("click", () => {
+      openHabitEdit(habit, li);
+    });
+  
     li.appendChild(checkbox);
     li.appendChild(span);
+    li.appendChild(editButton);
 
     habitsList.appendChild(li);
   });
@@ -279,7 +368,6 @@ function toggleHabit(habitId) {
 
   localStorage.setItem("habits", JSON.stringify(widgetData["habits"]));
 }
-*/
 
 /**
  * Sets the layout for the calendar based on the saved layout in local storage.
@@ -392,15 +480,13 @@ async function loadCalendar(weekday, lastDay, dateText) {
       dayNumberSpan.textContent = calendarLoopTime.getDate();
       dayCellDiv.appendChild(dayNumberSpan);
 
-      //example code for adding tasts to day (currently adding task icon
-      //to current date)
-      var todayEvents = events.filter(function(event) {
-        eventDate = new Date(event.startDate);
-        eventDate.setDate(eventDate.getDate() + 1);
+      let todayEvents = events.filter(function(event) {
+        parts = event.startDate.split('T')[0];
+        parts = parts.split('-');
+        var eventDate = new Date(parts[0], parts[1] - 1, parts[2]); 
         return calendarLoopTime.toDateString() === eventDate.toDateString();
       });
       if (todayEvents.length > 0) {
-        console.log(todayEvents[0].startDate)
         const taskDiv = document.createElement('div');
         taskDiv.className = "calendar-task";
 
@@ -422,20 +508,49 @@ async function loadCalendar(weekday, lastDay, dateText) {
  * - Loads motivational quotes, applies the saved theme, layout, and font.
  * - (Commented code is present to load and render tasks from local storage.)
  */
+async function initPages() {
+  await getTasks();
+  await getHabits();
+
+  let pages = ["today", "week", "month", "habits"];
+  pages.forEach(page => {
+    renderWidget(page, 0);
+  });
+  
+  setLayout();
+}
+
+async function getTasks() {
+  await getAllTasks().then(events => {
+    events.forEach(event => {
+      dateStr = event.startDate.split("T")[0];
+      parts = dateStr.split('-');
+      var dueDate = new Date(parts[0], parts[1] - 1, parts[2]);
+
+      event.startDate = dueDate;
+    
+      if (dueDate <= currentDate) {
+        widgetData["today"].push(event);
+      } else if (dueDate <= weekDate) {
+        widgetData["week"].push(event);
+      } else if (dueDate <= monthDate) {
+        widgetData["month"].push(event);
+      }
+    });
+  })
+}
+
+async function getHabits() {
+  await getAllHabits().then(habits => {
+    habits.forEach(habit => {
+      widgetData["habits"].push(habit);
+    });
+  });
+}
+
 window.addEventListener("load", () => {
   // Load Tasks
-  /*savedPages = ["today", "week", "month", "habits"];
-  savedPages.forEach((page) => {
-    const savedTasks = localStorage.getItem(page);
-    if (savedTasks) {
-      // Parse the JSON string back into an array of tasks
-      widgetData[page] = JSON.parse(savedTasks);
-    }
-
-    renderWidget(page, 0);
-  });*/
-
-  setLayout();
+  initPages();
 
   // Initialize quote cycling on window load
   // Start cycling motivational quotes

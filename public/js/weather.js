@@ -199,6 +199,7 @@ function fetchForecast(url) {
 document.getElementById('getWeatherBtn').addEventListener('click', () => {
   const city = document.getElementById('citySelect').value;
   fetchWeather(city);
+  incrementWeatherChecks();
 });
 
 /**
@@ -211,6 +212,7 @@ document.getElementById('getLocationWeatherBtn').addEventListener('click', () =>
       (position) => {
         const { latitude: lat, longitude: lon } = position.coords;
         fetchWeatherByCoords(lat, lon);
+        incrementWeatherChecks();
       },
       () => {
         alert("Unable to retrieve your location. Please enable location services.");
@@ -227,4 +229,44 @@ document.getElementById('getLocationWeatherBtn').addEventListener('click', () =>
  */
 window.addEventListener('load', () => {
   fetchWeather(document.getElementById('citySelect').value);
+  incrementWeatherChecks();
 });
+
+async function incrementWeatherChecks() {
+  let response = await fetch("/api.stats");
+  stats = await response.json();
+  if (stats.length === 0) {
+    // No stats found, initialize them
+    console.log("No stats found. Initializing...");
+    const initResponse = await fetch("/api/stats/initialize", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (initResponse.ok) {
+        stats = await initResponse.json();
+        console.log("Stats initialized:", stats);
+    } else {
+        console.error("Failed to initialize stats:", initResponse.statusText);
+        return;
+    }
+} else {
+    stats = stats[0]; // Assuming stats is an array, take the first entry
+}
+let id = await stats.id;
+
+stats.weatherChecks++;
+
+const updateResponse = await fetch(`/api/stats/${id}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(stats)
+});
+if (!updateResponse.ok) {
+    console.error(updateResponse.statusText);
+}
+}

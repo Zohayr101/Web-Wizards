@@ -95,6 +95,7 @@ window.addEventListener("load", () => {
         setLayout(layout);
         document.getElementById("selected-layout").removeAttribute("id");
         layoutSelection.id = "selected-layout";
+        incrementSettingsChanged();
       });
 
       layoutMenu.appendChild(layoutSelection);
@@ -136,6 +137,7 @@ window.addEventListener("load", () => {
         setTheme(theme);
         document.getElementById("selected-theme").removeAttribute("id");
         themeSelection.id = "selected-theme";
+        incrementSettingsChanged();
       });
 
       themeMenu.appendChild(themeSelection);
@@ -161,6 +163,7 @@ window.addEventListener("load", () => {
         setFont(font);
         document.getElementById("selected-font").removeAttribute("id");
         fontSelection.id = "selected-font";
+        incrementSettingsChanged();
       });
 
       fontsMenu.appendChild(fontSelection);
@@ -220,6 +223,7 @@ function quotesLoad() {
     }
     option.addEventListener("change", () => {
       updateQuotes();
+      incrementSettingsChanged();
     });
   }
 }
@@ -299,5 +303,44 @@ function shuffleArray(array) {
   
     // Set interval to change quotes every 5 seconds
     setInterval(showNextQuote, 5000);
+  }
+
+  async function incrementSettingsChanged() {
+    let response = await fetch("/api.stats");
+    stats = await response.json();
+    if (stats.length === 0) {
+      // No stats found, initialize them
+      console.log("No stats found. Initializing...");
+      const initResponse = await fetch("/api/stats/initialize", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          }
+      });
+  
+      if (initResponse.ok) {
+          stats = await initResponse.json();
+          console.log("Stats initialized:", stats);
+      } else {
+          console.error("Failed to initialize stats:", initResponse.statusText);
+          return;
+      }
+  } else {
+      stats = stats[0]; // Assuming stats is an array, take the first entry
+  }
+  let id = await stats.id;
+  
+  stats.settingsChanged++;
+  
+  const updateResponse = await fetch(`/api/stats/${id}`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify(stats)
+  });
+  if (!updateResponse.ok) {
+      console.error(updateResponse.statusText);
+  }
   }
   

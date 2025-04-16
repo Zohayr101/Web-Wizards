@@ -146,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       thumbsIcon.textContent = "👍";
       thumbsIcon.setAttribute("data-hover", "like?");
       thumbsIcon.addEventListener("click", e => {
+        incrementMovieLikes();
         e.stopPropagation();
         if (thumbsIcon.classList.contains("liked")) {
           thumbsIcon.classList.remove("liked");
@@ -369,3 +370,42 @@ document.addEventListener("DOMContentLoaded", () => {
       moviesContainer.innerHTML = "<p>Failed to load movie data.</p>";
     });
 });
+
+async function incrementMovieLikes() {
+  let response = await fetch("/api.stats");
+  stats = await response.json();
+  if (stats.length === 0) {
+    // No stats found, initialize them
+    console.log("No stats found. Initializing...");
+    const initResponse = await fetch("/api/stats/initialize", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (initResponse.ok) {
+        stats = await initResponse.json();
+        console.log("Stats initialized:", stats);
+    } else {
+        console.error("Failed to initialize stats:", initResponse.statusText);
+        return;
+    }
+} else {
+    stats = stats[0]; // Assuming stats is an array, take the first entry
+}
+let id = await stats.id;
+
+stats.movieLikes++;
+
+const updateResponse = await fetch(`/api/stats/${id}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(stats)
+});
+if (!updateResponse.ok) {
+    console.error(updateResponse.statusText);
+}
+}

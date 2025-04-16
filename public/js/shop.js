@@ -17,6 +17,44 @@ const layouts = window.LAYOUTS;
 const fonts = window.FONTS;
 
 /**
+ * Available shop items
+ * @constant {Object}
+ */
+const items = {
+    'hat1': "media/hat1.png", // path to hat image
+    'hat2': "media/hat2.png",
+    'hat3': "media/hat3.png",
+    'hat4': "media/hat4.png",
+    'hat5': "media/hat5.png",
+    'theme1': "media/theme1.png",
+    'theme2': "media/theme2.png",
+    'theme3': "media/theme3.png",
+    'theme4': "media/theme4.png",
+    'quote1': window.QUOTES_PRESIDENTIAL,
+    'quote2': window.QUOTES_TECH_CEO,
+    'quote3': window.QUOTES_WALL_STREET,
+    'quote4': window.QUOTES_CELEBRITY,
+}
+
+/**
+ * Value of each action in gold amount
+ * @constant {Object}
+ */
+const actionWorth = {
+    'pomoCompleted': 10,
+    'pomoTimeSpentMinutes': 1,
+    'tasksCompleted': 5,
+    'habitsCompleted': 5,
+    'longestHabitStreak': 10,
+    'stocksChecked': 1,
+    'weatherChecks': 1,
+    'movieLikes': 1,
+    'settingsChanged': 1,
+    'journalEntriesWritten': 3,
+    'notesWritten': 2,
+}
+
+/**
  * Initializes the app after the window has fully loaded.
  *
  * This event listener performs the following tasks:
@@ -29,53 +67,7 @@ const fonts = window.FONTS;
  * @listens window#load
  */
 window.addEventListener("load", async () => {
-    // Fetch user stats
-    try {
-        let response = await fetch("/api.stats");
-
-        if (response.ok) {
-            let stats = await response.json();
-
-            if (stats.length === 0) {
-                // No stats found, initialize them
-                console.log("No stats found. Initializing...");
-                const initResponse = await fetch("/api/stats/initialize", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-
-                if (initResponse.ok) {
-                    stats = await initResponse.json();
-                    console.log("Stats initialized:", stats);
-                } else {
-                    console.error("Failed to initialize stats:", initResponse.statusText);
-                    return;
-                }
-            } else {
-                stats = stats[0]; // Assuming stats is an array, take the first entry
-            }
-
-            // Populate stats fields
-            document.querySelector(".stat:nth-child(1)").textContent = `Pomodoros Completed: ${stats.pomoCompleted}`;
-            document.querySelector(".stat:nth-child(2)").textContent = `Tasks Completed: ${stats.tasksCompleted}`;
-            document.querySelector(".stat:nth-child(3)").textContent = `Habits Completed: ${stats.habitsCompleted}`;
-            document.querySelector(".stat:nth-child(4)").textContent = `Journal Entries Written: ${stats.journalEntriesWritten}`;
-            document.querySelector(".stat:nth-child(5)").textContent = `Notes Written: ${stats.notesWritten}`;
-            document.querySelector(".stat:nth-child(6)").textContent = `Movies Liked: ${stats.movieLikes}`;
-            document.querySelector(".stat:nth-child(7)").textContent = `Longest Habit Streak: ${stats.longestHabitStreak}`;
-            document.querySelector(".stat:nth-child(8)").textContent = `Weather Checked: ${stats.weatherChecks}`;
-            document.querySelector(".stat:nth-child(9)").textContent = `Stocks Viewed: ${stats.stocksChecked}`;
-            document.querySelector(".stat:nth-child(10)").textContent = `Settings Changed: ${stats.settingsChanged}`;
-            document.querySelector(".stat:nth-child(11)").textContent = `Gold Earned: ${stats.goldEarned}`;
-            document.querySelector(".stat:nth-child(12)").textContent = `Gold Spent: ${stats.goldSpent}`;
-        } else {
-            console.error("Failed to fetch stats:", response.statusText);
-        }
-    } catch (error) {
-        console.error("Error fetching stats:", error);
-    }
+    updateStats();
 
     // Load quotes
     let checkedQuotes = localStorage.getItem('checkedQuotes')?.split(',') || [];
@@ -150,4 +142,213 @@ function cycleQuotes() {
 
     // Set interval to change quotes every 5 seconds
     setInterval(showNextQuote, 5000);
+}
+
+async function updateGold(stats) {
+    let response = await fetch("/api.stats");
+    stats = await response.json();
+    if (stats.length === 0) {
+        // No stats found, initialize them
+        console.log("No stats found. Initializing...");
+        const initResponse = await fetch("/api/stats/initialize", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (initResponse.ok) {
+            stats = await initResponse.json();
+            console.log("Stats initialized:", stats);
+        } else {
+            console.error("Failed to initialize stats:", initResponse.statusText);
+            return;
+        }
+    } else {
+        stats = stats[0]; // Assuming stats is an array, take the first entry
+    }
+    let id = await stats.id;
+
+    // Calculate total gold earned
+    let totalGold = 500; // each user starts with 500 gold
+    for (let key in actionWorth) {
+        if (stats[key]) {
+            totalGold += stats[key] * actionWorth[key];
+        }
+    }
+
+    stats.goldEarned = totalGold;
+    stats.goldAmount = totalGold - stats.goldSpent;
+
+    // Update the DOM element displaying the gold amount
+    document.getElementById("balance").textContent = `Gold Balance: ${stats.goldAmount}`;
+
+    const updateResponse = await fetch(`/api/stats/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(stats)
+    });
+    if (!updateResponse.ok) {
+        console.error(updateResponse.statusText);
+    }
+}
+
+async function buyItem(item, price) {
+    let response = await fetch("/api.stats");
+    stats = await response.json();
+    if (stats.length === 0) {
+        // No stats found, initialize them
+        console.log("No stats found. Initializing...");
+        const initResponse = await fetch("/api/stats/initialize", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (initResponse.ok) {
+            stats = await initResponse.json();
+            console.log("Stats initialized:", stats);
+        } else {
+            console.error("Failed to initialize stats:", initResponse.statusText);
+            return;
+        }
+    } else {
+        stats = stats[0]; // Assuming stats is an array, take the first entry
+    }
+    let id = await stats.id;
+
+    let currentGold = stats.goldEarned - stats.goldSpent;
+    //console.log(currentGold);
+    if (currentGold < price) {
+        alert("Not enough gold!");
+        return;
+    }
+    stats.goldSpent += price;
+    instantiateItem(item);
+
+    const updateResponse = await fetch(`/api/stats/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(stats)
+    });
+    if (!updateResponse.ok) {
+        console.error(updateResponse.statusText);
+    }
+    updateGold();
+    updateStats();
+}
+
+function instantiateItem(item) {
+    console.log(`Successfully bought ${item}`);
+}
+
+async function updateStats() {
+    // Fetch user stats
+    try {
+        let response = await fetch("/api.stats");
+
+        if (response.ok) {
+            let stats = await response.json();
+
+            if (stats.length === 0) {
+                // No stats found, initialize them
+                console.log("No stats found. Initializing...");
+                const initResponse = await fetch("/api/stats/initialize", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (initResponse.ok) {
+                    stats = await initResponse.json();
+                    console.log("Stats initialized:", stats);
+                } else {
+                    console.error("Failed to initialize stats:", initResponse.statusText);
+                    return;
+                }
+            } else {
+                stats = stats[0]; // Assuming stats is an array, take the first entry
+            }
+
+            // Update gold values
+            updateGold();
+
+            // Populate stats fields
+            document.querySelector(".stat:nth-child(1)").textContent = `Pomodoros Completed: ${stats.pomoCompleted}`;
+            document.querySelector(".stat:nth-child(2)").textContent = `Tasks Completed: ${stats.tasksCompleted}`;
+            document.querySelector(".stat:nth-child(3)").textContent = `Habits Completed: ${stats.habitsCompleted}`;
+            document.querySelector(".stat:nth-child(4)").textContent = `Journal Entries Written: ${stats.journalEntriesWritten}`;
+            document.querySelector(".stat:nth-child(5)").textContent = `Notes Written: ${stats.notesWritten}`;
+            document.querySelector(".stat:nth-child(6)").textContent = `Movies Liked: ${stats.movieLikes}`;
+            document.querySelector(".stat:nth-child(7)").textContent = `Longest Habit Streak: ${stats.longestHabitStreak}`;
+            document.querySelector(".stat:nth-child(8)").textContent = `Weather Checked: ${stats.weatherChecks}`;
+            document.querySelector(".stat:nth-child(9)").textContent = `Stocks Viewed: ${stats.stocksChecked}`;
+            document.querySelector(".stat:nth-child(10)").textContent = `Settings Changed: ${stats.settingsChanged}`;
+            document.querySelector(".stat:nth-child(11)").textContent = `Gold Earned: ${stats.goldEarned}`;
+            document.querySelector(".stat:nth-child(12)").textContent = `Gold Spent: ${stats.goldSpent}`;
+        } else {
+            console.error("Failed to fetch stats:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error fetching stats:", error);
+    }
+}
+
+async function setGold(amount) {
+
+    let response = await fetch("/api.stats");
+    stats = await response.json();
+    if (stats.length === 0) {
+        // No stats found, initialize them
+        console.log("No stats found. Initializing...");
+        const initResponse = await fetch("/api/stats/initialize", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (initResponse.ok) {
+            stats = await initResponse.json();
+            console.log("Stats initialized:", stats);
+        } else {
+            console.error("Failed to initialize stats:", initResponse.statusText);
+            return;
+        }
+    } else {
+        stats = stats[0]; // Assuming stats is an array, take the first entry
+    }
+    let id = await stats.id;
+
+    // Calculate total gold earned
+    let totalGold = 0;
+    for (let key in actionWorth) {
+        if (stats[key]) {
+            totalGold += stats[key] * actionWorth[key];
+        }
+    }
+
+    stats.goldEarned = amount;
+    stats.goldSpent = 0;
+    stats.goldAmount = totalGold - stats.goldSpent;
+
+    // Update the DOM element displaying the gold amount
+    document.getElementById("balance").textContent = `Gold Balance: ${stats.goldAmount}`;
+
+    const updateResponse = await fetch(`/api/stats/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(stats)
+    });
+    if (!updateResponse.ok) {
+        console.error(updateResponse.statusText);
+    }
 }
