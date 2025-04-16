@@ -4,160 +4,25 @@
 // CONSTANTS
 //=========================
 
-/**
- * The end of today's date set to 23:59:59:999.
- * @type {Date}
- */
-const todayDate = new Date();
-todayDate.setHours(23, 59, 59, 999);
-
-/**
- * The numeric day for today.
- * @type {number}
- */
-const today = todayDate.getDate();
-
-/**
- * The date object representing one week from today, with time set to 23:59:59:999.
- * @type {Date}
- */
-const weekDate = new Date();
-weekDate.setDate(today + 7);
-weekDate.setHours(23, 59, 59, 999);
-
-/**
- * The date object representing approximately one month (30 days) from today, with time set to 23:59:59:999.
- * @type {Date}
- */
-const monthDate = new Date();
-monthDate.setDate(today + 30);
-monthDate.setHours(23, 59, 59, 999);
-
-
-//=========================
-// MAIN FUNCTION FOR 
-// CREATING LIST ITEMS / EDITING LIST ITEMS
-//=========================
-
-/**
- * Creates a list item element representing a task event.
- *
- * @param {Object} event - The task event object.
- * @param {string|number} event.id - The unique identifier for the event.
- * @param {string} event.category - The category of the event.
- * @param {number} event.priority - The priority level of the event (0 for low, 1 for normal, 2 for high).
- * @param {boolean} event.complete - The completion status of the event.
- * @param {Date|string} event.startDate - The start date/time of the event.
- * @param {string} event.title - The title of the event.
- * @returns {HTMLLIElement} The list item element that represents the task.
- */
-function createTaskListItem(event) {
-  
-  const li = document.createElement("li");
-  li.dataset.eventId = event.id;
-  li.dataset.category = event.category;
-  li.dataset.priority = event.priority;
-
-  //code for checkbox
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.checked = event.complete;
-  checkbox.addEventListener("click", () => {
-    toggleComplete(event, li, checkbox);
-  });
-
-  //formattting date to short date
-  const formatDate = new Intl.DateTimeFormat("en-US", {
-    month: "numeric",
-    day: "numeric",
-    year: "numeric",
-  });
-  const rawDate = new Date(event.startDate);
-  rawDate.setDate(rawDate.getDate() + 1);
-  const formattedDate = formatDate.format(rawDate);
-
-  let priorityFlag;
-  switch (event.priority) {
-    case 0: priorityFlag = "💤";
-      break;
-    case 1: priorityFlag = "";
-      break;
-    case 2: priorityFlag = "⚠";
-      break;
-    default: priorityFlag = "";
-      break;
-  };
-
-  //put title and formatted date onto span
-  const span = document.createElement("span");
-  span.textContent = `${priorityFlag} ${event.title} - ${formattedDate}`;
-
-  //code for edit button
-  const editButton = document.createElement("button");
-  editButton.textContent = "✏";
-  editButton.addEventListener("click", () => {
-    openEditWindow(event, li);
-  });
-
-  /*//code for delete button
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "🗑";
-  deleteButton.addEventListener("click", async () => {
-    if (confirm(`Delete this item? "${event.title}"`)) {
-      const success = await deleteEvent(event.id);
-      if (success) {
-        li.remove();
-      } else {
-        alert("error deleting event from sql server");
-      }
-    }
-  }); */
-
-  li.appendChild(checkbox);
-  li.appendChild(span);
-  li.appendChild(editButton);
-  //li.appendChild(deleteButton);
-
-  return li;
-}
-
 
 //=========================
 // GET TASKS
 //=========================
-
-/**
- * Fetches task events from the server when the DOM is fully loaded, creates corresponding list items,
- * and appends them to their respective lists based on due dates.
- */
-document.addEventListener("DOMContentLoaded", async () => {
+async function getAllTasks() {
   try {
     const response = await fetch("/api.events");
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
-    const events = await response.json();
-    const todayTaskList = document.getElementById("today-list");
-    const weekTaskList = document.getElementById("week-list");
-    const monthTaskList = document.getElementById("month-list");
 
-    events.forEach(event => {
-      const li = createTaskListItem(event);
-      const dueDate = new Date(event.startDate);
-
-      if (dueDate.getTime() <= todayDate.getTime()) {
-        todayTaskList.appendChild(li);
-      } else if (dueDate.getTime() <= weekDate.getTime()) {
-        weekTaskList.appendChild(li);
-      } else if (dueDate.getTime() <= monthDate.getTime()) {
-        monthTaskList.appendChild(li);
-      }
-    });
+    var events = await response.json();
   } catch (error) {
     console.error("Fetch error:", error);
+    return null;
   }
-});
 
+  return events;
+}
 
 //=========================
 // ADD TASK
@@ -181,7 +46,7 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
   const dueDate = document.getElementById("task-due-date").value;
   const taskCategory = document.getElementById("task-category").value;
   const taskPriority = parseInt(document.getElementById("add-task-priority").value, 10);
-
+  
   const taskData = {
     title: taskName,
     startDate: dueDate,
@@ -189,8 +54,6 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
     category: taskCategory,
     priority: taskPriority
   };
-
-  console.log(taskData);
 
   closeTaskWindow();
   document.getElementById("task-name").value = "";
@@ -202,37 +65,42 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
     const response = await fetch("/api/events", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(taskData)
+      body: JSON.stringify(taskData),
     });
 
-    if(!response.ok) {
+    if (!response.ok) {
       throw new Error("error: api post error");
     }
 
-    var newTask = await response.json();
   } catch (error) {
-      console.error("API error:", error);
-  }
-  
-  const todayTaskList = document.getElementById("today-list");
-  const weekTaskList = document.getElementById("week-list");
-  const monthTaskList = document.getElementById("month-list");
-
-  const li = createTaskListItem(newTask);
-
-  const newDate = new Date(taskData.startDate);
-  newDate.setDate(newDate.getDate() + 1);
-
-  if (newDate.getTime() <= todayDate.getTime()) {
-    todayTaskList.appendChild(li);
-  } else if (newDate.getTime() <= weekDate.getTime()) {
-    weekTaskList.appendChild(li);
-  } else if (newDate.getTime() <= monthDate.getTime()) {
-    monthTaskList.appendChild(li);
+    console.error("API error: ", error);
+    return;
   }
 
+  parts = taskData.startDate.split('-');
+  var newDate = new Date(parts[0], parts[1] - 1, parts[2]);
+
+  let listId;
+  if (newDate <= currentDate) {
+    listId = "today";
+  } else if (newDate <= weekDate) {
+    listId = "week";
+  } else if (newDate <= monthDate) {
+    listId = "month";
+  } else {
+    return;
+  }
+
+  tasks = widgetData[listId];
+  // Push into the array
+  // Update the lists with the new task
+  taskData.startDate = newDate;
+  tasks.push(taskData);
+  tasks.sort((a, b) => a.startDate - b.startDate);
+
+  renderWidget(listId, 0);
   setLayout();
 });
 
@@ -246,11 +114,13 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
  * @param {Object} event - The task event object.
  * @param {HTMLElement} li - The list item element representing the task.
  */
-function openEditWindow(event, li) {
+function openEditWindow(event) {
   const editTaskWindow = document.getElementById("edit-task");
   editTaskWindow.style.display = "block";
+  console.log(event);
   editTaskWindow.dataset.eventId = event.id;
   editTaskWindow.dataset.title = event.title;
+  editTaskWindow.dataset.startDate = event.startDate;
   
   //new fields
   editTaskWindow.dataset.category = event.category;
@@ -271,7 +141,6 @@ function openEditWindow(event, li) {
   editTaskDueDate.value = new Date(event.startDate).toISOString().split("T")[0];
   editTaskCategory.value = event.category;
   editTaskPriority.value = event.priority;
-
 }
 
 /**
@@ -437,20 +306,39 @@ deleteButton.addEventListener("click", async () => {
   const eventTitle = document.getElementById("edit-task").dataset.title;
   const li = document.querySelector(`li[data-event-id="${eventId}"]`);
 
+  let eventDate = document.getElementById("edit-task").dataset.startDate;
 
-    if (confirm(`Delete this item? "${eventTitle}"`)) {
-      const success = await deleteEvent(eventId);
-      if (success) {
-        if(li) {
-          li.remove();
+  if (confirm(`Delete this item? "${eventTitle}"`)) {
+    closeEditWindow();
 
+    const success = await deleteEvent(eventId);
+    if (success) {
+      if(li) {
+        li.remove();
+
+        eventDate = new Date(eventDate);
+        if (eventDate <= currentDate) {
+          taskId = "today";
+        } else if (eventDate <= weekDate) {
+          taskId = "week";
+        } else if (eventDate <= monthDate) {
+          taskId = "month";
+        } else {
+          return;
         }
-        closeEditWindow();
+
+        removeIndx = widgetData[taskId].findIndex(task => task.id == eventId);
+        if (removeIndx > -1) {
+          widgetData[taskId].splice(removeIndx, 1);
+        }
         
-      } else {
-        alert("error deleting event from sql server");
+        renderWidget(taskId, 0);
       }
+      
+    } else {
+      alert("error deleting event from sql server");
     }
+  }
 });
 
 /**

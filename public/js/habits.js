@@ -6,68 +6,6 @@
 //=========================
 
 
-/**
- * Creates a list item element representing the given habit.
- *
- * This function builds an <li> element with:
- * - data attributes for habit id, title, and frequency,
- * - a checkbox that toggles the habit's completion status,
- * - a <span> element that displays the habit title and its streak info,
- * - an edit button that opens the habit edit window.
- *
- * @param {Object} habit - The habit data.
- * @param {(number|string)} habit.id - The unique identifier for the habit.
- * @param {string} habit.title - The title of the habit.
- * @param {string} habit.frequency - The frequency of the habit (e.g., "daily", "weekly", "monthly").
- * @param {boolean} habit.complete - Indicates whether the habit is complete.
- * @param {number} habit.daysComplete - The current streak count for completing the habit.
- * @returns {HTMLElement} The <li> element representing the habit.
- */
-function createHabitListItem(habit) {
-  const li = document.createElement("li");
-  li.dataset.habitId = habit.id;
-  li.dataset.title = habit.title;
-  li.dataset.frequency = habit.frequency;
-
-    // Create checkbox element for habit completion tracking.
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.checked = habit.complete;
-  checkbox.addEventListener("click", () => {
-    habitComplete(habit, li, checkbox);
-  });
-
-    // Create span element to show habit details based on frequency.
-  const span = document.createElement("span");
-  switch (habit.frequency.toLowerCase()) {
-    case "daily": 
-      span.textContent =  `Did you ${habit.title} today? Days streak: ${habit.daysComplete}`;
-      break;
-    case "weekly":
-      span.textContent = `Did you ${habit.title} this week? Days streak: ${habit.daysComplete}`;
-      break;
-    case "monthly":
-      span.textContent = `Did you ${habit.title} this month? Days streak: ${habit.daysComplete}`;
-      break;
-    default:
-      span.textContent = `Did you ${habit.title}? Days streak: ${habit.daysComplete}`;
-      break;
-  };
-  
-  // Create edit button to open the habit editing window.
-  const editButton = document.createElement("button");
-  editButton.textContent = "🖊";
-  editButton.addEventListener("click", () => {
-    openHabitEdit(habit, li);
-  });
-
-  li.appendChild(checkbox);
-  li.appendChild(span);
-  li.appendChild(editButton);
-
-  return li;
-}
-
 
 //=========================
 // GET HABITS
@@ -78,26 +16,22 @@ function createHabitListItem(habit) {
  * Fetches habit data from the API endpoint "/api.habits" and appends each habit as a list item
  * into the element with the id "habits-list".
  *
- * @async
- * @listens DOMContentLoaded
  */
-document.addEventListener("DOMContentLoaded", async () => {
+async function getAllHabits() {
   try {
     const response = await fetch("/api.habits");
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
-    const habits = await response.json();
-    const habitsList = document.getElementById("habits-list");
 
-    habits.forEach((habit) => {
-      const li = createHabitListItem(habit);
-      habitsList.appendChild(li);
-    });
+    var habits = await response.json();
   } catch (error) {
     console.error("Fetch error:", error);
+    return null;
   }
-});
+
+  return habits;
+}
 
 
 //=========================
@@ -147,6 +81,10 @@ document
       habitStreak: 0
     };
 
+    closeHabitWindow();
+    document.getElementById("habit-name").value = "";
+    document.getElementById("habit-frequency").value = "Daily";
+
     try {
       const response = await fetch("/api/habits", {
         method: "POST",
@@ -159,19 +97,14 @@ document
       if (!response.ok) {
         throw new Error("error: api post error");
       }
-
-      const newHabit = await response.json();
-      const habitsList = document.getElementById("habits-list");
-      const li = createHabitListItem(newHabit);
-
-      habitsList.appendChild(li);
-      console.log("Created habit", habitData.title);
-
     } catch (error) {
       console.error("API error: ", error);
+      return;
     }
 
-    closeHabitWindow();
+    widgetData["habits"].push(habitData);
+    renderWidget("habits", 0);
+    console.log("Created habit", habitData.title);
 });
 
 
@@ -445,15 +378,11 @@ const deleteHabitButton = document.getElementById("deleteHabitButton");
 deleteHabitButton.addEventListener("click", async () => {
   const habitId = document.getElementById("edit-habit").dataset.habitId;
   const habitTitle = document.getElementById("edit-habit").dataset.title;
-  const li = document.querySelector(`li[data-habit-id="${habitId}"]`);
 
     if (confirm(`Delete this item? "${habitTitle}"`)) {
       const success = await deleteHabit(habitId);
       if (success) {
-        if(li) {
-          li.remove();
-          closeHabitEditWindow();
-        }
+        closeHabitEditWindow();
         
       } else {
         alert("error deleting habit from sql server");
@@ -472,7 +401,7 @@ deleteHabitButton.addEventListener("click", async () => {
  */
 async function deleteHabit(habitId) {
   try {
-    const response = await fetch(`/api/habits/${habitId}`, {
+    const response = await fetch(`/api/habits/${habitId}`, { 
       method: "DELETE"
     });
     if (!response.ok) {
