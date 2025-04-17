@@ -45,7 +45,7 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
   const taskName = document.getElementById("task-name").value;
   const dueDate = document.getElementById("task-due-date").value;
   const taskCategory = document.getElementById("task-category").value;
-  const taskPriority = parseInt(document.getElementById("add-task-priority").value, 10);
+  const taskPriority = parseInt(document.querySelector('input[name="priority"]:checked').value);
   
   const taskData = {
     title: taskName,
@@ -59,7 +59,14 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
   document.getElementById("task-name").value = "";
   document.getElementById("task-due-date").value = "";
   document.getElementById("task-category").value = "";
-  document.getElementById("add-task-priority").value = 1; // or whatever default
+  
+  radioButtons = document.querySelectorAll('input[name="priority"]'); // or whatever default
+  for (let i = 0; i < radioButtons.length; i++) {
+    if (radioButtons[i].value === '1') {
+      radioButtons[i].checked = true;
+      break;
+    }
+  }
 
   try {
     const response = await fetch("/api/events", {
@@ -93,12 +100,7 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
     return;
   }
 
-  tasks = widgetData[listId];
-  // Push into the array
-  // Update the lists with the new task
-  taskData.startDate = newDate;
-  tasks.push(taskData);
-  tasks.sort((a, b) => a.startDate - b.startDate);
+  await initTasks();
 
   renderWidget(listId, 0);
   setLayout();
@@ -117,7 +119,6 @@ document.getElementById("addTaskButton").addEventListener("click", async functio
 function openEditWindow(event) {
   const editTaskWindow = document.getElementById("edit-task");
   editTaskWindow.style.display = "block";
-  console.log(event);
   editTaskWindow.dataset.eventId = event.id;
   editTaskWindow.dataset.title = event.title;
   editTaskWindow.dataset.startDate = event.startDate;
@@ -126,7 +127,7 @@ function openEditWindow(event) {
   editTaskWindow.dataset.category = event.category;
   editTaskWindow.dataset.priority = event.priority;
   
-  if(event.complete === true || event.complete) {
+  if(event.complete === true) {
     editTaskWindow.dataset.complete = 1;
   } else {
     editTaskWindow.dataset.complete = 0;
@@ -135,7 +136,7 @@ function openEditWindow(event) {
   const editTaskName = document.getElementById("edit-task-name");
   const editTaskDueDate = document.getElementById("edit-task-due-date");
   const editTaskCategory = document.getElementById("edit-task-category");
-  const editTaskPriority = document.getElementById("edit-task-priority");
+  const editTaskPriority = parseInt(document.querySelector('input[name="priority"]:checked').value);
 
   editTaskName.value = event.title;
   editTaskDueDate.value = new Date(event.startDate).toISOString().split("T")[0];
@@ -251,7 +252,7 @@ document.getElementById("editTaskButton").addEventListener("click", async functi
   const complete = document.getElementById("edit-task").dataset.complete;
   const eventId = document.getElementById("edit-task").dataset.eventId;
   const category = document.getElementById("edit-task-category").value;
-  const priority = parseInt(document.getElementById("edit-task-priority").value, 10);
+  const priority = parseInt(document.querySelector('input[name="priority"]:checked').value);
 
   try {
     const response = await fetch(`/api/events/${eventId}`, {

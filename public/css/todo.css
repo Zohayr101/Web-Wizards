@@ -185,13 +185,24 @@
 }
 
 .calendar-task {
-    background: blue; /* Uses CSS variable */
     border: 1px solid var(--primary-color); /* Uses CSS variable */
     border-radius: 50%;
     width: 20px;
     height: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     transition: background-color 0.3s ease, height 0.3s ease; /* Smooth transition */
+}
+
+.high-priority {
+    background: red; /* Uses CSS variable */
+}
+
+.normal-priority {
+    background: blue; /* Uses CSS variable */
+}
+
+.low-priority {
+    background: green; /* Uses CSS variable */
 }
 
 /* fixes the current month being slightly wider than the rest */

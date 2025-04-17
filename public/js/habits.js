@@ -102,7 +102,8 @@ document
       return;
     }
 
-    widgetData["habits"].push(habitData);
+    await initHabits();
+
     renderWidget("habits", 0);
     console.log("Created habit", habitData.title);
 });
@@ -282,10 +283,11 @@ if (!updateResponse.ok) {
 }
 }
 
-/*
+
 //function for the edit window button
-document.getElementById("editTaskButton").addEventListener("click", async function (event) {
+document.getElementById("add-habit-button").addEventListener("click", async function (event) {
   event.preventDefault();
+  console.log("fdsjfdsk");
 
   const updateTitle = document.getElementById("edit-task-name").value;
   const updateDueDate = document.getElementById("edit-task-due-date").value;
@@ -330,7 +332,7 @@ document.getElementById("editTaskButton").addEventListener("click", async functi
     console.error("Error updating event: ", error);
   }
 });
-*/
+
 //=========================
 // DELETE HABIT
 //=========================
@@ -378,11 +380,25 @@ const deleteHabitButton = document.getElementById("deleteHabitButton");
 deleteHabitButton.addEventListener("click", async () => {
   const habitId = document.getElementById("edit-habit").dataset.habitId;
   const habitTitle = document.getElementById("edit-habit").dataset.title;
+  const li = document.querySelector(`li[data-event-id="${eventId}"]`);
 
     if (confirm(`Delete this item? "${habitTitle}"`)) {
+      closeHabitEditWindow();
+
       const success = await deleteHabit(habitId);
       if (success) {
-        closeHabitEditWindow();
+        if(li) {
+          li.remove();
+  
+          await initHabits();
+  
+          removeIndx = widgetData["habits"].findIndex(habit => habit.id == habitId);
+          if (removeIndx > -1) {
+            widgetData["habits"].splice(removeIndx, 1);
+          }
+          
+          renderWidget("habits", 0);
+        }
         
       } else {
         alert("error deleting habit from sql server");
