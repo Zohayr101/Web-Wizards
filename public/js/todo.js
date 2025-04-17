@@ -490,6 +490,19 @@ async function loadCalendar(weekday, lastDay, dateText) {
         const taskDiv = document.createElement('div');
         taskDiv.className = "calendar-task";
 
+        var maxPriority = events.reduce((a,b) => a.priority > b.priority?a:b).priority;
+        switch (maxPriority) {
+          case 2:
+            taskDiv.classList.add("high-priority");
+            break;
+          case 1:
+            taskDiv.classList.add("normal-priority");
+            break;
+          case 0:
+            taskDiv.classList.add("low-priority");
+            break;
+        }
+
         dayCellDiv.appendChild(taskDiv);
       }
 
@@ -509,8 +522,8 @@ async function loadCalendar(weekday, lastDay, dateText) {
  * - (Commented code is present to load and render tasks from local storage.)
  */
 async function initPages() {
-  await getTasks();
-  await getHabits();
+  await initTasks();
+  await initHabits();
 
   let pages = ["today", "week", "month", "habits"];
   pages.forEach(page => {
@@ -520,7 +533,10 @@ async function initPages() {
   setLayout();
 }
 
-async function getTasks() {
+async function initTasks() {
+  widgetData["today"] = [];
+  widgetData["week"] = [];
+  widgetData["month"] = [];
   await getAllTasks().then(events => {
     events.forEach(event => {
       dateStr = event.startDate.split("T")[0];
@@ -538,9 +554,15 @@ async function getTasks() {
       }
     });
   })
+  let pages = ["today", "week", "month"];
+  pages.forEach(page => {
+    widgetData[page].sort((a, b) => a.priority - b.priority);
+    widgetData[page].sort((a, b) => a.dueDate - b.dueDate);
+  });
 }
 
-async function getHabits() {
+async function initHabits() {
+  widgetData["habits"] = [];
   await getAllHabits().then(habits => {
     habits.forEach(habit => {
       widgetData["habits"].push(habit);
