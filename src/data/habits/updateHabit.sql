@@ -4,6 +4,7 @@ SET     [title] = @title
        , [daysComplete] = @daysComplete
        , [maxDays] = @maxDays
        , [frequency] = @frequency
+       , [lastCompleted] = @lastCompleted
 WHERE   [id] = @id
  AND   [userId] = @userId;
 
@@ -13,6 +14,7 @@ SELECT  [id]
        , [daysComplete]
        , [maxDays]
        , [frequency]
+       , [lastCompleted]
 FROM    [dbo].[habits]
 WHERE   [id] = @id
  AND   [userId] = @userId;

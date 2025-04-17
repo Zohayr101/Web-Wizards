@@ -8,6 +8,7 @@ INSERT INTO [dbo].[habits]
    , [daysComplete]
    , [maxDays]
    , [frequency]
+   , [lastCompleted]
 )
 VALUES
 (
@@ -17,6 +18,7 @@ VALUES
    , @daysComplete
    , @maxDays
    , @frequency
+   , @lastCompleted
 );
 
 SELECT @newId = SCOPE_IDENTITY();
@@ -28,6 +30,7 @@ SELECT
     [complete],
     [daysComplete],
     [maxDays],
-    [frequency]
+    [frequency],
+    [lastCompleted]
 FROM [dbo].[habits]
 WHERE id = @newId;
