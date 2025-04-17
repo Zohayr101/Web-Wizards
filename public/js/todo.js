@@ -490,7 +490,7 @@ async function loadCalendar(weekday, lastDay, dateText) {
         const taskDiv = document.createElement('div');
         taskDiv.className = "calendar-task";
 
-        var maxPriority = events.reduce((a,b) => a.priority > b.priority?a:b).priority;
+        var maxPriority = todayEvents.reduce((a,b) => a.priority > b.priority?a:b).priority;
         switch (maxPriority) {
           case 2:
             taskDiv.classList.add("high-priority");
