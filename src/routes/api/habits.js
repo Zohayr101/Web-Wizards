@@ -86,8 +86,8 @@ module.exports.register = async server => {
                 }
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
-                const {title, complete, daysComplete, maxDays, frequency} = request.payload;
-                const res = await db.habits.addHabit({userId, title, complete, daysComplete, maxDays, frequency});
+                const {title, complete, daysComplete, maxDays, frequency, lastCompleted} = request.payload;
+                const res = await db.habits.addHabit({userId, title, complete, daysComplete, maxDays, frequency, lastCompleted});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);
@@ -130,9 +130,9 @@ module.exports.register = async server => {
                 const db = request.server.plugins.sql.client;
                 const userId = request.auth.credentials.profile.id;
                 const {id} = request.params;
-                const {title, complete, daysComplete, maxDays, frequency} = request.payload;
+                const {title, complete, daysComplete, maxDays, frequency, lastCompleted} = request.payload;
 
-                const res = await db.habits.updateHabit({id, userId, title, complete, daysComplete, maxDays, frequency});
+                const res = await db.habits.updateHabit({id, userId, title, complete, daysComplete, maxDays, frequency, lastCompleted});
                 return res.recordset[0];
             } catch (err) {
                 console.log(err);

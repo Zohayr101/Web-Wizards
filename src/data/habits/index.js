@@ -44,7 +44,7 @@ const register = async ({sql, getConnection}) => {
      * @param {string} habitData.frequency - The frequency (e.g., daily, weekly) for the habit.
      * @returns {Promise<Object>} The result of the addHabit SQL query.
      */
-	const addHabit = async ({ userId, title, complete, daysComplete, maxDays, frequency }) => {
+	const addHabit = async ({ userId, title, complete, daysComplete, maxDays, frequency, lastCompleted }) => {
 		const cnx = await getConnection();
 		const request = await cnx.request();
 		request.input("userId", sql.NVarChar(50), userId);
@@ -53,6 +53,7 @@ const register = async ({sql, getConnection}) => {
 		request.input("daysComplete", sql.Int, daysComplete);
 		request.input("maxDays", sql.Int, maxDays);
 		request.input("frequency", sql.NVarChar(100), frequency);
+        request.input("lastCompleted", sql.Date, lastCompleted);
 
 		return await request.query(sqlQueries.addHabit);
 	};
@@ -71,7 +72,7 @@ const register = async ({sql, getConnection}) => {
      * @param {string} habitData.frequency - The updated frequency for the habit.
      * @returns {Promise<Object>} The result of the updateHabit SQL query.
      */
-    const updateHabit = async ( { id, userId, title, complete, daysComplete, maxDays, frequency } ) => {
+    const updateHabit = async ( { id, userId, title, complete, daysComplete, maxDays, frequency, lastCompleted } ) => {
 		const cnx = await getConnection();
 		const request = await cnx.request();
 		request.input("id", sql.Int, id);
@@ -81,6 +82,7 @@ const register = async ({sql, getConnection}) => {
 		request.input("daysComplete", sql.Int, daysComplete);
 		request.input("maxDays", sql.Int, maxDays);
 		request.input("frequency", sql.NVarChar(100), frequency);
+        request.input("lastCompleted", sql.Date, lastCompleted);
 
 		return request.query(sqlQueries.updateHabit);
 	};

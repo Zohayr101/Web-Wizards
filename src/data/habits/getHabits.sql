@@ -4,6 +4,7 @@ SELECT 	[id]
 	, [daysComplete]
 	, [maxDays]
 	, [frequency]
+	, [lastCompleted]
 
 FROM	[dbo].[habits]
 WHERE	[userId] = @userId
