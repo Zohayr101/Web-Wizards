@@ -149,24 +149,21 @@ window.QUOTES_POSITIVE = [
   ]
 
 /**
- * Global object to store user stats locally.
- * This will be initialized when the application loads.
- * @global
- * @type {Object}
+ * Boolean of purchase state of shop items
+ * @constant {Object}
  */
-window.STATS = {
-    goldAmount: 0,
-    goldEarned: 0,
-    goldSpent: 0,
-    pomoCompleted: 0,
-    pomoTimeSpentMinutes: 0,
-    tasksCompleted: 0,
-    habitsCompleted: 0,
-    longestHabitStreak: 0,
-    stocksChecked: 0,
-    weatherChecks: 0,
-    movieLikes: 0,
-    settingsChanged: 0,
-    journalEntriesWritten: 0,
-    notesWritten: 0
-};
+window.PURCHASED = {
+  'hat1': false,
+  'hat2': false,
+  'hat3': false,
+  'hat4': false,
+  'hat5': false,
+  'theme1': false,
+  'theme2': false,
+  'theme3': false,
+  'theme4': false,
+  'quote1': false,
+  'quote2': false,
+  'quote3': false,
+  'quote4': false,
+}

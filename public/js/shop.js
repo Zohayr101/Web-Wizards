@@ -17,10 +17,10 @@ const layouts = window.LAYOUTS;
 const fonts = window.FONTS;
 
 /**
- * Available shop items
+ * Source of shop items
  * @constant {Object}
  */
-const items = {
+const itemsSource = {
     'hat1': "media/hat1.png", // path to hat image
     'hat2': "media/hat2.png",
     'hat3': "media/hat3.png",
@@ -54,6 +54,18 @@ const actionWorth = {
     'notesWritten': 2,
 }
 
+let purchasedItems = localStorage.getItem('purchasedItems');
+
+// Check if purchasedItems exists in localStorage
+if (!purchasedItems) {
+    // Initialize purchasedItems as an empty array and store it in localStorage
+    purchasedItems = [];
+    localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+} else {
+    // Parse the existing purchasedItems from localStorage
+    purchasedItems = JSON.parse(purchasedItems);
+}
+
 /**
  * Initializes the app after the window has fully loaded.
  *
@@ -67,6 +79,7 @@ const actionWorth = {
  * @listens window#load
  */
 window.addEventListener("load", async () => {
+    recallPurchased();
     updateStats();
 
     // Load quotes
@@ -159,7 +172,6 @@ async function updateGold(stats) {
 
         if (initResponse.ok) {
             stats = await initResponse.json();
-            console.log("Stats initialized:", stats);
         } else {
             console.error("Failed to initialize stats:", initResponse.statusText);
             return;
@@ -210,7 +222,6 @@ async function buyItem(item, price) {
 
         if (initResponse.ok) {
             stats = await initResponse.json();
-            console.log("Stats initialized:", stats);
         } else {
             console.error("Failed to initialize stats:", initResponse.statusText);
             return;
@@ -221,12 +232,17 @@ async function buyItem(item, price) {
     let id = await stats.id;
 
     let currentGold = stats.goldEarned - stats.goldSpent;
-    //console.log(currentGold);
     if (currentGold < price) {
         alert("Not enough gold!");
         return;
     }
     stats.goldSpent += price;
+
+    // Add the item to purchasedItems and update localStorage
+    purchasedItems.push(item);
+    localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+
+    // Update the button to reflect the purchase
     instantiateItem(item);
 
     const updateResponse = await fetch(`/api/stats/${id}`, {
@@ -244,6 +260,10 @@ async function buyItem(item, price) {
 }
 
 function instantiateItem(item) {
+    window.PURCHASED[item] = true;
+    let purchaseButton = document.getElementById(item).querySelector('button');
+    purchaseButton.textContent = "Purchased";
+    purchaseButton.disabled = true;
     console.log(`Successfully bought ${item}`);
 }
 
@@ -267,7 +287,6 @@ async function updateStats() {
 
                 if (initResponse.ok) {
                     stats = await initResponse.json();
-                    console.log("Stats initialized:", stats);
                 } else {
                     console.error("Failed to initialize stats:", initResponse.statusText);
                     return;
@@ -316,7 +335,6 @@ async function setGold(amount) {
 
         if (initResponse.ok) {
             stats = await initResponse.json();
-            console.log("Stats initialized:", stats);
         } else {
             console.error("Failed to initialize stats:", initResponse.statusText);
             return;
@@ -351,4 +369,15 @@ async function setGold(amount) {
     if (!updateResponse.ok) {
         console.error(updateResponse.statusText);
     }
+}
+
+function recallPurchased() {
+    // Iterate through purchasedItems and update the buttons
+    purchasedItems.forEach(item => {
+        const purchaseButton = document.getElementById(item)?.querySelector('button');
+        if (purchaseButton) {
+            purchaseButton.textContent = "Purchased";
+            purchaseButton.disabled = true;
+        }
+    });
 }
