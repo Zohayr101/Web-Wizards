@@ -105,9 +105,9 @@ The movie schedule allows the user to view a list of many relevant movies showin
 
  When the user is interested in seeing a movie, they can select the heart icon, and after viewing the movie, they can select the thumbs-up icon to show that they’ve enjoyed it. The user can click a movie poster in order to view the full description, genre, cast, budget, and box office.
 
-<p style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; justify-content: space-between; max-width: 100%;">
-  <img src="public/media/manual/movies.png" style="width: 60%; height: auto;" alt="Movies Overview" />
-  <img src="public/media/manual/movies1.png" style="width: 35%; height: auto;" alt="Movies Details" />
+<p style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; justify-content: center;">
+  <img src="public/media/manual/movies.png" style="flex: 1 1 60%; max-width: 60%; height: auto;" alt="Movies Overview" />
+  <img src="public/media/manual/movies1.png" style="flex: 1 1 35%; max-width: 35%; height: auto;" alt="Movies Details" />
 </p>
 
 ## [Documentation](#table-of-contents)
