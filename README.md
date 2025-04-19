@@ -81,6 +81,9 @@ In-application gold can be earned by interacting with the various features such 
 ## [Journal](#table-of-contents)
 
 Tomeato allows users to jot down their thoughts throughout the day, and even to upload a relevant photo. There is a separate section of the journal for note taking, so users can keep their personal and professional notes separate.
+
+When Journal is selected, the user can input the title, and the body of their entry for the day, then they can click ‘Save Entry’. Below that window, the user can choose an image to supplement their entry with the ‘Choose File’ button, they can also click the ‘Remove Image’ button if they’d like to delete it. When Note is selected, the user can add a title to their note entry, as well as the body. Near the top-right corner, the user is able to toggle from a mini-calendar, to choose the date they’re working on. 
+
 <p float="left">
   <img src="public/media/manual/journal.png" width="49%" />
   <img src="public/media/manual/notes.png" width="49%" />
@@ -102,9 +105,9 @@ The movie schedule allows the user to view a list of many relevant movies showin
 
  When the user is interested in seeing a movie, they can select the heart icon, and after viewing the movie, they can select the thumbs-up icon to show that they’ve enjoyed it. The user can click a movie poster in order to view the full description, genre, cast, budget, and box office.
 
-<p float="left">
-  <img src="public/media/manual/movies.png" height="100%" width="auto" />
-  <img src="public/media/manual/movies1.png" height="auto" width="auto" />
+<p style="display: flex; align-items: center; gap: 10px;">
+  <img src="public/media/manual/movies.png" style="height: 30vh; width: auto;" />
+  <img src="public/media/manual/movies1.png" style="height: 30vh; width: auto;" />
 </p>
 
 ## [Documentation](#table-of-contents)
