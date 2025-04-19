@@ -1,4 +1,4 @@
-![banner](public/media/tomeato.png)
+<p style="text-align:center">![banner](public/media/tomeato.png)</p>
 # Tomeato
 ## Table of Contents
 
