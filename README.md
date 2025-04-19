@@ -6,7 +6,7 @@
 
 ### [Getting Started](#getting-started-1)
 
-### [Screen Views and Navigation](#screen-views-and-naviagation-1)
+### [Screen Views and Navigation](#screen-views-and-navigation-1)
 
 ### [Tasks, Habits, and Calendar](#tasks-habits-and-calendar-1)
 
