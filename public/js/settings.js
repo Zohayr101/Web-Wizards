@@ -117,7 +117,6 @@ window.addEventListener("load", () => {
       const textColor = getComputedStyle(colorFetcher).getPropertyValue('--text-color');
       const primaryColor = getComputedStyle(colorFetcher).getPropertyValue('--primary-color');
       const secondaryColor = getComputedStyle(colorFetcher).getPropertyValue('--secondary-color');
-      const buttonColor = getComputedStyle(colorFetcher).getPropertyValue('--button-bg-color');
       
       const backgroundDiv = document.createElement('div');
       backgroundDiv.style.backgroundColor = backgroundColor;

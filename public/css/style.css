@@ -92,6 +92,34 @@
     --arrow-bg-color: #6a5acd;
 }
 
+.theme1 {
+  --bg-color: #0d0221;
+  --text-color: #f5f5f5;
+  --primary-color: #ff2a6d;
+  --secondary-color: #08f7fe;
+}
+
+.theme2 {
+  --bg-color: #fcecc9;
+  --text-color: #3e2f2f;
+  --primary-color: #e86a33;
+  --secondary-color: #c1a57b;
+}
+
+.theme3 {
+  --bg-color: #d5ffe4;
+  --text-color: #1a1a2e;
+  --primary-color: #8e05c2;
+  --secondary-color: #00bbf0;
+}
+
+.theme4 {
+  --bg-color: #1b1b2f;
+  --text-color: #eaeaea;
+  --primary-color: #6c5ce7;
+  --secondary-color: #00cec9;
+}
+
 ./* Dropdown container */
 .dropdown {
   position: relative;

@@ -4,7 +4,7 @@
  * @constant {string[]}
  */
 window.THEMES = [
-    "theme-dark", 
+    "theme-dark",
     "theme-light", 
     "theme-green", 
     "theme-purple", 
