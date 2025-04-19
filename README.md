@@ -84,9 +84,9 @@ Tomeato allows users to jot down their thoughts throughout the day, and even to 
 
 When Journal is selected, the user can input the title, and the body of their entry for the day, then they can click ‘Save Entry’. Below that window, the user can choose an image to supplement their entry with the ‘Choose File’ button, they can also click the ‘Remove Image’ button if they’d like to delete it. When Note is selected, the user can add a title to their note entry, as well as the body. Near the top-right corner, the user is able to toggle from a mini-calendar, to choose the date they’re working on. 
 
-<p float="left">
-  <img src="public/media/manual/journal.png" width="49%" alt="Journal" />
-  <img src="public/media/manual/notes.png" width="49%" alt="Notes" />
+<p style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; justify-content: center;">
+  <img src="public/media/manual/journal.png" style="width: 100%; max-width: 60%; height: auto;" alt="Journal" />
+  <img src="public/media/manual/notes.png" style="width: 100%; max-width: 35%; height: auto;" alt="Notes" />
 </p>
 
 ## [Weather](#table-of-contents)
