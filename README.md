@@ -1,4 +1,4 @@
-![banner](public/media/tomeato.png){ width="800" height="auto" style="display: block; margin: 0 auto" }
+<p align="center"><img width="800" src="public/media/tomeato.png"></p>
 # Tomeato
 ## Table of Contents
 
