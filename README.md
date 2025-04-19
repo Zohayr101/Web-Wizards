@@ -107,7 +107,7 @@ The movie schedule allows the user to view a list of many relevant movies showin
 
 <p style="display: flex; align-items: center; gap: 10px;">
   <img src="public/media/manual/movies.png" style="height: 30vh; width: 61vw;" />
-  <img src="public/media/manual/movies1.png" style="height: 30vh; width: 38vw;" />
+  <img src="public/media/manual/movies1.png" style="height: 30vh; width: auto;" />
 </p>
 
 ## [Documentation](#table-of-contents)
