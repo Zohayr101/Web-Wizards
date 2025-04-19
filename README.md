@@ -2,9 +2,7 @@
 
 ## Table of Contents
 
-### Introduction 
-
-### Getting Started
+[Introduction](introduction)
 
 ---
 
