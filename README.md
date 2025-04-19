@@ -54,6 +54,7 @@ The settings page allows the user to select which layout, color scheme, font, an
 ## Pomodoro
 
 > “A Pomodoro can’t be interrupted: It marks 25 minutes of pure work. A Pomodoro can’t be split up: There is no such thing as half a Pomodoro.” - Francesco Cirillo, inventor of the Pomodoro. 
+
 The Pomodoro method involves splitting up working time into intervals. As envisioned by its creator, it involves working for 25 minutes (a Pomodoro) then taking a break from working for 5 minutes. After four Pomodoros, a longer 30 minute break is taken. Tomeato provides a range of audio queues for the user once a Pomodoro finishes.
 
 
