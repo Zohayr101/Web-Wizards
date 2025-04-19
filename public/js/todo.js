@@ -334,10 +334,10 @@ function updateHabits(habitsArray) {
         span.textContent =  `Did you ${habit.title} today? Days streak: ${habit.daysComplete}`;
         break;
       case "weekly":
-        span.textContent = `Did you ${habit.title} this week? Days streak: ${habit.daysComplete}`;
+        span.textContent = `Did you ${habit.title} this week? Weeks streak: ${habit.daysComplete}`;
         break;
       case "monthly":
-        span.textContent = `Did you ${habit.title} this month? Days streak: ${habit.daysComplete}`;
+        span.textContent = `Did you ${habit.title} this month? Months streak: ${habit.daysComplete}`;
         break;
       default:
         span.textContent = `Did you ${habit.title}? Days streak: ${habit.daysComplete}`;
@@ -556,8 +556,8 @@ async function initTasks() {
   })
   let pages = ["today", "week", "month"];
   pages.forEach(page => {
-    widgetData[page].sort((a, b) => a.priority - b.priority);
-    widgetData[page].sort((a, b) => a.dueDate - b.dueDate);
+    widgetData[page].sort((a, b) => b.priority - a.priority);
+    widgetData[page].sort((a, b) => a.startDate - b.startDate);
   });
 }
 
@@ -565,6 +565,7 @@ async function initHabits() {
   widgetData["habits"] = [];
   await getAllHabits().then(habits => {
     habits.forEach(habit => {
+      console.log(habit);
       widgetData["habits"].push(habit);
     });
   });

@@ -78,7 +78,8 @@ document
       title: habitName,
       frequency: habitFrequency,
       complete: false,
-      habitStreak: 0
+      daysComplete: 0,
+      lastCompleted: null
     };
 
     closeHabitWindow();
@@ -125,17 +126,23 @@ document
  * @param {string} habit.frequency - The habit's frequency.
  * @param {HTMLElement} li - The list item element associated with the habit.
  */
-function openHabitEdit(habit, li) {
+function openHabitEdit(habit) {
   const editHabitWindow = document.getElementById("edit-habit");
   editHabitWindow.style.display = "block";
-  editHabitWindow.dataset.habitId = li.dataset.habitId;
+  editHabitWindow.dataset.habitId = habit.id;
   editHabitWindow.dataset.title = habit.title;
+  editHabitWindow.dataset.lastCompleted = habit.lastCompleted;
+
+  if(habit.complete === true) {
+    editHabitWindow.dataset.complete = 1;
+  } else {
+    editHabitWindow.dataset.complete = 0;
+  };
 
   const editHabitName = document.getElementById("edit-habit-name");
   const editHabitFrequency = document.getElementById("edit-habit-frequency");
   editHabitName.value = habit.title;
   editHabitFrequency.value = habit.frequency;
-
 }
 
 /**
@@ -161,14 +168,48 @@ function closeHabitEditWindow() {
  * @param {string} habit.frequency - The frequency of the habit.
  * @param {boolean} habit.complete - The current completion status.
  * @param {number} habit.daysComplete - The current completion streak.
- * @param {HTMLElement} li - The list item element for the habit.
+ * @param {Date} habit.lastCompleted 
+* @param {HTMLElement} li - The list item element for the habit.
  * @param {HTMLInputElement} checkbox - The checkbox element that was clicked.
  */
 async function habitComplete(habit, li, checkbox) {
   const updateComplete = !habit.complete;
   const habitId = habit.id;
   const habitTitle = habit.title;
-  const habitStreak = habit.daysComplete;
+  const habitFrequency = habit.frequency;
+  var habitStreak = habit.daysComplete;
+
+  var habitLastCompleted = habit.lastCompleted;
+
+  if (habitLastCompleted != null) {
+    parts = habitLastCompleted.split("T")[0];
+    parts = parts.split("-");
+  
+    habitLastCompleted = new Date(parts[0], parts[1] - 1, parts[2]);
+
+    console.log(habitFrequency);
+
+    if (habitFrequency === "Daily") {
+      console.log(habitLastCompleted);
+      console.log(currentDate);
+      if (habitLastCompleted.getFullYear() !== currentDate.getFullYear() &&
+      habitLastCompleted.getMonth() !== currentDate.getMonth() &&
+      habitLastCompleted.getDate() !== currentDate.getDate()) {
+        habitStreak += 1;
+      }
+    } else if (habitFrequency === "Weekly") {
+      habitStreak += 1;
+    } else if (habitFrequency === "Monthly") {
+      if (habitLastCompleted.getMonth() !== currentDate.getMonth() &&
+      habitLastCompleted.getDate() !== currentDate.getDate()) {
+      habitStreak += 1;
+    }
+  } else {
+    habitStreak += 1;
+  }
+  console.log(habitStreak);
+
+  habitLastCompleted = currentDate;
 
   try {
     const response = await fetch(`/api/habits/${habitId}`, {
@@ -179,8 +220,9 @@ async function habitComplete(habit, li, checkbox) {
       body: JSON.stringify({
         complete: updateComplete,
         title: habitTitle,
-        habitStreak: habitStreak + 1,
-        frequency: habit.frequency
+        habitStreak: habitStreak,
+        frequency: habitFrequency,
+        lastCompleted: habitLastCompleted
       }),
     });
 
@@ -194,11 +236,7 @@ async function habitComplete(habit, li, checkbox) {
     console.error("error updating habit complete: ", error);
     checkbox.checked = habit.complete;
   }
-
-  if (updateComplete) {
-    incrementHabitComplete();
-    checkHabitStreak(habitStreak + 1);
-  }
+}
 }
 
 async function checkHabitStreak(habitStreak) {
@@ -221,27 +259,27 @@ async function checkHabitStreak(habitStreak) {
         console.error("Failed to initialize stats:", initResponse.statusText);
         return;
     }
-} else {
-    stats = stats[0]; // Assuming stats is an array, take the first entry
-}
-let id = await stats.id;
-let currentTopStreak = stats.longestHabitStreak;
-if (currentTopStreak > habitStreak) {
-  return;
-}
+  } else {
+      stats = stats[0]; // Assuming stats is an array, take the first entry
+  }
+  let id = await stats.id;
+  let currentTopStreak = stats.longestHabitStreak;
+  if (currentTopStreak > habitStreak) {
+    return;
+  }
 
-stats.longestHabitStreak = habitStreak;
+  stats.longestHabitStreak = habitStreak;
 
-const updateResponse = await fetch(`/api/stats/${id}`, {
-    method: "PUT",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(stats)
-});
-if (!updateResponse.ok) {
-    console.error(updateResponse.statusText);
-}
+  const updateResponse = await fetch(`/api/stats/${id}`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify(stats)
+  });
+  if (!updateResponse.ok) {
+      console.error(updateResponse.statusText);
+  }
 }
 
 async function incrementHabitComplete() {
@@ -264,74 +302,24 @@ async function incrementHabitComplete() {
         console.error("Failed to initialize stats:", initResponse.statusText);
         return;
     }
-} else {
-    stats = stats[0]; // Assuming stats is an array, take the first entry
-}
-let id = await stats.id;
+  } else {
+      stats = stats[0]; // Assuming stats is an array, take the first entry
+  }
+  let id = await stats.id;
 
-stats.habitsCompleted++;
+  stats.habitsCompleted++;
 
-const updateResponse = await fetch(`/api/stats/${id}`, {
-    method: "PUT",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(stats)
-});
-if (!updateResponse.ok) {
-    console.error(updateResponse.statusText);
-}
-}
-
-
-//function for the edit window button
-document.getElementById("add-habit-button").addEventListener("click", async function (event) {
-  event.preventDefault();
-  console.log("fdsjfdsk");
-
-  const updateTitle = document.getElementById("edit-task-name").value;
-  const updateDueDate = document.getElementById("edit-task-due-date").value;
-  const complete = document.getElementById("edit-task").dataset.complete;
-  const eventId = document.getElementById("edit-task").dataset.eventId;
-  const category = document.getElementById("edit-task-category").value;
-  const priority = parseInt(document.getElementById("edit-task-priority").value, 10);
-
-  try {
-    const response = await fetch(`/api/events/${eventId}`, {
+  const updateResponse = await fetch(`/api/stats/${id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+          "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        title: updateTitle,
-        startDate: updateDueDate,
-        complete: complete,
-        category: category,
-        priority: priority
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error("HTTP error: ", response.status);
-    }
-
-    const li = document.querySelector(`li[data-event-id="${eventId}"]`)
-    if (li) {
-      const span = li.querySelector("span");
-      const formatDate = new Intl.DateTimeFormat("en-US", {
-        month: "numeric",
-        day: "numeric",
-        year: "numeric"
-      });
-      const formattedDate = formatDate.format(new Date(updateDueDate));
-      span.textContent = `${updateTitle} - ${formattedDate}`
-    }
-
-    closeEditWindow();
-  } catch (error) {
-    console.error("Error updating event: ", error);
+      body: JSON.stringify(stats)
+  });
+  if (!updateResponse.ok) {
+      console.error(updateResponse.statusText);
   }
-});
+}
 
 //=========================
 // DELETE HABIT
@@ -380,30 +368,28 @@ const deleteHabitButton = document.getElementById("deleteHabitButton");
 deleteHabitButton.addEventListener("click", async () => {
   const habitId = document.getElementById("edit-habit").dataset.habitId;
   const habitTitle = document.getElementById("edit-habit").dataset.title;
-  const li = document.querySelector(`li[data-event-id="${eventId}"]`);
+  const li = document.querySelector(`li[data-habit-id="${habitId}"]`);
 
-    if (confirm(`Delete this item? "${habitTitle}"`)) {
-      closeHabitEditWindow();
+  if (confirm(`Delete this item? "${habitTitle}"`)) {
+    closeHabitEditWindow();
 
-      const success = await deleteHabit(habitId);
-      if (success) {
-        if(li) {
-          li.remove();
-  
-          await initHabits();
-  
-          removeIndx = widgetData["habits"].findIndex(habit => habit.id == habitId);
-          if (removeIndx > -1) {
-            widgetData["habits"].splice(removeIndx, 1);
-          }
-          
-          renderWidget("habits", 0);
+    const success = await deleteHabit(habitId);
+    if (success) {
+      if(li) {
+        li.remove();
+        
+        removeIndx = widgetData["habits"].findIndex(habit => habit.id == habitId);
+        if (removeIndx > -1) {
+          widgetData["habits"].splice(removeIndx, 1);
         }
         
-      } else {
-        alert("error deleting habit from sql server");
+        renderWidget("habits", 0);
       }
+      
+    } else {
+      alert("error deleting habit from sql server");
     }
+  }
 });
 
 /**
@@ -417,7 +403,7 @@ deleteHabitButton.addEventListener("click", async () => {
  */
 async function deleteHabit(habitId) {
   try {
-    const response = await fetch(`/api/habits/${habitId}`, { 
+    const response = await fetch(`/api/habits/` + habitId, { 
       method: "DELETE"
     });
     if (!response.ok) {
