@@ -35,11 +35,11 @@ Tomeato is an all-in-one productivity application that will help you stay organi
 
 ## Getting Started
 
-To get started, you will need to register via our secure authentication server. Creating the account is easy, and after that, you will be able to log in using your email address and password.
+To get started, new users will need to register via our secure authentication server. Creating the account is easy, and after that, users will be able to log in using their email address and password.
 
 ## Screen Views and Navigation
 
-text
+The profile and wizard hat icon will be where to find most navigation on the site. The tomato icon will also take users to the Pomodoro page. The Profile Icon will include, Settings, Shop, and Logout. The wizard hat icon is where users will find the Extras! This includes Journal, Weather, Movies, and Stocks. The individual pages will be described in more depth in their respective sections.
 
 ## Tasks, Habits, and Calendar
 
@@ -49,13 +49,15 @@ The calendar widget will be generated for the current date and can be shown in e
 
 ## Settings
 
-The settings page allows the user to select which layout, color scheme, font, and quote pack the site should use for tasks, habits, and calendar.
+The settings page allows the user to modify four different display options for the hat: Layouts, Themes, Fonts, and Quote Packs.
+
+Layouts can vary the widget size, location, and visibility. Themes change all of the colors of the site, including, but not limited to: background color, text color, and highlight colors. Fonts change all unspecified fonts on the website to the font the user selects, allowing for monospace, fancy, serif, and sans-serif options. Quote Packs add to the list of cycling quotes at the bottom of the main pages with several different themes for the quotes.
 
 ## Pomodoro
 
 > “A Pomodoro can’t be interrupted: It marks 25 minutes of pure work. A Pomodoro can’t be split up: There is no such thing as half a Pomodoro.” - Francesco Cirillo, inventor of the Pomodoro. 
 
-The Pomodoro method involves splitting up working time into intervals. As envisioned by its creator, it involves working for 25 minutes (a Pomodoro) then taking a break from working for 5 minutes. After four Pomodoros, a longer 30 minute break is taken. Tomeato provides a range of audio queues for the user once a Pomodoro finishes.
+The Pomodoro method involves splitting up working time into intervals. As envisioned by its creator, it involves working for 25 minutes (a Pomodoro) then taking a break from working for 5 minutes. After four Pomodoros, a longer 30 minute break is taken. Tomeato provides a range of audio queues for the user once a Pomodoro finishes
 
 
 ## Shop
@@ -72,7 +74,7 @@ Never be afraid of a weather surprise ruining your plans! Tomeato allows users t
 
 ## Stocks
 
-Many students, professionals, and more own stocks but don’t want to throw off their workflow to check on them. The Stock Market page offers a slew of information of the +50 most premier public companies, to choose from.  The user can choose from several time ranges: 1 Year, 6 Months, 3 Months, 1 Month, and 1 Week. A graph will show the history and fluctuation of the stock based on the selected window of time. Below that will be key details of the stock that all users must be familiar with, from serious investors to hobbyists.
+Many students, professionals, and more own stocks but don’t want to throw off their workflow to check on them. The Stock Market page offers a slew of information of the +50 most premier public companies, to choose from.  The user can choose from several time ranges: 1 Year, 6 Months, 3 Months, 1 Month, and 1 Week. A graph will show the history and fluctuation of the stock based on the selected window of time. Below that will be key details of the stock that all users must be familiar with, from serious investors to hobbyists. 
 
 ## Movies
 
