@@ -98,11 +98,13 @@ Many students, professionals, and more own stocks but don’t want to throw off 
 
 ## Movies
 
-The movie schedule allows the user to view a list of many relevant movies showing each month. The user can sort a month’s movies by either popularity or release date.
+The movie schedule allows the user to view a list of many relevant movies showing each month. The user can sort a month’s movies by either popularity or release date. The movie schedule allows the user to view a list of many relevant movies showing each month. The user can sort a month’s movies by either popularity or release date.
+
+ When the user is interested in seeing a movie, they can select the heart icon, and after viewing the movie, they can select the thumbs-up icon to show that they’ve enjoyed it. The user can click a movie poster in order to view the full description, genre, cast, budget, and box office.
 
 <p float="left">
-  <img src="public/media/manual/movies.png" width="64%" />
-  <img src="public/media/manual/movies1.png" width="34%" />
+  <img src="public/media/manual/movies.png" width="49%" />
+  <img src="public/media/manual/movies1.png" width="49%" />
 </p>
 
 ## Documentation
