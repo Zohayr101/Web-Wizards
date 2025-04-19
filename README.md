@@ -76,7 +76,7 @@ The Pomodoro method involves splitting up working time into intervals. As envisi
 ## Shop
 
 In-application gold can be earned by interacting with the various features such as completing tasks, earning habit streaks, spending time on pomodoros, etc. This gold is spent at the shop! Here, users will find additional wizard hats, themes, and quote packs. The shop page also gives a detailed view of user site statistics.
-<p align="center"><img src="public/media/manual/shop.png" alt="Tomeato"></p>
+<p align="center"><img size=80% src="public/media/manual/shop.png" alt="Tomeato"></p>
 
 ## Journal
 
@@ -89,20 +89,20 @@ Tomeato allows users to jot down their thoughts throughout the day, and even to 
 ## Weather
 
 Never be afraid of a weather surprise ruining your plans! Tomeato allows users to view the weather forecast for a wide range of cities. Larger cities have the weather forecast in one hour increments, while some smaller cities have the forecast in three hour increments.
-<p align="center"><img src="public/media/manual/weather.png" alt="Tomeato"></p>
+<p align="center"><img size=65% src="public/media/manual/weather.png" alt="Tomeato"></p>
 
 ## Stocks
 
 Many students, professionals, and more own stocks but don’t want to throw off their workflow to check on them. The Stock Market page offers a slew of information of the +50 most premier public companies, to choose from.  The user can choose from several time ranges: 1 Year, 6 Months, 3 Months, 1 Month, and 1 Week. A graph will show the history and fluctuation of the stock based on the selected window of time. Below that will be key details of the stock that all users must be familiar with, from serious investors to hobbyists. 
-<p align="center"><img src="public/media/manual/stocks.png" alt="Tomeato"></p>
+<p align="center"><img size=60% src="public/media/manual/stocks.png" alt="Tomeato"></p>
 
 ## Movies
 
 The movie schedule allows the user to view a list of many relevant movies showing each month. The user can sort a month’s movies by either popularity or release date.
 
 <p float="left">
-  <img src="public/media/manual/movies.png" width="49%" />
-  <img src="public/media/manual/movies1.png" width="49%" />
+  <img src="public/media/manual/movies.png" width="64%" />
+  <img src="public/media/manual/movies1.png" width="34%" />
 </p>
 
 ## Documentation
