@@ -37,7 +37,7 @@ Tomeato is an all-in-one productivity application that will help you stay organi
 ## Getting Started
 
 To get started, new users will need to register via our secure authentication server. Creating the account is easy, and after that, users will be able to log in using their email address and password.
-<p align="center"><img src="public/media/manual/tomeato.png" alt="Tomeato"></p>
+<p align="center"><img src="public/media/manual/login.png" alt="Tomeato"></p>
 
 ## Screen Views and Navigation
 
