@@ -53,8 +53,8 @@ Solarized dark             |  Solarized Ocean
 ![](public/media/manual/tomeato.png)  |  ![](public/media/manual/tomeato.png)
 
 <p float="left">
-  <img src="public/media/manual/tomeato.png" width="50%" />
-  <img src="public/media/manual/tomeato.png" width="50%" />
+  <img src="public/media/manual/tomeato.png" width="49%" />
+  <img src="public/media/manual/tomeato.png" width="49%" />
 </p>
 
 ## Settings
