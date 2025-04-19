@@ -1,4 +1,4 @@
-<p align="center"><img width="800" src="public/media/tomeato.png"></p>
+<p align="center"><img width="400" src="public/media/tomeato.png"></p>
 # Tomeato
 ## Table of Contents
 
