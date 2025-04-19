@@ -78,9 +78,12 @@
       <br>
       <label>Priority</label>
       <div class="priority-buttons">
-        <button type="button" class="priority-btn" data-value="0">Low</button>
-        <button type="button" class="priority-btn active" data-value="1">Normal</button>
-        <button type="button" class="priority-btn" data-value="2">High</button>
+        <input type="radio" class="priority-btn" name="priority" value="0">
+        <label for="0">Low</label><br>
+        <input type="radio" checked="checked" class="priority-btn active" name="priority" value="1">
+        <label for="1">Normal</label><br>
+        <input type="radio" class="priority-btn" name="priority" value="2">
+        <label for="2">High</label><br>
         <input type="hidden" id="add-task-priority" name="add-task-priority" value="1">
       </div>
 
@@ -117,9 +120,12 @@
       <br />
       <label>Priority</label>
       <div class="priority-buttons">
-        <button type="button" class="priority-btn" data-value="0">Low</button>
-        <button type="button" class="priority-btn active" data-value="1">Normal</button>
-        <button type="button" class="priority-btn" data-value="2">High</button>
+        <input type="radio" class="priority-btn" name="priority" value="0">
+        <label for="0">Low</label><br>
+        <input type="radio" checked="checked" class="priority-btn active" name="priority" value="1">
+        <label for="1">Normal</label><br>
+        <input type="radio" class="priority-btn" name="priority" value="2">
+        <label for="2">High</label><br>
         <input type="hidden" id="edit-task-priority" name="edit-task-priority" value="1">
       </div>
 
@@ -150,7 +156,7 @@
       <br />
       <div class="modal-footer">
         <button class="cancel-btn" type="button" onclick="closeHabitWindow()">Cancel</button>
-        <button id="add-habit-button" type="submit">Add Habit</button>
+        <button id="add-habit-button" type="submit" form="edit-habit-form">Add Habit</button>
       </div>
     </form>
   </div>
