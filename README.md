@@ -37,10 +37,12 @@ Tomeato is an all-in-one productivity application that will help you stay organi
 ## Getting Started
 
 To get started, new users will need to register via our secure authentication server. Creating the account is easy, and after that, users will be able to log in using their email address and password.
+<p align="center"><img src="public/media/manual/tomeato.png" alt="Tomeato"></p>
 
 ## Screen Views and Navigation
 
 The profile and wizard hat icon will be where to find most navigation on the site. The tomato icon will also take users to the Pomodoro page. The Profile Icon will include, Settings, Shop, and Logout. The wizard hat icon is where users will find the Extras! This includes Journal, Weather, Movies, and Stocks. The individual pages will be described in more depth in their respective sections.
+<p align="center"><img src="public/media/manual/navigation.png" alt="Tomeato"></p>
 
 ## Tasks, Habits, and Calendar
 
@@ -49,8 +51,8 @@ A main feature of Tomeato is that it allows the user to keep track of tasks and 
 The calendar widget will be generated for the current date and can be shown in either a month or week display. If there are tasks scheduled for that day, a colored icon will appear on the calendar depending on the highest priority task due that day. If the highest priority task is “high” priority, a red icon will be displayed; if its “normal” priority, a blue icon will be displayed; for “low” priority tasks, a green icon is displayed. The calendar can be freely navigated, even to see tasks many months prior and in advance.
 
 <p float="left">
-  <img src="public/media/manual/tomeato.png" width="49%" />
-  <img src="public/media/manual/tomeato.png" width="49%" />
+  <img src="public/media/manual/page2.png" width="49%" />
+  <img src="public/media/manual/page1.png" width="49%" />
 </p>
 
 ## Settings
@@ -58,33 +60,50 @@ The calendar widget will be generated for the current date and can be shown in e
 The settings page allows the user to modify four different display options for the hat: Layouts, Themes, Fonts, and Quote Packs.
 
 Layouts can vary the widget size, location, and visibility. Themes change all of the colors of the site, including, but not limited to: background color, text color, and highlight colors. Fonts change all unspecified fonts on the website to the font the user selects, allowing for monospace, fancy, serif, and sans-serif options. Quote Packs add to the list of cycling quotes at the bottom of the main pages with several different themes for the quotes.
+<p align="center"><img src="public/media/manual/settings.png" alt="Tomeato"></p>
 
 ## Pomodoro
 
 > “A Pomodoro can’t be interrupted: It marks 25 minutes of pure work. A Pomodoro can’t be split up: There is no such thing as half a Pomodoro.” - Francesco Cirillo, inventor of the Pomodoro. 
 
 The Pomodoro method involves splitting up working time into intervals. As envisioned by its creator, it involves working for 25 minutes (a Pomodoro) then taking a break from working for 5 minutes. After four Pomodoros, a longer 30 minute break is taken. Tomeato provides a range of audio queues for the user once a Pomodoro finishes
-
+<p align="center"><img src="public/media/manual/pomo.png" alt="Tomeato"></p>
+<p float="left">
+  <img src="public/media/manual/pomoShort.png" width="49%" />
+  <img src="public/media/manual/pomoLong.png" width="49%" />
+</p>
 
 ## Shop
 
 In-application gold can be earned by interacting with the various features such as completing tasks, earning habit streaks, spending time on pomodoros, etc. This gold is spent at the shop! Here, users will find additional wizard hats, themes, and quote packs. The shop page also gives a detailed view of user site statistics.
+<p align="center"><img src="public/media/manual/shop.png" alt="Tomeato"></p>
 
 ## Journal
 
 Tomeato allows users to jot down their thoughts throughout the day, and even to upload a relevant photo. There is a separate section of the journal for note taking, so users can keep their personal and professional notes separate.
+<p float="left">
+  <img src="public/media/manual/journal.png" width="49%" />
+  <img src="public/media/manual/notes.png" width="49%" />
+</p>
 
 ## Weather
 
 Never be afraid of a weather surprise ruining your plans! Tomeato allows users to view the weather forecast for a wide range of cities. Larger cities have the weather forecast in one hour increments, while some smaller cities have the forecast in three hour increments.
+<p align="center"><img src="public/media/manual/weather.png" alt="Tomeato"></p>
 
 ## Stocks
 
 Many students, professionals, and more own stocks but don’t want to throw off their workflow to check on them. The Stock Market page offers a slew of information of the +50 most premier public companies, to choose from.  The user can choose from several time ranges: 1 Year, 6 Months, 3 Months, 1 Month, and 1 Week. A graph will show the history and fluctuation of the stock based on the selected window of time. Below that will be key details of the stock that all users must be familiar with, from serious investors to hobbyists. 
+<p align="center"><img src="public/media/manual/stocks.png" alt="Tomeato"></p>
 
 ## Movies
 
 The movie schedule allows the user to view a list of many relevant movies showing each month. The user can sort a month’s movies by either popularity or release date.
+
+<p float="left">
+  <img src="public/media/manual/movies.png" width="49%" />
+  <img src="public/media/manual/movies1.png" width="49%" />
+</p>
 
 ## Documentation
 
