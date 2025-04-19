@@ -50,9 +50,9 @@ A main feature of Tomeato is that it allows the user to keep track of tasks and 
 
 The calendar widget will be generated for the current date and can be shown in either a month or week display. If there are tasks scheduled for that day, a colored icon will appear on the calendar depending on the highest priority task due that day. If the highest priority task is “high” priority, a red icon will be displayed; if its “normal” priority, a blue icon will be displayed; for “low” priority tasks, a green icon is displayed. The calendar can be freely navigated, even to see tasks many months prior and in advance.
 
-<p float="left">
-  <img src="public/media/manual/page2.png" width="49%" alt="Screenshot with large month calendar" />
-  <img src="public/media/manual/page1.png" width="49%" alt="Screenshot with small week calendar" />
+<p style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; justify-content: center;">
+  <img src="public/media/manual/page2.png" style="width: 100%; max-width: 60%; height: auto;" alt="Screenshot with large month calendar" />
+  <img src="public/media/manual/page1.png" style="width: 100%; max-width: 35%; height: auto;" alt="Screenshot with small week calendar" />
 </p>
 
 ## [Settings](#table-of-contents)
