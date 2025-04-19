@@ -52,6 +52,11 @@ Solarized dark             |  Solarized Ocean
 :-------------------------:|:-------------------------:
 ![](public/media/manual/tomeato.png)  |  ![](public/media/manual/tomeato.png)
 
+<p float="left">
+  <img src="public/media/manual/tomeato.png" width="100" />
+  <img src="public/media/manual/tomeato.png" width="100" />
+</p>
+
 ## Settings
 
 The settings page allows the user to modify four different display options for the hat: Layouts, Themes, Fonts, and Quote Packs.
